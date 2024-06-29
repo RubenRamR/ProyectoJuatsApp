@@ -199,6 +199,9 @@ public class frmRegistrar extends javax.swing.JFrame {
 
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
         // TODO add your handling code here:
+        frmMainMenu frm = new frmMainMenu(negocio);
+        frm.show();
+        this.dispose();           
     }//GEN-LAST:event_btnCerrarActionPerformed
 
     private void fldTelefonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fldTelefonoActionPerformed
