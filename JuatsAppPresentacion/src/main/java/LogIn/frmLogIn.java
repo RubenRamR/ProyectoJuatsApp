@@ -67,7 +67,7 @@ public class frmLogIn extends javax.swing.JFrame {
                 btnGuardarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 420, 240, 40));
+        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 400, 240, 60));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 64)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -146,7 +146,7 @@ public class frmLogIn extends javax.swing.JFrame {
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
         frmChat frm = new frmChat(negocio);
-        frm.show();
+        frm.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnGuardarActionPerformed
 

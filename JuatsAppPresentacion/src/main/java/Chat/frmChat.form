@@ -72,20 +72,17 @@
           </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="190" y="720" width="350" height="30"/>
+              <AbsoluteConstraints x="30" y="580" width="450" height="30"/>
             </Constraint>
           </Constraints>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel2">
           <Properties>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Segoe UI" size="10" style="0"/>
-            </Property>
             <Property name="text" type="java.lang.String" value="Foto"/>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="190" y="750" width="180" height="20"/>
+              <AbsoluteConstraints x="30" y="610" width="180" height="20"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -98,7 +95,7 @@
           </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="190" y="770" width="350" height="30"/>
+              <AbsoluteConstraints x="30" y="630" width="350" height="30"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -149,33 +146,27 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnEncontrarImagen">
           <Properties>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Segoe UI" size="8" style="0"/>
-            </Property>
-            <Property name="text" type="java.lang.String" value="Encontrar Imagen"/>
+            <Property name="text" type="java.lang.String" value="Encontrar imagen"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEncontrarImagenActionPerformed"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="Color customColor2 = new Color(0, 113, 219);&#xa;Color customColor3 = new Color(78, 160, 237);&#xa;Border lineBorder2 = BorderFactory.createLineBorder(customColor2, 2);&#xa;btnEncontrarImagen.setBorder(lineBorder2);&#xa;btnEncontrarImagen.setBackground(customColor3);"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="Color customColor1 = new Color(0, 113, 219);&#xa;Color customColor4 = new Color(78, 160, 237);&#xa;Border lineBorder3 = BorderFactory.createLineBorder(customColor1, 2);&#xa;btnEncontrarImagen.setBorder(lineBorder3);&#xa;btnEncontrarImagen.setBackground(customColor4);"/>
           </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="190" y="810" width="110" height="20"/>
+              <AbsoluteConstraints x="30" y="680" width="160" height="40"/>
             </Constraint>
           </Constraints>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel4">
           <Properties>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Segoe UI" size="10" style="0"/>
-            </Property>
             <Property name="text" type="java.lang.String" value="Mensaje *"/>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="190" y="700" width="180" height="20"/>
+              <AbsoluteConstraints x="30" y="560" width="180" height="20"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -185,29 +176,57 @@
           </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="20" y="120" width="-1" height="-1"/>
+              <AbsoluteConstraints x="30" y="120" width="-1" height="-1"/>
             </Constraint>
           </Constraints>
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
           <SubComponents>
-            <Component class="javax.swing.JTable" name="tblChats">
+            <Component class="javax.swing.JTable" name="tblChat">
               <Properties>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                   <Table columnCount="2" rowCount="4">
-                    <Column editable="true" title="Nombre" type="java.lang.Object">
-                      <Data value="a"/>
-                      <Data value="null"/>
-                      <Data value="null"/>
-                      <Data value="null"/>
-                    </Column>
-                    <Column editable="false" title="Foto " type="java.lang.Object"/>
+                    <Column editable="false" title="Nombre" type="java.lang.Object"/>
+                    <Column editable="false" title="Imagen" type="java.lang.Object"/>
                   </Table>
+                </Property>
+                <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
+                  <TableColumnModel selectionModel="0">
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                      <Title/>
+                      <Editor/>
+                      <Renderer/>
+                    </Column>
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                      <Title/>
+                      <Editor/>
+                      <Renderer/>
+                    </Column>
+                  </TableColumnModel>
+                </Property>
+                <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
+                  <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                 </Property>
               </Properties>
             </Component>
           </SubComponents>
         </Container>
+        <Component class="javax.swing.JButton" name="btnEnviarMensaje">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Enviar"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEnviarMensajeActionPerformed"/>
+          </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="Color customColor2 = new Color(0, 113, 219);&#xa;Color customColor3 = new Color(78, 160, 237);&#xa;Border lineBorder2 = BorderFactory.createLineBorder(customColor2, 2);&#xa;btnEncontrarImagen.setBorder(lineBorder2);&#xa;btnEncontrarImagen.setBackground(customColor3);"/>
+          </AuxValues>
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+              <AbsoluteConstraints x="320" y="680" width="160" height="40"/>
+            </Constraint>
+          </Constraints>
+        </Component>
       </SubComponents>
     </Container>
   </SubComponents>
