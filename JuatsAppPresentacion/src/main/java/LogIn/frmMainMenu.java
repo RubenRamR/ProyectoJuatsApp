@@ -24,7 +24,6 @@ public class frmMainMenu extends javax.swing.JFrame {
     public frmMainMenu(JANegocio negocio) {
         initComponents();
         this.setLocationRelativeTo(this);
-        this.setSize(700, 520);
         this.negocio = negocio;
 
     }

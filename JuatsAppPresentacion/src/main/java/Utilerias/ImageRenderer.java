@@ -33,7 +33,16 @@ public class ImageRenderer extends DefaultTableCellRenderer {
 
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-        label.setIcon(new ImageIcon(image));
+
+            // Get the desired row height and column width
+            int rowHeight = table.getRowHeight(row);
+            int columnWidth = table.getColumnModel().getColumn(column).getWidth();
+
+            // Resize the image to fit the row height and column width
+            Image scaledImage = image.getScaledInstance(columnWidth, rowHeight, Image.SCALE_SMOOTH);
+            label.setIcon(new ImageIcon(scaledImage));
+
+
         return label;
     }
 }

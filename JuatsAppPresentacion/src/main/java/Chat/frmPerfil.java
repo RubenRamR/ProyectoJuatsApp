@@ -2,9 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package LogIn;
+package Chat;
 
 
+import LogIn.*;
 import java.awt.Color;
 import java.io.File;
 import javax.swing.BorderFactory;
@@ -16,14 +17,14 @@ import negocio.JANegocio;
  *
  * @author santi
  */
-public class frmRegistrar extends javax.swing.JFrame {
+public class frmPerfil extends javax.swing.JFrame {
 
     JANegocio negocio;
     
     /**
      * Creates new form LogIn
      */
-    public frmRegistrar(JANegocio negocio) {
+    public frmPerfil(JANegocio negocio) {
         initComponents();
         this.setLocationRelativeTo(this);
         this.negocio = negocio;
@@ -65,8 +66,11 @@ public class frmRegistrar extends javax.swing.JFrame {
 
         Color customColor = new Color(35, 135, 35);
         Border lineBorder = BorderFactory.createLineBorder(customColor, 2);
-        btnGuardar.setBorder(lineBorder);
-        btnGuardar.setBackground(new java.awt.Color(66, 143, 66));
+        Color customColor2 = new Color(0, 113, 219);
+        Color customColor3 = new Color(78, 160, 237);
+        Border lineBorder2 = BorderFactory.createLineBorder(customColor2, 2);
+        btnGuardar.setBorder(lineBorder2);
+        btnGuardar.setBackground(customColor3);
         btnGuardar.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
         btnGuardar.setText("Guardar");
         btnGuardar.addActionListener(new java.awt.event.ActionListener() {
@@ -74,11 +78,11 @@ public class frmRegistrar extends javax.swing.JFrame {
                 btnGuardarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 420, 180, 40));
+        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 440, 180, 40));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 64)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Registrar");
+        jLabel1.setText("Editar");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 700, -1));
 
         btnCerrar.setBackground(Color.red);
@@ -159,9 +163,6 @@ public class frmRegistrar extends javax.swing.JFrame {
         fldFecha.setBackground(new java.awt.Color(186, 219, 186));
         jPanel1.add(fldFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 360, 230, 40));
 
-        Color customColor2 = new Color(0, 113, 219);
-        Color customColor3 = new Color(78, 160, 237);
-        Border lineBorder2 = BorderFactory.createLineBorder(customColor2, 2);
         btnEncontrarImagen.setBorder(lineBorder2);
         btnEncontrarImagen.setBackground(customColor3);
         btnEncontrarImagen.setFont(new java.awt.Font("Segoe UI", 0, 8)); // NOI18N

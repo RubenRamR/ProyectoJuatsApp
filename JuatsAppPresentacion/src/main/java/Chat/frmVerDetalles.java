@@ -2,10 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package LogIn;
+package Chat;
 
 
-import Chat.frmChat;
+import LogIn.*;
 import java.awt.Color;
 import java.io.File;
 import javax.swing.BorderFactory;
@@ -17,14 +17,14 @@ import negocio.JANegocio;
  *
  * @author santi
  */
-public class frmLogIn extends javax.swing.JFrame {
+public class frmVerDetalles extends javax.swing.JFrame {
 
     JANegocio negocio;
     
     /**
      * Creates new form LogIn
      */
-    public frmLogIn(JANegocio negocio) {
+    public frmVerDetalles(JANegocio negocio) {
         initComponents();
         this.setLocationRelativeTo(this);
         this.negocio = negocio;
@@ -46,8 +46,9 @@ public class frmLogIn extends javax.swing.JFrame {
         btnCerrar = new javax.swing.JButton();
         fldTelefono = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        fldContraseña = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        fldImagen = new javax.swing.JTextField();
+        btnEncontrarImagen = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -57,20 +58,23 @@ public class frmLogIn extends javax.swing.JFrame {
 
         Color customColor = new Color(35, 135, 35);
         Border lineBorder = BorderFactory.createLineBorder(customColor, 2);
-        btnGuardar.setBorder(lineBorder);
-        btnGuardar.setBackground(new java.awt.Color(66, 143, 66));
+        Color customColor2 = new Color(0, 113, 219);
+        Color customColor3 = new Color(78, 160, 237);
+        Border lineBorder2 = BorderFactory.createLineBorder(customColor2, 2);
+        btnGuardar.setBorder(lineBorder2);
+        btnGuardar.setBackground(customColor3);
         btnGuardar.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
-        btnGuardar.setText("Iniciar Sesión");
+        btnGuardar.setText("Guardar");
         btnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGuardarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 420, 240, 40));
+        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 440, 180, 40));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 64)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Iniciar Sesión");
+        jLabel1.setText("Detalles");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 700, -1));
 
         btnCerrar.setBackground(Color.red);
@@ -89,24 +93,35 @@ public class frmLogIn extends javax.swing.JFrame {
                 fldTelefonoActionPerformed(evt);
             }
         });
-        jPanel1.add(fldTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 170, 230, 40));
+        jPanel1.add(fldTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 140, 230, 40));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jLabel2.setText("Teléfono *");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 130, 230, -1));
+        jLabel2.setText("Nombre");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 100, 230, -1));
 
-        fldContraseña.setBorder(lineBorder);
-        fldContraseña.setBackground(new java.awt.Color(186, 219, 186));
-        fldContraseña.addActionListener(new java.awt.event.ActionListener() {
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jLabel3.setText("Imagen de Perfil ");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 100, 230, -1));
+
+        fldImagen.setBorder(lineBorder);
+        fldImagen.setBackground(new java.awt.Color(186, 219, 186));
+        fldImagen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fldContraseñaActionPerformed(evt);
+                fldImagenActionPerformed(evt);
             }
         });
-        jPanel1.add(fldContraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 280, 230, 40));
+        jPanel1.add(fldImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 140, 230, 40));
 
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jLabel5.setText("Contraseña *");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 240, 230, -1));
+        btnEncontrarImagen.setBorder(lineBorder2);
+        btnEncontrarImagen.setBackground(customColor3);
+        btnEncontrarImagen.setFont(new java.awt.Font("Segoe UI", 0, 8)); // NOI18N
+        btnEncontrarImagen.setText("Encontrar Imagen");
+        btnEncontrarImagen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEncontrarImagenActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnEncontrarImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 190, 110, 20));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -127,13 +142,9 @@ public class frmLogIn extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void fldContraseñaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fldContraseñaActionPerformed
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_fldContraseñaActionPerformed
-
-    private void fldTelefonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fldTelefonoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_fldTelefonoActionPerformed
+    }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
         // TODO add your handling code here:
@@ -142,22 +153,40 @@ public class frmLogIn extends javax.swing.JFrame {
         this.dispose();           
     }//GEN-LAST:event_btnCerrarActionPerformed
 
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+    private void fldTelefonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fldTelefonoActionPerformed
         // TODO add your handling code here:
-        frmChat frm = new frmChat(negocio);
-        frm.show();
-        this.dispose();
-    }//GEN-LAST:event_btnGuardarActionPerformed
+    }//GEN-LAST:event_fldTelefonoActionPerformed
+
+    private void fldImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fldImagenActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fldImagenActionPerformed
+
+    private void btnEncontrarImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEncontrarImagenActionPerformed
+        // TODO add your handling code here:
+        JFileChooser fileChooser = new JFileChooser();
+
+        // Show the open dialog
+        int result = fileChooser.showOpenDialog(this);
+
+        // Check if a file was selected
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            fldImagen.setText(selectedFile.getAbsolutePath());
+        }
+
+        
+    }//GEN-LAST:event_btnEncontrarImagenActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCerrar;
+    private javax.swing.JButton btnEncontrarImagen;
     private javax.swing.JButton btnGuardar;
-    private javax.swing.JTextField fldContraseña;
+    private javax.swing.JTextField fldImagen;
     private javax.swing.JTextField fldTelefono;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }
