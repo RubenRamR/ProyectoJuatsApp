@@ -6,6 +6,7 @@ package Chat;
 
 
 import LogIn.*;
+import Utilerias.ImageFromMongoDBRenderer;
 import Utilerias.ImageRenderer;
 import Utilerias.JButtonCellEditor;
 import Utilerias.JButtonRenderer;
@@ -18,7 +19,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.border.Border;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import negocio.JANegocio;
 
@@ -29,48 +33,48 @@ import negocio.JANegocio;
  */
 public class frmChat extends javax.swing.JFrame {
 
-    JANegocio negocio;
+    private DefaultTableModel modeloTabla;
+    private JANegocio negocio;
     
     /**
      * Creates new form LogIn
      */
     public frmChat(JANegocio negocio) {
         initComponents();
-        cargarConfiguracionInicialTablaChats();
-        cargarConfiguracionInicialTablaMiPerfil();
+        //inicializarTabla();
         this.setLocationRelativeTo(this);
+        this.setSize(700, 520);
         this.negocio = negocio;
 
     }
+ 
+   // Método para inicializar la tabla
+    /*private void inicializarTabla() {
+        // Inicializar la tabla y el modelo de tabla
+        tblChat = new JTable();
+        modeloTabla = new DefaultTableModel();
 
-    private void cargarConfiguracionInicialTablaChats() { 
-           
-        TableColumnModel modeloColumnas = this.tblChats.getColumnModel();
+        // Configurar el modelo de tabla
+        tblChat.setModel(modeloTabla);
 
+        // Agregar columnas al modelo de tabla
+        modeloTabla.addColumn("Nombre"); // Supongamos que la columna 0 es el nombre del usuario
 
+        // Llenar la tabla con datos de ejemplo (aquí deberías cargar los datos desde tu base de datos)
+        Object[] datosFila1 = {"Usuario 1"};
+        Object[] datosFila2 = {"Usuario 2"};
+        modeloTabla.addRow(datosFila1);
+        modeloTabla.addRow(datosFila2);
+
+        // Configurar el renderizador de imágenes para la columna específica
+        int indiceColumnaImagen = 1; // Suponiendo que la columna 1 es donde quieres mostrar la imagen
+        tblChat.getColumnModel().getColumn(indiceColumnaImagen).setCellRenderer(new ImageFromMongoDBRenderer());
         
-        ActionListener onAprobarClickListener = new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                
-            }               
-        };
-        int indiceColumnaEditar = 0;
-        Color color = new Color(178, 218, 250);
-        modeloColumnas.getColumn(indiceColumnaEditar).setCellRenderer(new JButtonRenderer("Nombre",color));
-        modeloColumnas.getColumn(indiceColumnaEditar).setCellEditor(new JButtonCellEditor("Nombre", onAprobarClickListener));
-
-        tblChats.getColumnModel().getColumn(1).setCellRenderer(new ImageRenderer("C:\\Users\\santi\\Documents\\GitHub\\ProyectoJuatsApp\\JuatsAppPresentacion\\src\\main\\java\\Utilerias\\placeholder.jpg"));
-       
-    }         
+        // Agregar la tabla al contenedor de la ventana (si es necesario)
+        JScrollPane scrollPane = new JScrollPane(tblChat);
+        getContentPane().add(scrollPane); // Asumiendo que la ventana es un contenedor de tipo JFrame o similar
+    }*/
     
-    private void cargarConfiguracionInicialTablaMiPerfil() { 
-        tblMiFoto.setRowHeight(0, 50);   
-        tblMiFoto.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer("C:\\Users\\santi\\Documents\\GitHub\\ProyectoJuatsApp\\JuatsAppPresentacion\\src\\main\\java\\Utilerias\\placeholder.jpg"));
-       
-    }         
-        
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -91,16 +95,8 @@ public class frmChat extends javax.swing.JFrame {
         btnEncontrarImagen = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblChats = new javax.swing.JTable();
-        jScrollPane2 = new javax.swing.JScrollPane();
         tblChat = new javax.swing.JTable();
         btnEnviarMensaje = new javax.swing.JButton();
-        btnNuevoChat = new javax.swing.JButton();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        tblMiFoto = new javax.swing.JTable();
-        btnDetalles = new javax.swing.JButton();
-        btnAgregarContactos = new javax.swing.JButton();
-        btnDetalles2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -126,11 +122,10 @@ public class frmChat extends javax.swing.JFrame {
                 fldMensajeActionPerformed(evt);
             }
         });
-        jPanel1.add(fldMensaje, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 700, 350, 30));
+        jPanel1.add(fldMensaje, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 580, 450, 30));
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 10)); // NOI18N
         jLabel2.setText("Foto");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 730, 180, 20));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 610, 180, 20));
 
         fldFoto.setBorder(lineBorder);
         fldFoto.setBackground(new java.awt.Color(186, 219, 186));
@@ -139,7 +134,7 @@ public class frmChat extends javax.swing.JFrame {
                 fldFotoActionPerformed(evt);
             }
         });
-        jPanel1.add(fldFoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 750, 350, 30));
+        jPanel1.add(fldFoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 630, 350, 30));
 
         btnPerfil.setBorder(lineBorder);
         btnPerfil.setBackground(new java.awt.Color(66, 143, 66));
@@ -149,7 +144,7 @@ public class frmChat extends javax.swing.JFrame {
                 btnPerfilActionPerformed(evt);
             }
         });
-        jPanel1.add(btnPerfil, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 60, 110, 30));
+        jPanel1.add(btnPerfil, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 60, 110, 30));
 
         btnContactos.setBorder(lineBorder);
         btnContactos.setBackground(new java.awt.Color(66, 143, 66));
@@ -159,141 +154,63 @@ public class frmChat extends javax.swing.JFrame {
                 btnContactosActionPerformed(evt);
             }
         });
-        jPanel1.add(btnContactos, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 20, 110, 30));
+        jPanel1.add(btnContactos, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 20, 110, 30));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel3.setText("Chats");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 180, 20));
 
-        Color customColor2 = new Color(0, 113, 219);
-        Color customColor3 = new Color(78, 160, 237);
-        Border lineBorder2 = BorderFactory.createLineBorder(customColor2, 2);
-        btnEncontrarImagen.setBorder(lineBorder2);
-        btnEncontrarImagen.setBackground(customColor3);
-        btnEncontrarImagen.setFont(new java.awt.Font("Segoe UI", 0, 8)); // NOI18N
-        btnEncontrarImagen.setText("Encontrar Imagen");
+        Color customColor1 = new Color(0, 113, 219);
+        Color customColor4 = new Color(78, 160, 237);
+        Border lineBorder3 = BorderFactory.createLineBorder(customColor1, 2);
+        btnEncontrarImagen.setBorder(lineBorder3);
+        btnEncontrarImagen.setBackground(customColor4);
+        btnEncontrarImagen.setText("Encontrar imagen");
         btnEncontrarImagen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEncontrarImagenActionPerformed(evt);
             }
         });
-        jPanel1.add(btnEncontrarImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 790, 110, 20));
+        jPanel1.add(btnEncontrarImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 680, 160, 40));
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 10)); // NOI18N
         jLabel4.setText("Mensaje *");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 680, 180, 20));
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 560, 180, 20));
 
-        tblChats.setAutoCreateRowSorter(true);
-        tblChats.setBackground(new java.awt.Color(66, 143, 66));
-        tblChats.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(66, 143, 66)));
-        tblChats.setForeground(new java.awt.Color(51, 153, 0));
-        tblChats.setModel(new javax.swing.table.DefaultTableModel(
+        tblChat.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {"", null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
                 {null, null},
                 {null, null},
                 {null, null},
                 {null, null}
             },
             new String [] {
-                "Nombre", "Foto "
+                "Nombre", "Imagen"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                true, false
+                false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        tblChats.setToolTipText("");
-        tblChats.setSelectionForeground(new java.awt.Color(66, 143, 66));
-        jScrollPane1.setViewportView(tblChats);
+        jScrollPane1.setViewportView(tblChat);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 240, 710));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, -1, -1));
 
-        tblChat.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Mensaje", "Foto", "Fecha", "Enviado por"
-            }
-        ));
-        jScrollPane2.setViewportView(tblChat);
-
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 100, 590, 580));
-
-        btnEnviarMensaje.setBorder(lineBorder);
-        btnEnviarMensaje.setBackground(new java.awt.Color(66, 143, 66));
-        btnEnviarMensaje.setText("Enviar Mensaje");
+        Color customColor2 = new Color(0, 113, 219);
+        Color customColor3 = new Color(78, 160, 237);
+        Border lineBorder2 = BorderFactory.createLineBorder(customColor2, 2);
+        btnEncontrarImagen.setBorder(lineBorder2);
+        btnEncontrarImagen.setBackground(customColor3);
+        btnEnviarMensaje.setText("Enviar");
         btnEnviarMensaje.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEnviarMensajeActionPerformed(evt);
             }
         });
-        jPanel1.add(btnEnviarMensaje, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 700, 230, 80));
-
-        btnNuevoChat.setBorder(lineBorder);
-        btnNuevoChat.setBackground(new java.awt.Color(66, 143, 66));
-        btnNuevoChat.setText("Nuevo chat");
-        btnNuevoChat.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNuevoChatActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnNuevoChat, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 60, 140, 30));
-
-        tblMiFoto.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null}
-            },
-            new String [] {
-                "Mi foto de perfil"
-            }
-        ));
-        jScrollPane3.setViewportView(tblMiFoto);
-
-        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 20, 140, 70));
-
-        btnDetalles.setBorder(lineBorder);
-        btnDetalles.setBackground(new java.awt.Color(66, 143, 66));
-        btnDetalles.setText("Ver Detalles");
-        btnDetalles.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDetallesActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnDetalles, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 60, 160, 30));
-
-        btnAgregarContactos.setBorder(lineBorder);
-        btnAgregarContactos.setBackground(new java.awt.Color(66, 143, 66));
-        btnAgregarContactos.setText("Agregar contactos");
-        btnAgregarContactos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAgregarContactosActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnAgregarContactos, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 20, 140, 30));
-
-        btnDetalles2.setBorder(lineBorder);
-        btnDetalles2.setBackground(new java.awt.Color(66, 143, 66));
-        btnDetalles2.setText("Agregar Integrantes");
-        btnDetalles2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDetalles2ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnDetalles2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 20, 160, 30));
+        jPanel1.add(btnEnviarMensaje, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 680, 160, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -312,7 +229,6 @@ public class frmChat extends javax.swing.JFrame {
 
     private void fldFotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fldFotoActionPerformed
         // TODO add your handling code here:
-        
     }//GEN-LAST:event_fldFotoActionPerformed
 
     private void fldMensajeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fldMensajeActionPerformed
@@ -328,16 +244,10 @@ public class frmChat extends javax.swing.JFrame {
 
     private void btnPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPerfilActionPerformed
         // TODO add your handling code here:
-        frmPerfil frm = new frmPerfil(negocio);
-        frm.show();
-        this.dispose();
     }//GEN-LAST:event_btnPerfilActionPerformed
 
     private void btnContactosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContactosActionPerformed
         // TODO add your handling code here:
-        frmVerContactos frm = new frmVerContactos(negocio);
-        frm.show();
-        this.dispose();
     }//GEN-LAST:event_btnContactosActionPerformed
 
     private void btnEncontrarImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEncontrarImagenActionPerformed
@@ -359,41 +269,12 @@ public class frmChat extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnEnviarMensajeActionPerformed
 
-    private void btnNuevoChatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoChatActionPerformed
-        // TODO add your handling code here:
-        frmNuevoChat frm = new frmNuevoChat(negocio);
-        frm.show();
-        this.dispose();
-    }//GEN-LAST:event_btnNuevoChatActionPerformed
-
-    private void btnDetallesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetallesActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnDetallesActionPerformed
-
-    private void btnAgregarContactosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarContactosActionPerformed
-        // TODO add your handling code here:
-        frmAgregarContactos frm = new frmAgregarContactos(negocio);
-        frm.show();
-        this.dispose();        
-    }//GEN-LAST:event_btnAgregarContactosActionPerformed
-
-    private void btnDetalles2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetalles2ActionPerformed
-        // TODO add your handling code here:
-        frmAgregarIntegrantes frm = new frmAgregarIntegrantes(negocio);
-        frm.show();
-        this.dispose(); 
-    }//GEN-LAST:event_btnDetalles2ActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAgregarContactos;
     private javax.swing.JButton btnCerrar;
     private javax.swing.JButton btnContactos;
-    private javax.swing.JButton btnDetalles;
-    private javax.swing.JButton btnDetalles2;
     private javax.swing.JButton btnEncontrarImagen;
     private javax.swing.JButton btnEnviarMensaje;
-    private javax.swing.JButton btnNuevoChat;
     private javax.swing.JButton btnPerfil;
     private javax.swing.JTextField fldFoto;
     private javax.swing.JTextField fldMensaje;
@@ -402,10 +283,6 @@ public class frmChat extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable tblChat;
-    private javax.swing.JTable tblChats;
-    private javax.swing.JTable tblMiFoto;
     // End of variables declaration//GEN-END:variables
 }
