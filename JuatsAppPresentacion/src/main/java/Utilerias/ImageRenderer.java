@@ -11,6 +11,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import javax.imageio.ImageIO;
 
 
@@ -22,10 +23,12 @@ import javax.imageio.ImageIO;
 public class ImageRenderer extends DefaultTableCellRenderer {
     private JLabel label = new JLabel();
     private BufferedImage image;
+    
 
     public ImageRenderer(String imagePath) {
         try {
-            image = ImageIO.read(new File(imagePath));
+                    InputStream is = getClass().getClassLoader().getResourceAsStream("imagenes/" + imagePath);
+            image = ImageIO.read(is);
         } catch (IOException e) {
             e.printStackTrace();
         }

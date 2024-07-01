@@ -61,13 +61,14 @@ public class frmChat extends javax.swing.JFrame {
         modeloColumnas.getColumn(indiceColumnaEditar).setCellRenderer(new JButtonRenderer("Nombre",color));
         modeloColumnas.getColumn(indiceColumnaEditar).setCellEditor(new JButtonCellEditor("Nombre", onAprobarClickListener));
 
-        tblChats.getColumnModel().getColumn(1).setCellRenderer(new ImageRenderer("C:\\Users\\santi\\Documents\\GitHub\\ProyectoJuatsApp\\JuatsAppPresentacion\\src\\main\\java\\Utilerias\\placeholder.jpg"));
+
+        tblChats.getColumnModel().getColumn(1).setCellRenderer(new ImageRenderer("placeholder.jpg"));
        
     }         
     
     private void cargarConfiguracionInicialTablaMiPerfil() { 
         tblMiFoto.setRowHeight(0, 50);   
-        tblMiFoto.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer("C:\\Users\\santi\\Documents\\GitHub\\ProyectoJuatsApp\\JuatsAppPresentacion\\src\\main\\java\\Utilerias\\placeholder.jpg"));
+        tblMiFoto.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer("placeholder.jpg"));
        
     }         
         
