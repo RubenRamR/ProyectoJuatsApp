@@ -42,12 +42,13 @@ public class frmRegistrar extends javax.swing.JFrame {
         btnGuardar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         btnCerrar = new javax.swing.JButton();
-        fldTelefono = new javax.swing.JTextField();
+        fldApellidoPaterno = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         fldImagen = new javax.swing.JTextField();
-        fldDireccion = new javax.swing.JTextField();
         fldContraseña = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
+        fldColonia = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -55,6 +56,16 @@ public class frmRegistrar extends javax.swing.JFrame {
         fldSexo = new javax.swing.JComboBox<>();
         fldFecha = new com.toedter.calendar.JDateChooser();
         btnEncontrarImagen = new javax.swing.JButton();
+        fldTelefono1 = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        fldNombre1 = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        fldApellidoPaterno1 = new javax.swing.JTextField();
+        fldCalle = new javax.swing.JTextField();
+        jLabel13 = new javax.swing.JLabel();
+        fldNumero = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -73,12 +84,12 @@ public class frmRegistrar extends javax.swing.JFrame {
                 btnGuardarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 420, 180, 40));
+        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 440, 180, 50));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 64)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Registrar");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 700, -1));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 0, 700, -1));
 
         btnCerrar.setBackground(Color.red);
         btnCerrar.setText("X");
@@ -89,22 +100,22 @@ public class frmRegistrar extends javax.swing.JFrame {
         });
         jPanel1.add(btnCerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
-        fldTelefono.setBorder(lineBorder);
-        fldTelefono.setBackground(new java.awt.Color(186, 219, 186));
-        fldTelefono.addActionListener(new java.awt.event.ActionListener() {
+        fldApellidoPaterno.setBorder(lineBorder);
+        fldApellidoPaterno.setBackground(new java.awt.Color(186, 219, 186));
+        fldApellidoPaterno.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fldTelefonoActionPerformed(evt);
+                fldApellidoPaternoActionPerformed(evt);
             }
         });
-        jPanel1.add(fldTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 140, 230, 40));
+        jPanel1.add(fldApellidoPaterno, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 240, 230, 40));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jLabel2.setText("Teléfono *");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 100, 230, -1));
+        jLabel2.setText("Apellido Paterno *");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 200, 230, -1));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel3.setText("Imagen de Perfil *");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 100, 230, -1));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 200, 230, -1));
 
         fldImagen.setBorder(lineBorder);
         fldImagen.setBackground(new java.awt.Color(186, 219, 186));
@@ -113,16 +124,7 @@ public class frmRegistrar extends javax.swing.JFrame {
                 fldImagenActionPerformed(evt);
             }
         });
-        jPanel1.add(fldImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 140, 230, 40));
-
-        fldDireccion.setBorder(lineBorder);
-        fldDireccion.setBackground(new java.awt.Color(186, 219, 186));
-        fldDireccion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fldDireccionActionPerformed(evt);
-            }
-        });
-        jPanel1.add(fldDireccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 250, 230, 40));
+        jPanel1.add(fldImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 240, 230, 60));
 
         fldContraseña.setBorder(lineBorder);
         fldContraseña.setBackground(new java.awt.Color(186, 219, 186));
@@ -131,32 +133,44 @@ public class frmRegistrar extends javax.swing.JFrame {
                 fldContraseñaActionPerformed(evt);
             }
         });
-        jPanel1.add(fldContraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 250, 230, 40));
+        jPanel1.add(fldContraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 430, 230, 40));
+
+        jLabel11.setText("Colonia");
+        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 150, 50, -1));
+
+        fldColonia.setBorder(lineBorder);
+        fldColonia.setBackground(new java.awt.Color(186, 219, 186));
+        fldColonia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fldColoniaActionPerformed(evt);
+            }
+        });
+        jPanel1.add(fldColonia, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 150, 230, 40));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jLabel4.setText("Dirección completa *");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 210, 230, -1));
+        jLabel4.setText("Dirección *");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 110, 230, -1));
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel5.setText("Contraseña *");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 210, 230, -1));
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 400, 230, -1));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel6.setText("Sexo *");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 320, 230, -1));
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 390, 230, -1));
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel7.setText("Fecha  Nacimiento *");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 320, 230, -1));
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 110, 230, -1));
 
         fldSexo.setBorder(lineBorder);
         fldSexo.setBackground(new java.awt.Color(186, 219, 186));
         fldSexo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Masculino", "Femenino", "Robot", "Ninja", "Otro" }));
-        jPanel1.add(fldSexo, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 360, 230, 40));
+        jPanel1.add(fldSexo, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 430, 230, 40));
 
         fldFecha.setBorder(lineBorder);
         fldFecha.setBackground(new java.awt.Color(186, 219, 186));
-        jPanel1.add(fldFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 360, 230, 40));
+        jPanel1.add(fldFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 150, 230, 40));
 
         Color customColor2 = new Color(0, 113, 219);
         Color customColor3 = new Color(78, 160, 237);
@@ -170,21 +184,80 @@ public class frmRegistrar extends javax.swing.JFrame {
                 btnEncontrarImagenActionPerformed(evt);
             }
         });
-        jPanel1.add(btnEncontrarImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 190, 110, 20));
+        jPanel1.add(btnEncontrarImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 310, 110, 20));
+
+        fldApellidoPaterno.setBorder(lineBorder);
+        fldApellidoPaterno.setBackground(new java.awt.Color(186, 219, 186));
+        fldTelefono1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fldTelefono1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(fldTelefono1, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 340, 230, 40));
+
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jLabel8.setText("Teléfono *");
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 300, 230, -1));
+
+        fldApellidoPaterno.setBorder(lineBorder);
+        fldApellidoPaterno.setBackground(new java.awt.Color(186, 219, 186));
+        fldNombre1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fldNombre1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(fldNombre1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 150, 230, 40));
+
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jLabel9.setText("Nombre *");
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 110, 230, -1));
+
+        jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jLabel10.setText("Apellido Paterno *");
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 300, 230, -1));
+
+        jLabel12.setText("Calle");
+        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 200, 50, -1));
+
+        fldApellidoPaterno.setBorder(lineBorder);
+        fldApellidoPaterno.setBackground(new java.awt.Color(186, 219, 186));
+        fldApellidoPaterno1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fldApellidoPaterno1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(fldApellidoPaterno1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 340, 230, 40));
+
+        fldColonia.setBorder(lineBorder);
+        fldColonia.setBackground(new java.awt.Color(186, 219, 186));
+        fldCalle.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fldCalleActionPerformed(evt);
+            }
+        });
+        jPanel1.add(fldCalle, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 200, 230, 40));
+
+        jLabel13.setText("Numero");
+        jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 250, 50, -1));
+
+        fldColonia.setBorder(lineBorder);
+        fldColonia.setBackground(new java.awt.Color(186, 219, 186));
+        fldNumero.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fldNumeroActionPerformed(evt);
+            }
+        });
+        jPanel1.add(fldNumero, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 250, 230, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 797, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 530, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -202,13 +275,13 @@ public class frmRegistrar extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnCerrarActionPerformed
 
-    private void fldTelefonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fldTelefonoActionPerformed
+    private void fldApellidoPaternoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fldApellidoPaternoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_fldTelefonoActionPerformed
+    }//GEN-LAST:event_fldApellidoPaternoActionPerformed
 
-    private void fldDireccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fldDireccionActionPerformed
+    private void fldColoniaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fldColoniaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_fldDireccionActionPerformed
+    }//GEN-LAST:event_fldColoniaActionPerformed
 
     private void fldContraseñaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fldContraseñaActionPerformed
         // TODO add your handling code here:
@@ -235,24 +308,55 @@ public class frmRegistrar extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnEncontrarImagenActionPerformed
 
+    private void fldTelefono1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fldTelefono1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fldTelefono1ActionPerformed
+
+    private void fldNombre1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fldNombre1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fldNombre1ActionPerformed
+
+    private void fldApellidoPaterno1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fldApellidoPaterno1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fldApellidoPaterno1ActionPerformed
+
+    private void fldCalleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fldCalleActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fldCalleActionPerformed
+
+    private void fldNumeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fldNumeroActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fldNumeroActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCerrar;
     private javax.swing.JButton btnEncontrarImagen;
     private javax.swing.JButton btnGuardar;
+    private javax.swing.JTextField fldApellidoPaterno;
+    private javax.swing.JTextField fldApellidoPaterno1;
+    private javax.swing.JTextField fldCalle;
+    private javax.swing.JTextField fldColonia;
     private javax.swing.JTextField fldContraseña;
-    private javax.swing.JTextField fldDireccion;
     private com.toedter.calendar.JDateChooser fldFecha;
     private javax.swing.JTextField fldImagen;
+    private javax.swing.JTextField fldNombre1;
+    private javax.swing.JTextField fldNumero;
     private javax.swing.JComboBox<String> fldSexo;
-    private javax.swing.JTextField fldTelefono;
+    private javax.swing.JTextField fldTelefono1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }
