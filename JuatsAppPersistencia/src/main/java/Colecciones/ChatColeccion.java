@@ -24,7 +24,6 @@ public class ChatColeccion {
     }
 
     public ChatColeccion(String nombre, byte[] imagen, List<ObjectId> integrantes, List<Mensaje> mensajes) {
-        this.id = id;
         this.nombre = nombre;
         this.imagen = imagen;
         this.integrantes = integrantes;

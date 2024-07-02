@@ -4,8 +4,8 @@
  */
 package DTO;
 
-import DocsNeg.ContactoDTO;
-import DocsNeg.DireccionDTO;
+import DocsDTO.ContactoDTO;
+import DocsDTO.DireccionDTO;
 import java.time.LocalDate;
 import java.util.List;
 

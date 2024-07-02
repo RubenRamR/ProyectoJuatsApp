@@ -5,6 +5,7 @@
 package InterfacesNegocio;
 
 import Colecciones.ChatColeccion;
+import DTO.ChatDTO;
 import excepciones.NegocioException;
 import excepciones.PersistenciaException;
 import java.util.List;
@@ -17,13 +18,13 @@ import org.bson.types.ObjectId;
 
 public interface IChatNegocio {
 
-    public void crearChat(ChatColeccion chat) throws NegocioException;
+    public void crearChat(ChatDTO chat) throws NegocioException;
 
     public ChatColeccion obtenerChatPorId(ObjectId id) throws NegocioException;
 
     public List<ChatColeccion> obtenerTodosLosChats() throws NegocioException;
 
-    public void actualizarChat(ChatColeccion chat) throws NegocioException;
+    public void actualizarChat(ChatDTO chat) throws NegocioException;
 
     public void eliminarChat(ObjectId id) throws NegocioException;
 }

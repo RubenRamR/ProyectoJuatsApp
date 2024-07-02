@@ -16,6 +16,9 @@ public class Mensaje {
     private LocalDateTime fechaHoraRegistro;
     private byte[] imagenOpcional;
 
+    public Mensaje() {
+    }
+    
     // Constructor, getters y setters
     public Mensaje(String textoMensaje, LocalDateTime fechaHoraRegistro, byte[] imagenOpcional) {
         this.textoMensaje = textoMensaje;

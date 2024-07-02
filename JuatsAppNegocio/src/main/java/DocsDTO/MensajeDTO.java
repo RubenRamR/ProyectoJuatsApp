@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package DocsNeg;
+package DocsDTO;
 
 import java.time.LocalDateTime;
 
@@ -16,6 +16,9 @@ public class MensajeDTO {
     private LocalDateTime fechaHoraRegistro;
     private byte[] imagenOpcional;
 
+    public MensajeDTO() {
+    }   
+    
     // Constructor, getters y setters
     public MensajeDTO(String textoMensaje, LocalDateTime fechaHoraRegistro, byte[] imagenOpcional) {
         this.textoMensaje = textoMensaje;

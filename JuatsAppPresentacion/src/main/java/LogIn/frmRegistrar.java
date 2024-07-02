@@ -5,7 +5,7 @@
 package LogIn;
 
 import DTO.UsuarioDTO;
-import DocsNeg.DireccionDTO;
+import DocsDTO.DireccionDTO;
 import java.awt.Color;
 import java.io.File;
 import javax.swing.BorderFactory;
