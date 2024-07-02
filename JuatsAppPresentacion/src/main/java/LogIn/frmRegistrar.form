@@ -259,6 +259,15 @@
           </Constraints>
         </Component>
         <Component class="com.toedter.calendar.JDateChooser" name="fldFecha">
+          <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ba" green="db" red="ba" type="rgb"/>
+            </Property>
+            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ba" green="db" red="ba" type="rgb"/>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" value=""/>
+          </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="fldFecha.setBorder(lineBorder);&#xa;fldFecha.setBackground(new java.awt.Color(186, 219, 186));"/>
           </AuxValues>
@@ -292,7 +301,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="fldTelefonoActionPerformed"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="fldApellidoPaterno.setBorder(lineBorder);&#xa;fldApellidoPaterno.setBackground(new java.awt.Color(186, 219, 186));"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="fldTelefono.setBorder(lineBorder);&#xa;fldTelefono.setBackground(new java.awt.Color(186, 219, 186));"/>
           </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
@@ -318,7 +327,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="fldNombreActionPerformed"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="fldApellidoPaterno.setBorder(lineBorder);&#xa;fldApellidoPaterno.setBackground(new java.awt.Color(186, 219, 186));"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="fldNombre.setBorder(lineBorder);&#xa;fldNombre.setBackground(new java.awt.Color(186, 219, 186));"/>
           </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
@@ -367,7 +376,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="fldApellidoMaternoActionPerformed"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="fldApellidoPaterno.setBorder(lineBorder);&#xa;fldApellidoPaterno.setBackground(new java.awt.Color(186, 219, 186));"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="fldApellidoMaterno.setBorder(lineBorder);&#xa;fldApellidoMaterno.setBackground(new java.awt.Color(186, 219, 186));"/>
           </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
@@ -380,7 +389,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="fldCalleActionPerformed"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="fldColonia.setBorder(lineBorder);&#xa;fldColonia.setBackground(new java.awt.Color(186, 219, 186));"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="fldCalle.setBorder(lineBorder);&#xa;fldCalle.setBackground(new java.awt.Color(186, 219, 186));"/>
           </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
@@ -403,7 +412,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="fldNumeroActionPerformed"/>
           </Events>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="fldColonia.setBorder(lineBorder);&#xa;fldColonia.setBackground(new java.awt.Color(186, 219, 186));"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="fldNumero.setBorder(lineBorder);&#xa;fldNumero.setBackground(new java.awt.Color(186, 219, 186));"/>
           </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">

@@ -7,14 +7,16 @@ package Negocio;
 import Colecciones.UsuarioColeccion;
 import DAO.UsuarioDAO;
 import DTO.UsuarioDTO;
-import Docs.Contacto;
 import Docs.Direccion;
 import DocsDTO.ContactoDTO;
 import DocsDTO.DireccionDTO;
 import InterfacesNegocio.IUsuarioNegocio;
 import excepciones.NegocioException;
+import excepciones.PersistenciaException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bson.types.ObjectId;
 
 /**
@@ -42,23 +44,62 @@ public class UsuarioNegocio implements IUsuarioNegocio {
     }
 
     @Override
-    public UsuarioColeccion obtenerUsuarioPorId(String id) throws NegocioException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void crearUsuarioSinContactos(UsuarioDTO usuario) throws NegocioException {
+
+            UsuarioColeccion usuarioColeccion = this.convertirUsuarioDTO(usuario);
+        try {
+            usuarioDAO.crearUsuarioSinContactos(usuarioColeccion);
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(UsuarioNegocio.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+    
+    @Override
+    public UsuarioColeccion obtenerUsuarioPorId(ObjectId id) throws NegocioException {
+        try
+        {
+            return usuarioDAO.obtenerUsuarioPorId(id);
+        } catch (Exception e)
+        {
+            throw new NegocioException(e.getMessage());
+        }        
     }
 
     @Override
     public List<UsuarioColeccion> obtenerTodosLosUsuarios() throws NegocioException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try
+        {
+            return usuarioDAO.obtenerTodosLosUsuarios();
+        } catch (Exception e)
+        {
+            throw new NegocioException(e.getMessage());
+        }        
     }
+    
 
     @Override
     public void actualizarUsuario(UsuarioDTO usuario) throws NegocioException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try
+        {
+            UsuarioColeccion usuarioA = new UsuarioColeccion();
+            usuarioA = convertirUsuarioDTO(usuario);
+            usuarioDAO.actualizarUsuario(usuarioA);
+        } catch (Exception e)
+        {
+            throw new NegocioException(e.getMessage());
+        }     
     }
 
     @Override
-    public void eliminarUsuario(String id) throws NegocioException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void eliminarUsuario(ObjectId id) throws NegocioException {
+        try
+        {
+            usuarioDAO.eliminarUsuario(id);
+        } catch (Exception e)
+        {
+            throw new NegocioException(e.getMessage());
+        }     
     }
     
     // Método para convertir UsuarioDTO a UsuarioColeccion
@@ -66,7 +107,7 @@ public class UsuarioNegocio implements IUsuarioNegocio {
         UsuarioColeccion usuario = new UsuarioColeccion();
         
         // Asignar los valores simples
-        usuario.setId(new ObjectId(dto.getId())); // Si es necesario convertir a ObjectId
+        usuario.setId(dto.getId()); // Si es necesario convertir a ObjectId
         usuario.setNombre(dto.getNombre());
         usuario.setApellidoPaterno(dto.getApellidoPaterno());
         usuario.setApellidoMaterno(dto.getApellidoMaterno());
@@ -74,18 +115,15 @@ public class UsuarioNegocio implements IUsuarioNegocio {
         usuario.setFechaNacimiento(dto.getFechaNacimiento());
         usuario.setTelefono(dto.getTelefono());
         usuario.setImagenPerfil(dto.getImagenPerfil());
+        usuario.setContactos(dto.getContactos());
         
         // Convertir la dirección si está presente en el DTO
         if (dto.getDireccion() != null) {
             usuario.setDireccion(convertirDireccionDTO(dto.getDireccion()));
         }
         
-        // Convertir los contactos si están presentes en el DTO
-        if (dto.getContactos() != null) {
-            usuario.setContactos(convertirListaContactoDTO(dto.getContactos()));
-        }
-        
         return usuario;
+        
     }
     
     // Método para convertir DireccionDTO a Direccion
@@ -97,17 +135,6 @@ public class UsuarioNegocio implements IUsuarioNegocio {
         return direccion;
     }
     
-    // Método para convertir una lista de ContactoDTO a una lista de Contacto
-    private List<Contacto> convertirListaContactoDTO(List<ContactoDTO> dtos) {
-        List<Contacto> contactos = new ArrayList<>();
-        for (ContactoDTO dto : dtos) {
-            Contacto contacto = new Contacto();
-            contacto.setNombre(dto.getNombre());
-            contacto.setImagen(dto.getImagen());
 
-            contactos.add(contacto);
-        }
-        return contactos;
-    }
 
 }

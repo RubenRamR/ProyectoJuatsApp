@@ -17,12 +17,14 @@ import java.util.List;
 public interface IUsuarioNegocio {
 
     void crearUsuario(UsuarioDTO usuario) throws NegocioException;
+    
+    void crearUsuarioSinContactos(UsuarioDTO usuario) throws NegocioException;
 
-    UsuarioColeccion obtenerUsuarioPorId(String id) throws NegocioException;
+    UsuarioColeccion obtenerUsuarioPorId(ObjectId id) throws NegocioException;
 
     List<UsuarioColeccion> obtenerTodosLosUsuarios() throws NegocioException;
 
     void actualizarUsuario(UsuarioDTO usuario) throws NegocioException;
 
-    void eliminarUsuario(String id) throws NegocioException;
+    void eliminarUsuario(ObjectId id) throws NegocioException;
 }

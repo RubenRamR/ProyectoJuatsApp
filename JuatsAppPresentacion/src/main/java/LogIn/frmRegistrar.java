@@ -13,12 +13,17 @@ import javax.swing.JFileChooser;
 import javax.swing.border.Border;
 import Negocio.UsuarioNegocio;
 import excepciones.NegocioException;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
 /**
@@ -202,6 +207,9 @@ public class frmRegistrar extends javax.swing.JFrame {
 
         fldFecha.setBorder(lineBorder);
         fldFecha.setBackground(new java.awt.Color(186, 219, 186));
+        fldFecha.setBackground(new java.awt.Color(186, 219, 186));
+        fldFecha.setForeground(new java.awt.Color(186, 219, 186));
+        fldFecha.setToolTipText("");
         jPanel1.add(fldFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 150, 230, 40));
 
         Color customColor2 = new Color(0, 113, 219);
@@ -218,8 +226,8 @@ public class frmRegistrar extends javax.swing.JFrame {
         });
         jPanel1.add(btnEncontrarImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 310, 110, 20));
 
-        fldApellidoPaterno.setBorder(lineBorder);
-        fldApellidoPaterno.setBackground(new java.awt.Color(186, 219, 186));
+        fldTelefono.setBorder(lineBorder);
+        fldTelefono.setBackground(new java.awt.Color(186, 219, 186));
         fldTelefono.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 fldTelefonoActionPerformed(evt);
@@ -231,8 +239,8 @@ public class frmRegistrar extends javax.swing.JFrame {
         jLabel8.setText("Teléfono *");
         jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 300, 230, -1));
 
-        fldApellidoPaterno.setBorder(lineBorder);
-        fldApellidoPaterno.setBackground(new java.awt.Color(186, 219, 186));
+        fldNombre.setBorder(lineBorder);
+        fldNombre.setBackground(new java.awt.Color(186, 219, 186));
         fldNombre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 fldNombreActionPerformed(evt);
@@ -251,8 +259,8 @@ public class frmRegistrar extends javax.swing.JFrame {
         jLabel12.setText("Calle");
         jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 200, 50, -1));
 
-        fldApellidoPaterno.setBorder(lineBorder);
-        fldApellidoPaterno.setBackground(new java.awt.Color(186, 219, 186));
+        fldApellidoMaterno.setBorder(lineBorder);
+        fldApellidoMaterno.setBackground(new java.awt.Color(186, 219, 186));
         fldApellidoMaterno.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 fldApellidoMaternoActionPerformed(evt);
@@ -260,8 +268,8 @@ public class frmRegistrar extends javax.swing.JFrame {
         });
         jPanel1.add(fldApellidoMaterno, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 340, 230, 40));
 
-        fldColonia.setBorder(lineBorder);
-        fldColonia.setBackground(new java.awt.Color(186, 219, 186));
+        fldCalle.setBorder(lineBorder);
+        fldCalle.setBackground(new java.awt.Color(186, 219, 186));
         fldCalle.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 fldCalleActionPerformed(evt);
@@ -272,8 +280,8 @@ public class frmRegistrar extends javax.swing.JFrame {
         jLabel13.setText("Numero");
         jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 250, 50, -1));
 
-        fldColonia.setBorder(lineBorder);
-        fldColonia.setBackground(new java.awt.Color(186, 219, 186));
+        fldNumero.setBorder(lineBorder);
+        fldNumero.setBackground(new java.awt.Color(186, 219, 186));
         fldNumero.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 fldNumeroActionPerformed(evt);
@@ -341,24 +349,18 @@ public class frmRegistrar extends javax.swing.JFrame {
             return;
         }
 
-        // Llamar al método del negocio para crear el usuario en la base de datos
-        try
-        {
-            usuarioNegocio.crearUsuario(usuario);
+        try {
+            // Llamar al método del negocio para crear el usuario en la base de datos
+            
+            usuarioNegocio.crearUsuarioSinContactos(usuario);
+        } catch (NegocioException ex) {
+            Logger.getLogger(frmRegistrar.class.getName()).log(Level.SEVERE, null, ex);
+        }
             JOptionPane.showMessageDialog(this, "Usuario creado exitosamente.");
             limpiarCampos();
-        } catch (NegocioException ex)
-        {
-            JOptionPane.showMessageDialog(this, "Error al crear el usuario: " + ex.getMessage());
-        }
-    }
 
-    private byte[] obtenerImagen(String rutaImagen) {
-        // Lógica para obtener y convertir la imagen a byte[]
-        // Aquí deberías implementar el código para cargar y convertir la imagen
-        // Te sugiero usar librerías como javax.imageio.ImageIO para cargar la imagen
-        // y convertirla a byte[]
-        return null; // Implementa la lógica adecuada para obtener la imagen como byte[]
+        
+    
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
