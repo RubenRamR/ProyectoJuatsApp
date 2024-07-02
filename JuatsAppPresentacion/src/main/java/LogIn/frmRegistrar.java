@@ -4,12 +4,22 @@
  */
 package LogIn;
 
+import DTO.UsuarioDTO;
+import DocsNeg.DireccionDTO;
 import java.awt.Color;
 import java.io.File;
 import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
 import javax.swing.border.Border;
 import Negocio.UsuarioNegocio;
+import excepciones.NegocioException;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -27,6 +37,28 @@ public class frmRegistrar extends javax.swing.JFrame {
         this.setLocationRelativeTo(this);
         this.usuarioNegocio = usuarioNegocio;
 
+    }
+
+    public byte[] convertirImagenABytes(File file) throws IOException {
+        // Leer el archivo de imagen en un InputStream
+        InputStream inputStream = new FileInputStream(file);
+        byte[] bytes = inputStream.readAllBytes();
+        inputStream.close();
+        return bytes;
+    }
+
+    private void limpiarCampos() {
+        fldNombre.setText("");
+        fldApellidoPaterno.setText("");
+        fldApellidoMaterno.setText("");
+        fldCalle.setText("");
+        fldNumero.setText("");
+        fldColonia.setText("");
+        fldTelefono.setText("");
+        fldContraseña.setText("");
+        fldSexo.setSelectedIndex(0); // Selecciona el primer ítem del combo (Masculino)
+        fldFecha.setDate(null); // Limpia la fecha seleccionada
+        fldImagen.setText("");
     }
 
     /**
@@ -56,13 +88,13 @@ public class frmRegistrar extends javax.swing.JFrame {
         fldSexo = new javax.swing.JComboBox<>();
         fldFecha = new com.toedter.calendar.JDateChooser();
         btnEncontrarImagen = new javax.swing.JButton();
-        fldTelefono1 = new javax.swing.JTextField();
+        fldTelefono = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
-        fldNombre1 = new javax.swing.JTextField();
+        fldNombre = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
-        fldApellidoPaterno1 = new javax.swing.JTextField();
+        fldApellidoMaterno = new javax.swing.JTextField();
         fldCalle = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
         fldNumero = new javax.swing.JTextField();
@@ -84,7 +116,7 @@ public class frmRegistrar extends javax.swing.JFrame {
                 btnGuardarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 440, 180, 50));
+        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 460, 180, 50));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 64)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -188,12 +220,12 @@ public class frmRegistrar extends javax.swing.JFrame {
 
         fldApellidoPaterno.setBorder(lineBorder);
         fldApellidoPaterno.setBackground(new java.awt.Color(186, 219, 186));
-        fldTelefono1.addActionListener(new java.awt.event.ActionListener() {
+        fldTelefono.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fldTelefono1ActionPerformed(evt);
+                fldTelefonoActionPerformed(evt);
             }
         });
-        jPanel1.add(fldTelefono1, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 340, 230, 40));
+        jPanel1.add(fldTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 340, 230, 40));
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel8.setText("Teléfono *");
@@ -201,19 +233,19 @@ public class frmRegistrar extends javax.swing.JFrame {
 
         fldApellidoPaterno.setBorder(lineBorder);
         fldApellidoPaterno.setBackground(new java.awt.Color(186, 219, 186));
-        fldNombre1.addActionListener(new java.awt.event.ActionListener() {
+        fldNombre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fldNombre1ActionPerformed(evt);
+                fldNombreActionPerformed(evt);
             }
         });
-        jPanel1.add(fldNombre1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 150, 230, 40));
+        jPanel1.add(fldNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 150, 230, 40));
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel9.setText("Nombre *");
         jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 110, 230, -1));
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jLabel10.setText("Apellido Paterno *");
+        jLabel10.setText("Apellido Materno *");
         jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 300, 230, -1));
 
         jLabel12.setText("Calle");
@@ -221,12 +253,12 @@ public class frmRegistrar extends javax.swing.JFrame {
 
         fldApellidoPaterno.setBorder(lineBorder);
         fldApellidoPaterno.setBackground(new java.awt.Color(186, 219, 186));
-        fldApellidoPaterno1.addActionListener(new java.awt.event.ActionListener() {
+        fldApellidoMaterno.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fldApellidoPaterno1ActionPerformed(evt);
+                fldApellidoMaternoActionPerformed(evt);
             }
         });
-        jPanel1.add(fldApellidoPaterno1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 340, 230, 40));
+        jPanel1.add(fldApellidoMaterno, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 340, 230, 40));
 
         fldColonia.setBorder(lineBorder);
         fldColonia.setBackground(new java.awt.Color(186, 219, 186));
@@ -266,6 +298,67 @@ public class frmRegistrar extends javax.swing.JFrame {
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
+        // Obtener los datos del formulario
+        String nombre = fldNombre.getText().trim();
+        String apellidoPaterno = fldApellidoPaterno.getText().trim();
+        String apellidoMaterno = fldApellidoMaterno.getText().trim(); // Si existe un campo para el apellido materno
+        String calle = fldCalle.getText().trim();
+        String numero = fldNumero.getText().trim();
+        String colonia = fldColonia.getText().trim();
+        String telefono = fldTelefono.getText().trim();
+        String contraseña = fldContraseña.getText().trim();
+        String sexo = (String) fldSexo.getSelectedItem();
+        LocalDate fechaNacimiento = fldFecha.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+        // Validar campos obligatorios (ejemplo)
+        if (nombre.isEmpty() || apellidoPaterno.isEmpty() || calle.isEmpty() || numero.isEmpty() || contraseña.isEmpty())
+        {
+            JOptionPane.showMessageDialog(this, "Por favor complete todos los campos obligatorios.");
+            return;
+        }
+
+        // Crear un objeto UsuarioDTO con los datos del formulario
+        UsuarioDTO usuario = new UsuarioDTO();
+        usuario.setNombre(nombre);
+        usuario.setApellidoPaterno(apellidoPaterno);
+        usuario.setApellidoMaterno(apellidoMaterno);
+        DireccionDTO direccion = new DireccionDTO(calle, numero, colonia);
+        usuario.setDireccion(direccion);
+        usuario.setTelefono(telefono);
+        usuario.setContraseña(contraseña);
+        usuario.setSexo(sexo);
+        usuario.setFechaNacimiento(fechaNacimiento);
+
+        // Convertir la imagen a byte[]
+        try
+        {
+            byte[] imagenBytes = convertirImagenABytes(new File(fldImagen.getText()));
+            usuario.setImagenPerfil(imagenBytes);
+        } catch (IOException ex)
+        {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al convertir la imagen a bytes.");
+            return;
+        }
+
+        // Llamar al método del negocio para crear el usuario en la base de datos
+        try
+        {
+            usuarioNegocio.crearUsuario(usuario);
+            JOptionPane.showMessageDialog(this, "Usuario creado exitosamente.");
+            limpiarCampos();
+        } catch (NegocioException ex)
+        {
+            JOptionPane.showMessageDialog(this, "Error al crear el usuario: " + ex.getMessage());
+        }
+    }
+
+    private byte[] obtenerImagen(String rutaImagen) {
+        // Lógica para obtener y convertir la imagen a byte[]
+        // Aquí deberías implementar el código para cargar y convertir la imagen
+        // Te sugiero usar librerías como javax.imageio.ImageIO para cargar la imagen
+        // y convertirla a byte[]
+        return null; // Implementa la lógica adecuada para obtener la imagen como byte[]
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
@@ -293,32 +386,43 @@ public class frmRegistrar extends javax.swing.JFrame {
 
     private void btnEncontrarImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEncontrarImagenActionPerformed
         // TODO add your handling code here:
+        // Mostrar el selector de archivos
         JFileChooser fileChooser = new JFileChooser();
-
-        // Show the open dialog
         int result = fileChooser.showOpenDialog(this);
 
-        // Check if a file was selected
+        // Verificar si se seleccionó un archivo
         if (result == JFileChooser.APPROVE_OPTION)
         {
             File selectedFile = fileChooser.getSelectedFile();
-            fldImagen.setText(selectedFile.getAbsolutePath());
+            String imagePath = selectedFile.getAbsolutePath();
+            fldImagen.setText(imagePath);
+
+            // Convertir la imagen a byte[]
+            try
+            {
+                byte[] imageData = convertirImagenABytes(selectedFile);
+                // Usar el byte[] para guardar o enviar según sea necesario
+            } catch (IOException ex)
+            {
+                ex.printStackTrace();
+                // Manejar el error según sea necesario
+            }
         }
 
 
     }//GEN-LAST:event_btnEncontrarImagenActionPerformed
 
-    private void fldTelefono1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fldTelefono1ActionPerformed
+    private void fldTelefonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fldTelefonoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_fldTelefono1ActionPerformed
+    }//GEN-LAST:event_fldTelefonoActionPerformed
 
-    private void fldNombre1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fldNombre1ActionPerformed
+    private void fldNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fldNombreActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_fldNombre1ActionPerformed
+    }//GEN-LAST:event_fldNombreActionPerformed
 
-    private void fldApellidoPaterno1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fldApellidoPaterno1ActionPerformed
+    private void fldApellidoMaternoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fldApellidoMaternoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_fldApellidoPaterno1ActionPerformed
+    }//GEN-LAST:event_fldApellidoMaternoActionPerformed
 
     private void fldCalleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fldCalleActionPerformed
         // TODO add your handling code here:
@@ -333,17 +437,17 @@ public class frmRegistrar extends javax.swing.JFrame {
     private javax.swing.JButton btnCerrar;
     private javax.swing.JButton btnEncontrarImagen;
     private javax.swing.JButton btnGuardar;
+    private javax.swing.JTextField fldApellidoMaterno;
     private javax.swing.JTextField fldApellidoPaterno;
-    private javax.swing.JTextField fldApellidoPaterno1;
     private javax.swing.JTextField fldCalle;
     private javax.swing.JTextField fldColonia;
     private javax.swing.JTextField fldContraseña;
     private com.toedter.calendar.JDateChooser fldFecha;
     private javax.swing.JTextField fldImagen;
-    private javax.swing.JTextField fldNombre1;
+    private javax.swing.JTextField fldNombre;
     private javax.swing.JTextField fldNumero;
     private javax.swing.JComboBox<String> fldSexo;
-    private javax.swing.JTextField fldTelefono1;
+    private javax.swing.JTextField fldTelefono;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

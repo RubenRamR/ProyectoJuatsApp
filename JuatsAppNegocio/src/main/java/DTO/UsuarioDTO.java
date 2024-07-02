@@ -4,8 +4,8 @@
  */
 package DTO;
 
-import Docs.Contacto;
-import Docs.Direccion;
+import DocsNeg.ContactoDTO;
+import DocsNeg.DireccionDTO;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -22,11 +22,67 @@ public class UsuarioDTO {
     private String sexo;
     private LocalDate fechaNacimiento;
     private String telefono;
+    private String contraseña;
     private byte[] imagenPerfil;
-    private Direccion direccion;
-    private List<Contacto> contactos;
+    private DireccionDTO direccion;
+    private List<ContactoDTO> contactos;
 
     public UsuarioDTO() {
+    }
+
+    public UsuarioDTO(String nombre, String apellidoPaterno, String apellidoMaterno, String sexo, LocalDate fechaNacimiento, String telefono, String contraseña, byte[] imagenPerfil, DireccionDTO direccion, List<ContactoDTO> contactos) {
+        this.nombre = nombre;
+        this.apellidoPaterno = apellidoPaterno;
+        this.apellidoMaterno = apellidoMaterno;
+        this.sexo = sexo;
+        this.fechaNacimiento = fechaNacimiento;
+        this.telefono = telefono;
+        this.contraseña = contraseña;
+        this.imagenPerfil = imagenPerfil;
+        this.direccion = direccion;
+        this.contactos = contactos;
+    }
+
+    public UsuarioDTO(String nombre, String apellidoPaterno, String apellidoMaterno, String sexo, LocalDate fechaNacimiento, String telefono, String contraseña, byte[] imagenPerfil, DireccionDTO direccion) {
+        this.nombre = nombre;
+        this.apellidoPaterno = apellidoPaterno;
+        this.apellidoMaterno = apellidoMaterno;
+        this.sexo = sexo;
+        this.fechaNacimiento = fechaNacimiento;
+        this.telefono = telefono;
+        this.contraseña = contraseña;
+        this.imagenPerfil = imagenPerfil;
+        this.direccion = direccion;
+    }
+
+    public UsuarioDTO(String id, String nombre, String apellidoPaterno, String apellidoMaterno, String sexo, LocalDate fechaNacimiento, String telefono, String contraseña, byte[] imagenPerfil, DireccionDTO direccion, List<ContactoDTO> contactos) {
+        this.id = id;
+        this.nombre = nombre;
+        this.apellidoPaterno = apellidoPaterno;
+        this.apellidoMaterno = apellidoMaterno;
+        this.sexo = sexo;
+        this.fechaNacimiento = fechaNacimiento;
+        this.telefono = telefono;
+        this.contraseña = contraseña;
+        this.imagenPerfil = imagenPerfil;
+        this.direccion = direccion;
+        this.contactos = contactos;
+    }
+
+    public String getContraseña() {
+        return contraseña;
+    }
+
+    public void setContraseña(String contraseña) {
+        this.contraseña = contraseña;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getNombre() {
@@ -85,19 +141,19 @@ public class UsuarioDTO {
         this.imagenPerfil = imagenPerfil;
     }
 
-    public Direccion getDireccion() {
+    public DireccionDTO getDireccion() {
         return direccion;
     }
 
-    public void setDireccion(Direccion direccion) {
+    public void setDireccion(DireccionDTO direccion) {
         this.direccion = direccion;
     }
 
-    public List<Contacto> getContactos() {
+    public List<ContactoDTO> getContactos() {
         return contactos;
     }
 
-    public void setContactos(List<Contacto> contactos) {
+    public void setContactos(List<ContactoDTO> contactos) {
         this.contactos = contactos;
     }
 

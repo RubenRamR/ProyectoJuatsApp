@@ -62,7 +62,7 @@
           </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="310" y="440" width="180" height="50"/>
+              <AbsoluteConstraints x="310" y="460" width="180" height="50"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -287,9 +287,9 @@
             </Constraint>
           </Constraints>
         </Component>
-        <Component class="javax.swing.JTextField" name="fldTelefono1">
+        <Component class="javax.swing.JTextField" name="fldTelefono">
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="fldTelefono1ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="fldTelefonoActionPerformed"/>
           </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="fldApellidoPaterno.setBorder(lineBorder);&#xa;fldApellidoPaterno.setBackground(new java.awt.Color(186, 219, 186));"/>
@@ -313,9 +313,9 @@
             </Constraint>
           </Constraints>
         </Component>
-        <Component class="javax.swing.JTextField" name="fldNombre1">
+        <Component class="javax.swing.JTextField" name="fldNombre">
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="fldNombre1ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="fldNombreActionPerformed"/>
           </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="fldApellidoPaterno.setBorder(lineBorder);&#xa;fldApellidoPaterno.setBackground(new java.awt.Color(186, 219, 186));"/>
@@ -344,7 +344,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="24" style="0"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Apellido Paterno *"/>
+            <Property name="text" type="java.lang.String" value="Apellido Materno *"/>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
@@ -362,9 +362,9 @@
             </Constraint>
           </Constraints>
         </Component>
-        <Component class="javax.swing.JTextField" name="fldApellidoPaterno1">
+        <Component class="javax.swing.JTextField" name="fldApellidoMaterno">
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="fldApellidoPaterno1ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="fldApellidoMaternoActionPerformed"/>
           </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="fldApellidoPaterno.setBorder(lineBorder);&#xa;fldApellidoPaterno.setBackground(new java.awt.Color(186, 219, 186));"/>

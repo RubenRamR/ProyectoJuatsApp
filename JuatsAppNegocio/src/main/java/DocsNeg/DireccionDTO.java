@@ -2,22 +2,22 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Docs;
+package DocsNeg;
 
 /**
  *
  * @author rramirez
  */
-public class Direccion {
+public class DireccionDTO {
 
     private String calle;
     private String numero;
     private String codigoPostal;
 
-    public Direccion() {
+    public DireccionDTO() {
     }
 
-    public Direccion(String calle, String numero, String codigoPostal) {
+    public DireccionDTO(String calle, String numero, String codigoPostal) {
         this.calle = calle;
         this.numero = numero;
         this.codigoPostal = codigoPostal;
@@ -51,5 +51,5 @@ public class Direccion {
     public String toString() {
         return "Direccion{" + "calle=" + calle + ", numero=" + numero + ", codigoPostal=" + codigoPostal + '}';
     }
-    
+
 }
