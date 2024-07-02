@@ -46,4 +46,11 @@ public class Mensaje {
     public void setImagenOpcional(byte[] imagenOpcional) {
         this.imagenOpcional = imagenOpcional;
     }
+
+    @Override
+    public String toString() {
+        return "Mensaje{" + "textoMensaje=" + textoMensaje + ", fechaHoraRegistro=" + fechaHoraRegistro + ", imagenOpcional=" + imagenOpcional + '}';
+    }
+    
+    
 }

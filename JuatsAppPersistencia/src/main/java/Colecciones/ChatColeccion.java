@@ -78,4 +78,10 @@ public class ChatColeccion {
     public void setMensajes(List<Mensaje> mensajes) {
         this.mensajes = mensajes;
     }
+
+    @Override
+    public String toString() {
+        return "ChatColeccion{" + "id=" + id + ", nombre=" + nombre + ", imagen=" + imagen + ", integrantes=" + integrantes + ", mensajes=" + mensajes + '}';
+    }
+
 }

@@ -8,9 +8,11 @@ import Colecciones.UsuarioColeccion;
 import Docs.Contacto;
 import Docs.Direccion;
 import InterfacesDAO.IUsuarioDAO;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.result.UpdateResult;
 import excepciones.PersistenciaException;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -81,81 +83,209 @@ public class UsuarioDAO implements IUsuarioDAO {
 
     @Override
     public UsuarioColeccion obtenerUsuarioPorId(ObjectId id) {
-        try {
-        // Crea el filtro para encontrar el usuario por su ObjectId
-        Bson filtro = Filters.eq("_id", id);
+        try
+        {
+            Bson filtro = Filters.eq("_id", id);
+            Document documentoUsuario = coleccion.find(filtro).first();
 
-        // Realiza la consulta y obtiene el primer documento que cumpla con el filtro
-        Document documentoUsuario = coleccion.find(filtro).first();
+            if (documentoUsuario != null)
+            {
+                UsuarioColeccion usuario = new UsuarioColeccion();
+                usuario.setId(documentoUsuario.getObjectId("_id"));
+                usuario.setNombre(documentoUsuario.getString("nombre"));
+                usuario.setApellidoPaterno(documentoUsuario.getString("apellidoPaterno"));
+                usuario.setApellidoMaterno(documentoUsuario.getString("apellidoMaterno"));
+                usuario.setSexo(documentoUsuario.getString("sexo"));
+                usuario.setFechaNacimiento(documentoUsuario.getDate("fechaNacimiento").toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+                usuario.setTelefono(documentoUsuario.getString("telefono"));
+                usuario.setContraseña(documentoUsuario.getString("contraseña"));
 
-        if (documentoUsuario != null) {
-            UsuarioColeccion usuario = new UsuarioColeccion();
-            usuario.setId(documentoUsuario.getObjectId("_id"));
-            usuario.setNombre(documentoUsuario.getString("nombre"));
-            usuario.setApellidoPaterno(documentoUsuario.getString("apellidoPaterno"));
-            usuario.setApellidoMaterno(documentoUsuario.getString("apellidoMaterno"));
-            usuario.setSexo(documentoUsuario.getString("sexo"));
-            usuario.setFechaNacimiento(documentoUsuario.getDate("fechaNacimiento").toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-            usuario.setTelefono(documentoUsuario.getString("telefono"));
-            usuario.setContraseña(documentoUsuario.getString("contraseña"));
-            
-            // Manejo de imagenPerfil si existe en el documento
-            if (documentoUsuario.containsKey("imagenPerfil")) {
-                usuario.setImagenPerfil(documentoUsuario.get("imagenPerfil", Binary.class).getData());
-            } else {
-                usuario.setImagenPerfil(null); // Si no hay imagenPerfil, se asigna null
-            }
-            
-            // Manejo de dirección si existe en el documento
-            if (documentoUsuario.containsKey("direccion")) {
-                Document docDireccion = documentoUsuario.get("direccion", Document.class);
-                Direccion direccion = new Direccion();
-                direccion.setCalle(docDireccion.getString("calle"));
-                direccion.setNumero(docDireccion.getString("numero"));
-                direccion.setCodigoPostal(docDireccion.getString("codigoPostal"));
-                usuario.setDireccion(direccion);
-            } else {
-                usuario.setDireccion(null); // Si no hay dirección, se asigna null
-            }
-            
-            // Manejo de contactos si existe en el documento
-            if (documentoUsuario.containsKey("contactos")) {
-                List<Document> listaDocumentosContactos = documentoUsuario.getList("contactos", Document.class);
-                List<Contacto> contactos = new ArrayList<>();
-                for (Document docContacto : listaDocumentosContactos) {
-                    Contacto contacto = new Contacto();
-                    contacto.setNombre(docContacto.getString("nombre"));
-                    // Si tienes otros campos en Contacto, ajusta aquí
-                    contactos.add(contacto);
+                // Manejo de imagenPerfil si existe en el documento
+                if (documentoUsuario.containsKey("imagenPerfil"))
+                {
+                    usuario.setImagenPerfil(documentoUsuario.get("imagenPerfil", Binary.class).getData());
+                } else
+                {
+                    usuario.setImagenPerfil(null); // Asigna null si no hay imagenPerfil
                 }
-                usuario.setContactos(contactos);
-            } else {
-                usuario.setContactos(null); // Si no hay contactos, se asigna null
-            }
 
-            return usuario;
-        } else {
-            return null; // Si no se encontró ningún documento con ese ID
+                // Manejo de dirección si existe en el documento
+                if (documentoUsuario.containsKey("direccion"))
+                {
+                    Document docDireccion = documentoUsuario.get("direccion", Document.class);
+                    Direccion direccion = new Direccion();
+                    direccion.setCalle(docDireccion.getString("calle"));
+                    direccion.setNumero(docDireccion.getString("numero"));
+                    direccion.setCodigoPostal(docDireccion.getString("codigoPostal"));
+                    usuario.setDireccion(direccion);
+                } else
+                {
+                    usuario.setDireccion(null); // Asigna null si no hay dirección
+                }
+
+                // Manejo de contactos si existe en el documento
+                if (documentoUsuario.containsKey("contactos"))
+                {
+                    List<Document> listaDocumentosContactos = documentoUsuario.getList("contactos", Document.class);
+                    List<Contacto> contactos = new ArrayList<>();
+                    for (Document docContacto : listaDocumentosContactos)
+                    {
+                        Contacto contacto = new Contacto();
+                        contacto.setNombre(docContacto.getString("nombre"));
+                        // Aquí deberías manejar la imagen del contacto si también está presente
+                        contacto.setImagen(docContacto.get("imagen", Binary.class).getData());
+                        contactos.add(contacto);
+                    }
+                    usuario.setContactos(contactos);
+                } else
+                {
+                    usuario.setContactos(null); // Asigna null si no hay contactos
+                }
+
+                return usuario;
+            } else
+            {
+                return null; // Retorna null si no se encontró ningún documento con ese ID
+            }
+        } catch (Exception e)
+        {
+            e.printStackTrace(); // Manejo básico de excepciones, imprimirá el error en la consola
+            return null; // Retorna null si ocurre algún error al consultar MongoDB
         }
-    } catch (Exception e) {
-        e.printStackTrace(); // Manejo básico de excepciones, imprimirá el error en la consola
-        return null; // Retorna null si ocurre algún error al consultar MongoDB
-    }
     }
 
     @Override
     public List<UsuarioColeccion> obtenerTodosLosUsuarios() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        List<UsuarioColeccion> usuarios = new ArrayList<>();
+        try
+        {
+            // Realiza la consulta para obtener todos los documentos de usuarios
+            FindIterable<Document> documentosUsuarios = coleccion.find();
+
+            // Itera sobre los documentos obtenidos
+            for (Document documentoUsuario : documentosUsuarios)
+            {
+                UsuarioColeccion usuario = new UsuarioColeccion();
+                usuario.setId(documentoUsuario.getObjectId("_id"));
+                usuario.setNombre(documentoUsuario.getString("nombre"));
+                usuario.setApellidoPaterno(documentoUsuario.getString("apellidoPaterno"));
+                usuario.setApellidoMaterno(documentoUsuario.getString("apellidoMaterno"));
+                usuario.setSexo(documentoUsuario.getString("sexo"));
+                usuario.setFechaNacimiento(documentoUsuario.getDate("fechaNacimiento").toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+                usuario.setTelefono(documentoUsuario.getString("telefono"));
+                usuario.setContraseña(documentoUsuario.getString("contraseña"));
+
+                // Manejo de imagenPerfil si existe en el documento
+                if (documentoUsuario.containsKey("imagenPerfil"))
+                {
+                    usuario.setImagenPerfil(documentoUsuario.get("imagenPerfil", Binary.class).getData());
+                } else
+                {
+                    usuario.setImagenPerfil(null); // Asigna null si no hay imagenPerfil
+                }
+
+                // Manejo de dirección si existe en el documento
+                if (documentoUsuario.containsKey("direccion"))
+                {
+                    Document docDireccion = documentoUsuario.get("direccion", Document.class);
+                    Direccion direccion = new Direccion();
+                    direccion.setCalle(docDireccion.getString("calle"));
+                    direccion.setNumero(docDireccion.getString("numero"));
+                    direccion.setCodigoPostal(docDireccion.getString("codigoPostal"));
+                    usuario.setDireccion(direccion);
+                } else
+                {
+                    usuario.setDireccion(null); // Asigna null si no hay dirección
+                }
+
+                // Manejo de contactos si existe en el documento
+                if (documentoUsuario.containsKey("contactos"))
+                {
+                    List<Document> listaDocumentosContactos = documentoUsuario.getList("contactos", Document.class);
+                    List<Contacto> contactos = new ArrayList<>();
+                    for (Document docContacto : listaDocumentosContactos)
+                    {
+                        Contacto contacto = new Contacto();
+                        contacto.setNombre(docContacto.getString("nombre"));
+
+                        // Manejo de imagen del contacto si existe en el documento
+                        if (docContacto.containsKey("imagen"))
+                        {
+                            contacto.setImagen(docContacto.get("imagen", Binary.class).getData());
+                        } else
+                        {
+                            contacto.setImagen(null); // Asigna null si no hay imagen para este contacto
+                        }
+
+                        contactos.add(contacto);
+                    }
+                    usuario.setContactos(contactos);
+                } else
+                {
+                    usuario.setContactos(null); // Asigna null si no hay contactos
+                }
+
+                usuarios.add(usuario);
+            }
+        } catch (Exception e)
+        {
+            e.printStackTrace(); // Manejo básico de excepciones, imprimirá el error en la consola
+            // Puedes manejar la excepción de otra forma según tus necesidades
+        }
+        return usuarios;
     }
 
-    @Override
     public void actualizarUsuario(UsuarioColeccion usuario) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try
+        {
+            // Crea el filtro para encontrar el usuario por su ObjectId
+            ObjectId idUsuario = usuario.getId();
+            Bson filtro = Filters.eq("_id", idUsuario);
+
+            // Crea el documento con los nuevos valores a actualizar
+            Document docActualizacion = new Document()
+                    .append("nombre", usuario.getNombre())
+                    .append("apellidoPaterno", usuario.getApellidoPaterno())
+                    .append("apellidoMaterno", usuario.getApellidoMaterno())
+                    .append("sexo", usuario.getSexo())
+                    .append("fechaNacimiento", java.sql.Date.valueOf(usuario.getFechaNacimiento()))
+                    .append("telefono", usuario.getTelefono())
+                    .append("contraseña", usuario.getContraseña())
+                    .append("imagenPerfil", usuario.getImagenPerfil())
+                    .append("direccion", convertirDireccionADocumento(usuario.getDireccion()))
+                    .append("contactos", convertirContactosADocumentos(usuario.getContactos()));
+
+            // Realiza la actualización en la base de datos
+            UpdateResult resultado = coleccion.updateOne(filtro, new Document("$set", docActualizacion));
+
+            // Verifica si se actualizó correctamente
+            if (resultado.getModifiedCount() > 0)
+            {
+                System.out.println("Usuario actualizado correctamente");
+            } else
+            {
+                System.out.println("No se encontró ningún usuario para actualizar");
+            }
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
-    @Override
     public void eliminarUsuario(ObjectId id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try
+        {
+            // Crea el filtro para encontrar el usuario por su ObjectId
+            Bson filtro = Filters.eq("_id", id);
+
+            // Elimina el documento que cumpla con el filtro
+            coleccion.deleteOne(filtro);
+
+            System.out.println("Usuario eliminado correctamente");
+        } catch (Exception e)
+        {
+            e.printStackTrace(); // Manejo básico de excepciones, imprimirá el error en la consola
+        }
     }
 
     private UsuarioColeccion convertirDocumentoAUsuario(Document doc) {
