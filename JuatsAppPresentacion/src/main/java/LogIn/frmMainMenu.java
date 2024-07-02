@@ -4,11 +4,10 @@
  */
 package LogIn;
 
-
 import java.awt.Color;
 import javax.swing.BorderFactory;
 import javax.swing.border.Border;
-import negocio.JANegocio;
+import Negocio.UsuarioNegocio;
 
 /**
  *
@@ -16,15 +15,21 @@ import negocio.JANegocio;
  */
 public class frmMainMenu extends javax.swing.JFrame {
 
-    JANegocio negocio;
-    
+    UsuarioNegocio usuarioNegocio;
+
     /**
      * Creates new form LogIn
      */
-    public frmMainMenu(JANegocio negocio) {
+//    public frmMainMenu(UsuarioNegocio usuarioNegocio) {
+//        initComponents();
+//        this.setLocationRelativeTo(this);
+//        this.usuarioNegocio = usuarioNegocio;
+//
+//    }
+    public frmMainMenu(UsuarioNegocio usuarioNegocio) {
         initComponents();
         this.setLocationRelativeTo(this);
-        this.negocio = negocio;
+        this.usuarioNegocio = usuarioNegocio;
 
     }
 
@@ -108,16 +113,16 @@ public class frmMainMenu extends javax.swing.JFrame {
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         // TODO add your handling code here:
-        frmRegistrar frm = new frmRegistrar(negocio);
+        frmRegistrar frm = new frmRegistrar(usuarioNegocio);
         frm.show();
         this.dispose();
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
         // TODO add your handling code here:
-        frmLogIn frm = new frmLogIn(negocio);
+        frmLogIn frm = new frmLogIn(usuarioNegocio);
         frm.show();
-        this.dispose();        
+        this.dispose();
     }//GEN-LAST:event_btnIniciarSesionActionPerformed
 
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed

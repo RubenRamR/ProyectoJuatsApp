@@ -4,14 +4,13 @@
  */
 package Chat;
 
-
 import LogIn.*;
+import Negocio.UsuarioNegocio;
 import java.awt.Color;
 import java.io.File;
 import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
 import javax.swing.border.Border;
-import negocio.JANegocio;
 
 /**
  *
@@ -19,15 +18,15 @@ import negocio.JANegocio;
  */
 public class frmAgregarIntegrantes extends javax.swing.JFrame {
 
-    JANegocio negocio;
-    
+    UsuarioNegocio usuarioNegocio;
+
     /**
      * Creates new form LogIn
      */
-    public frmAgregarIntegrantes(JANegocio negocio) {
+    public frmAgregarIntegrantes(UsuarioNegocio usuarioNegocio) {
         initComponents();
         this.setLocationRelativeTo(this);
-        this.negocio = negocio;
+        this.usuarioNegocio = usuarioNegocio;
 
     }
 
@@ -117,9 +116,9 @@ public class frmAgregarIntegrantes extends javax.swing.JFrame {
 
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
         // TODO add your handling code here:
-        frmMainMenu frm = new frmMainMenu(negocio);
+        frmMainMenu frm = new frmMainMenu(usuarioNegocio);
         frm.show();
-        this.dispose();           
+        this.dispose();
     }//GEN-LAST:event_btnCerrarActionPerformed
 
 

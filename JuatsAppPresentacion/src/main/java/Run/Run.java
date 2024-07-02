@@ -4,8 +4,12 @@
  */
 package Run;
 
+import Conexion.ConexionDB;
+import DAO.UsuarioDAO;
+import InterfacesDAO.IConexionDB;
 import LogIn.frmMainMenu;
-import negocio.JANegocio;
+import Negocio.UsuarioNegocio;
+import com.mongodb.client.MongoDatabase;
 
 /**
  *
@@ -18,14 +22,16 @@ public class Run {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        
+        IConexionDB conexionDB = new ConexionDB();
+        MongoDatabase database = conexionDB.conexion("mongodb://localhost:27017", "JuatssApp"); 
 
-        JANegocio negocio =new JANegocio();
-        
-        frmMainMenu mMenu = new frmMainMenu(negocio);
+        UsuarioDAO usuarioDAO = new UsuarioDAO(database);
+
+        UsuarioNegocio usuarioNegocio = new UsuarioNegocio(usuarioDAO);
+
+        frmMainMenu mMenu = new frmMainMenu(usuarioNegocio);
         mMenu.show();
-        
-        
+
     }
-    
+
 }

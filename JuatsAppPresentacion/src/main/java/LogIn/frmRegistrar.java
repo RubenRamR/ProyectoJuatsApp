@@ -4,13 +4,12 @@
  */
 package LogIn;
 
-
 import java.awt.Color;
 import java.io.File;
 import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
 import javax.swing.border.Border;
-import negocio.JANegocio;
+import Negocio.UsuarioNegocio;
 
 /**
  *
@@ -18,15 +17,15 @@ import negocio.JANegocio;
  */
 public class frmRegistrar extends javax.swing.JFrame {
 
-    JANegocio negocio;
-    
+    UsuarioNegocio usuarioNegocio;
+
     /**
      * Creates new form LogIn
      */
-    public frmRegistrar(JANegocio negocio) {
+    public frmRegistrar(UsuarioNegocio usuarioNegocio) {
         initComponents();
         this.setLocationRelativeTo(this);
-        this.negocio = negocio;
+        this.usuarioNegocio = usuarioNegocio;
 
     }
 
@@ -198,9 +197,9 @@ public class frmRegistrar extends javax.swing.JFrame {
 
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
         // TODO add your handling code here:
-        frmMainMenu frm = new frmMainMenu(negocio);
+        frmMainMenu frm = new frmMainMenu(usuarioNegocio);
         frm.show();
-        this.dispose();           
+        this.dispose();
     }//GEN-LAST:event_btnCerrarActionPerformed
 
     private void fldTelefonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fldTelefonoActionPerformed
@@ -227,12 +226,13 @@ public class frmRegistrar extends javax.swing.JFrame {
         int result = fileChooser.showOpenDialog(this);
 
         // Check if a file was selected
-        if (result == JFileChooser.APPROVE_OPTION) {
+        if (result == JFileChooser.APPROVE_OPTION)
+        {
             File selectedFile = fileChooser.getSelectedFile();
             fldImagen.setText(selectedFile.getAbsolutePath());
         }
 
-        
+
     }//GEN-LAST:event_btnEncontrarImagenActionPerformed
 
 

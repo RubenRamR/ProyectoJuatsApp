@@ -8,6 +8,8 @@ import Conexion.ConexionDB;
 import DAO.UsuarioDAO;
 import InterfacesDAO.IConexionDB;
 import InterfacesDAO.IUsuarioDAO;
+import LogIn.frmMainMenu;
+import Negocio.UsuarioNegocio;
 import com.mongodb.client.MongoDatabase;
 
 /**
@@ -20,14 +22,14 @@ public class RunConexion {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-//        IConexionDB conexionDB = new ConexionDB();
-//        MongoDatabase database = conexionDB.conexion("mongodb://localhost:27017", "JuatssApp");
-//
-//        IUsuarioDAO usuarioDAO = new UsuarioDAO(database);
-//        UsuarioNegocio usuarioNegocio = new UsuarioNegocio(usuarioDAO);
-//
-//        frmMainMenu mMenu = new frmMainMenu(usuarioNegocio);
-//        mMenu.setVisible(true);
+        IConexionDB conexionDB = new ConexionDB();
+        MongoDatabase database = conexionDB.conexion("mongodb://localhost:27017", "JuatssApp");
+
+        UsuarioDAO usuarioDAO = new UsuarioDAO(database);
+        UsuarioNegocio usuarioNegocio = new UsuarioNegocio(usuarioDAO);
+
+        frmMainMenu mMenu = new frmMainMenu(usuarioNegocio);
+        mMenu.setVisible(true);
     }
 
 }

@@ -14,7 +14,7 @@ import org.bson.types.ObjectId;
  * @author rramirez
  */
 public interface IChatDAO {
-
+    
     public void crearChat(ChatColeccion chat) throws PersistenciaException;
 
     public ChatColeccion obtenerChatPorId(ObjectId id) throws PersistenciaException;

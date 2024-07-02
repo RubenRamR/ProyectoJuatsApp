@@ -4,7 +4,6 @@
  */
 package Chat;
 
-
 import LogIn.*;
 import Utilerias.ImageRenderer;
 import Utilerias.JButtonCellEditor;
@@ -20,8 +19,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
 import javax.swing.border.Border;
 import javax.swing.table.TableColumnModel;
-import negocio.JANegocio;
-
+import Negocio.UsuarioNegocio;
 
 /**
  *
@@ -29,49 +27,46 @@ import negocio.JANegocio;
  */
 public class frmChat extends javax.swing.JFrame {
 
-    JANegocio negocio;
-    
+    UsuarioNegocio usuarioNegocio;
+
     /**
      * Creates new form LogIn
      */
-    public frmChat(JANegocio negocio) {
+    public frmChat(UsuarioNegocio usuarioNegocio) {
         initComponents();
         cargarConfiguracionInicialTablaChats();
         cargarConfiguracionInicialTablaMiPerfil();
         this.setLocationRelativeTo(this);
-        this.negocio = negocio;
+        this.usuarioNegocio = usuarioNegocio;
 
     }
 
-    private void cargarConfiguracionInicialTablaChats() { 
-           
+    private void cargarConfiguracionInicialTablaChats() {
+
         TableColumnModel modeloColumnas = this.tblChats.getColumnModel();
 
-
-        
         ActionListener onAprobarClickListener = new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                
-            }               
+
+            }
         };
         int indiceColumnaEditar = 0;
         Color color = new Color(178, 218, 250);
-        modeloColumnas.getColumn(indiceColumnaEditar).setCellRenderer(new JButtonRenderer("Nombre",color));
+        modeloColumnas.getColumn(indiceColumnaEditar).setCellRenderer(new JButtonRenderer("Nombre", color));
         modeloColumnas.getColumn(indiceColumnaEditar).setCellEditor(new JButtonCellEditor("Nombre", onAprobarClickListener));
 
-
         tblChats.getColumnModel().getColumn(1).setCellRenderer(new ImageRenderer("placeholder.jpg"));
-       
-    }         
-    
-    private void cargarConfiguracionInicialTablaMiPerfil() { 
-        tblMiFoto.setRowHeight(0, 50);   
+
+    }
+
+    private void cargarConfiguracionInicialTablaMiPerfil() {
+        tblMiFoto.setRowHeight(0, 50);
         tblMiFoto.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer("placeholder.jpg"));
-       
-    }         
-        
+
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -313,7 +308,7 @@ public class frmChat extends javax.swing.JFrame {
 
     private void fldFotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fldFotoActionPerformed
         // TODO add your handling code here:
-        
+
     }//GEN-LAST:event_fldFotoActionPerformed
 
     private void fldMensajeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fldMensajeActionPerformed
@@ -322,21 +317,21 @@ public class frmChat extends javax.swing.JFrame {
 
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
         // TODO add your handling code here:
-        frmMainMenu frm = new frmMainMenu(negocio);
+        frmMainMenu frm = new frmMainMenu(usuarioNegocio);
         frm.show();
-        this.dispose();           
+        this.dispose();
     }//GEN-LAST:event_btnCerrarActionPerformed
 
     private void btnPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPerfilActionPerformed
         // TODO add your handling code here:
-        frmPerfil frm = new frmPerfil(negocio);
+        frmPerfil frm = new frmPerfil(usuarioNegocio);
         frm.show();
         this.dispose();
     }//GEN-LAST:event_btnPerfilActionPerformed
 
     private void btnContactosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContactosActionPerformed
         // TODO add your handling code here:
-        frmVerContactos frm = new frmVerContactos(negocio);
+        frmVerContactos frm = new frmVerContactos(usuarioNegocio);
         frm.show();
         this.dispose();
     }//GEN-LAST:event_btnContactosActionPerformed
@@ -349,7 +344,8 @@ public class frmChat extends javax.swing.JFrame {
         int result = fileChooser.showOpenDialog(this);
 
         // Check if a file was selected
-        if (result == JFileChooser.APPROVE_OPTION) {
+        if (result == JFileChooser.APPROVE_OPTION)
+        {
             File selectedFile = fileChooser.getSelectedFile();
             fldFoto.setText(selectedFile.getAbsolutePath());
         }
@@ -362,7 +358,7 @@ public class frmChat extends javax.swing.JFrame {
 
     private void btnNuevoChatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoChatActionPerformed
         // TODO add your handling code here:
-        frmNuevoChat frm = new frmNuevoChat(negocio);
+        frmNuevoChat frm = new frmNuevoChat(usuarioNegocio);
         frm.show();
         this.dispose();
     }//GEN-LAST:event_btnNuevoChatActionPerformed
@@ -373,16 +369,16 @@ public class frmChat extends javax.swing.JFrame {
 
     private void btnAgregarContactosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarContactosActionPerformed
         // TODO add your handling code here:
-        frmAgregarContactos frm = new frmAgregarContactos(negocio);
+        frmAgregarContactos frm = new frmAgregarContactos(usuarioNegocio);
         frm.show();
-        this.dispose();        
+        this.dispose();
     }//GEN-LAST:event_btnAgregarContactosActionPerformed
 
     private void btnDetalles2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetalles2ActionPerformed
         // TODO add your handling code here:
-        frmAgregarIntegrantes frm = new frmAgregarIntegrantes(negocio);
+        frmAgregarIntegrantes frm = new frmAgregarIntegrantes(usuarioNegocio);
         frm.show();
-        this.dispose(); 
+        this.dispose();
     }//GEN-LAST:event_btnDetalles2ActionPerformed
 
 
