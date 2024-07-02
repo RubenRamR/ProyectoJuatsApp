@@ -22,26 +22,32 @@ import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
  */
 public class ConexionDB implements IConexionDB {
 
-    private final String connectionString;
-    private final String dbName;
-
-    public ConexionDB(String connectionString, String dbName) {
-        this.connectionString = connectionString;
-        this.dbName = dbName;
-    }
+    private MongoClient mongoClient;
+    private MongoDatabase database;
 
     @Override
-    public MongoDatabase crearConexion() {
+    public MongoDatabase conexion(String connectionString, String databaseName) {
         CodecRegistry pojoCodecRegistry = fromProviders(PojoCodecProvider.builder().automatic(true).build());
         CodecRegistry codecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(), pojoCodecRegistry);
 
-        ConnectionString cadenaConexion = new ConnectionString(connectionString);
-        MongoClientSettings clientSettings = MongoClientSettings.builder()
-                .applyConnectionString(cadenaConexion)
+        ConnectionString connString = new ConnectionString(connectionString);
+        MongoClientSettings settings = MongoClientSettings.builder()
+                .applyConnectionString(connString)
                 .codecRegistry(codecRegistry)
                 .build();
 
-        MongoClient dbServer = MongoClients.create(clientSettings);
-        return dbServer.getDatabase(dbName);
+        mongoClient = MongoClients.create(settings);
+        this.database = mongoClient.getDatabase(databaseName);
+
+        return this.database;
     }
+
+    @Override
+    public void close() {
+        if (mongoClient != null)
+        {
+            mongoClient.close();
+        }
+    }
+
 }
