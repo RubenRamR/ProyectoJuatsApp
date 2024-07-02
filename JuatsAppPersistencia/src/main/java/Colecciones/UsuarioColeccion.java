@@ -4,7 +4,6 @@
  */
 package Colecciones;
 
-import Docs.Contacto;
 import Docs.Direccion;
 import java.time.LocalDate;
 import java.util.List;
@@ -26,13 +25,24 @@ public class UsuarioColeccion {
     private String contraseña;
     private byte[] imagenPerfil;
     private Direccion direccion;
-    private List<Contacto> contactos;
+    private List<ObjectId> contactos;
 
     public UsuarioColeccion() {
     }
 
-    //Sin contactos
     public UsuarioColeccion(String nombre, String apellidoPaterno, String apellidoMaterno, String sexo, LocalDate fechaNacimiento, String telefono, String contraseña, byte[] imagenPerfil, Direccion direccion) {
+        this.nombre = nombre;
+        this.apellidoPaterno = apellidoPaterno;
+        this.apellidoMaterno = apellidoMaterno;
+        this.sexo = sexo;
+        this.fechaNacimiento = fechaNacimiento;
+        this.telefono = telefono;
+        this.contraseña = contraseña;
+        this.imagenPerfil = imagenPerfil;
+        this.direccion = direccion;
+    }
+
+    public UsuarioColeccion(ObjectId id, String nombre, String apellidoPaterno, String apellidoMaterno, String sexo, LocalDate fechaNacimiento, String telefono, String contraseña, byte[] imagenPerfil, Direccion direccion) {
         this.id = id;
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
@@ -45,9 +55,7 @@ public class UsuarioColeccion {
         this.direccion = direccion;
     }
 
-    
-    public UsuarioColeccion(String nombre, String apellidoPaterno, String apellidoMaterno, String sexo, LocalDate fechaNacimiento, String telefono, String contraseña, byte[] imagenPerfil, Direccion direccion, List<Contacto> contactos) {
-        this.id = id;
+    public UsuarioColeccion(String nombre, String apellidoPaterno, String apellidoMaterno, String sexo, LocalDate fechaNacimiento, String telefono, String contraseña, byte[] imagenPerfil, Direccion direccion, List<ObjectId> contactos) {
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
         this.apellidoMaterno = apellidoMaterno;
@@ -60,7 +68,7 @@ public class UsuarioColeccion {
         this.contactos = contactos;
     }
 
-    public UsuarioColeccion(ObjectId id, String nombre, String apellidoPaterno, String apellidoMaterno, String sexo, LocalDate fechaNacimiento, String telefono, String contraseña, byte[] imagenPerfil, Direccion direccion, List<Contacto> contactos) {
+    public UsuarioColeccion(ObjectId id, String nombre, String apellidoPaterno, String apellidoMaterno, String sexo, LocalDate fechaNacimiento, String telefono, String contraseña, byte[] imagenPerfil, Direccion direccion, List<ObjectId> contactos) {
         this.id = id;
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
@@ -154,11 +162,11 @@ public class UsuarioColeccion {
         this.direccion = direccion;
     }
 
-    public List<Contacto> getContactos() {
+    public List<ObjectId> getContactos() {
         return contactos;
     }
 
-    public void setContactos(List<Contacto> contactos) {
+    public void setContactos(List<ObjectId> contactos) {
         this.contactos = contactos;
     }
 

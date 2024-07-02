@@ -5,7 +5,6 @@
 package DAO;
 
 import Colecciones.UsuarioColeccion;
-import Docs.Contacto;
 import Docs.Direccion;
 import InterfacesDAO.IUsuarioDAO;
 import com.mongodb.client.FindIterable;
@@ -39,6 +38,8 @@ public class UsuarioDAO implements IUsuarioDAO {
     public void crearUsuario(UsuarioColeccion usuario) throws PersistenciaException {
         try
         {
+            List<ObjectId> contactos = usuario.getContactos();
+
             Document doc = new Document()
                     .append("nombre", usuario.getNombre())
                     .append("apellidoPaterno", usuario.getApellidoPaterno())
@@ -49,7 +50,7 @@ public class UsuarioDAO implements IUsuarioDAO {
                     .append("contraseña", usuario.getContraseña())
                     .append("imagenPerfil", usuario.getImagenPerfil())
                     .append("direccion", convertirDireccionADocumento(usuario.getDireccion()))
-                    .append("contactos", convertirContactosADocumentos(usuario.getContactos()));
+                    .append("contactos", contactos);
 
             coleccion.insertOne(doc);
 
@@ -82,7 +83,7 @@ public class UsuarioDAO implements IUsuarioDAO {
     }
 
     @Override
-    public UsuarioColeccion obtenerUsuarioPorId(ObjectId id) {
+    public UsuarioColeccion obtenerUsuarioPorId(ObjectId id)throws PersistenciaException {
         try
         {
             Bson filtro = Filters.eq("_id", id);
@@ -100,62 +101,63 @@ public class UsuarioDAO implements IUsuarioDAO {
                 usuario.setTelefono(documentoUsuario.getString("telefono"));
                 usuario.setContraseña(documentoUsuario.getString("contraseña"));
 
-                // Manejo de imagenPerfil si existe en el documento
                 if (documentoUsuario.containsKey("imagenPerfil"))
                 {
-                    usuario.setImagenPerfil(documentoUsuario.get("imagenPerfil", Binary.class).getData());
+                    Binary imagenPerfil = documentoUsuario.get("imagenPerfil", Binary.class);
+                    if (imagenPerfil != null)
+                    {
+                        usuario.setImagenPerfil(imagenPerfil.getData());
+                    } else
+                    {
+                        usuario.setImagenPerfil(null);
+                    }
                 } else
                 {
-                    usuario.setImagenPerfil(null); // Asigna null si no hay imagenPerfil
+                    usuario.setImagenPerfil(null);
                 }
 
-                // Manejo de dirección si existe en el documento
                 if (documentoUsuario.containsKey("direccion"))
                 {
                     Document docDireccion = documentoUsuario.get("direccion", Document.class);
-                    Direccion direccion = new Direccion();
-                    direccion.setCalle(docDireccion.getString("calle"));
-                    direccion.setNumero(docDireccion.getString("numero"));
-                    direccion.setCodigoPostal(docDireccion.getString("codigoPostal"));
-                    usuario.setDireccion(direccion);
+                    if (docDireccion != null)
+                    {
+                        Direccion direccion = new Direccion();
+                        direccion.setCalle(docDireccion.getString("calle"));
+                        direccion.setNumero(docDireccion.getString("numero"));
+                        direccion.setCodigoPostal(docDireccion.getString("codigoPostal"));
+                        usuario.setDireccion(direccion);
+                    } else
+                    {
+                        usuario.setDireccion(null);
+                    }
                 } else
                 {
-                    usuario.setDireccion(null); // Asigna null si no hay dirección
+                    usuario.setDireccion(null);
                 }
 
-                // Manejo de contactos si existe en el documento
                 if (documentoUsuario.containsKey("contactos"))
                 {
-                    List<Document> listaDocumentosContactos = documentoUsuario.getList("contactos", Document.class);
-                    List<Contacto> contactos = new ArrayList<>();
-                    for (Document docContacto : listaDocumentosContactos)
-                    {
-                        Contacto contacto = new Contacto();
-                        contacto.setNombre(docContacto.getString("nombre"));
-                        // Aquí deberías manejar la imagen del contacto si también está presente
-                        contacto.setImagen(docContacto.get("imagen", Binary.class).getData());
-                        contactos.add(contacto);
-                    }
-                    usuario.setContactos(contactos);
+                    List<ObjectId> listaContactos = documentoUsuario.getList("contactos", ObjectId.class);
+                    usuario.setContactos(listaContactos);
                 } else
                 {
-                    usuario.setContactos(null); // Asigna null si no hay contactos
+                    usuario.setContactos(null);
                 }
 
                 return usuario;
             } else
             {
-                return null; // Retorna null si no se encontró ningún documento con ese ID
+                return null;
             }
         } catch (Exception e)
         {
-            e.printStackTrace(); // Manejo básico de excepciones, imprimirá el error en la consola
-            return null; // Retorna null si ocurre algún error al consultar MongoDB
+            e.printStackTrace();
+            return null;
         }
     }
 
     @Override
-    public List<UsuarioColeccion> obtenerTodosLosUsuarios() {
+    public List<UsuarioColeccion> obtenerTodosLosUsuarios()throws PersistenciaException {
         List<UsuarioColeccion> usuarios = new ArrayList<>();
         try
         {
@@ -176,7 +178,7 @@ public class UsuarioDAO implements IUsuarioDAO {
                 usuario.setContraseña(documentoUsuario.getString("contraseña"));
 
                 // Manejo de imagenPerfil si existe en el documento
-                if (documentoUsuario.containsKey("imagenPerfil"))
+                if (documentoUsuario.containsKey("imagenPerfil") && documentoUsuario.get("imagenPerfil") != null)
                 {
                     usuario.setImagenPerfil(documentoUsuario.get("imagenPerfil", Binary.class).getData());
                 } else
@@ -201,25 +203,8 @@ public class UsuarioDAO implements IUsuarioDAO {
                 // Manejo de contactos si existe en el documento
                 if (documentoUsuario.containsKey("contactos"))
                 {
-                    List<Document> listaDocumentosContactos = documentoUsuario.getList("contactos", Document.class);
-                    List<Contacto> contactos = new ArrayList<>();
-                    for (Document docContacto : listaDocumentosContactos)
-                    {
-                        Contacto contacto = new Contacto();
-                        contacto.setNombre(docContacto.getString("nombre"));
-
-                        // Manejo de imagen del contacto si existe en el documento
-                        if (docContacto.containsKey("imagen"))
-                        {
-                            contacto.setImagen(docContacto.get("imagen", Binary.class).getData());
-                        } else
-                        {
-                            contacto.setImagen(null); // Asigna null si no hay imagen para este contacto
-                        }
-
-                        contactos.add(contacto);
-                    }
-                    usuario.setContactos(contactos);
+                    List<ObjectId> listaIdContactos = documentoUsuario.getList("contactos", ObjectId.class);
+                    usuario.setContactos(listaIdContactos);
                 } else
                 {
                     usuario.setContactos(null); // Asigna null si no hay contactos
@@ -235,7 +220,8 @@ public class UsuarioDAO implements IUsuarioDAO {
         return usuarios;
     }
 
-    public void actualizarUsuario(UsuarioColeccion usuario) {
+    @Override
+    public void actualizarUsuario(UsuarioColeccion usuario)throws PersistenciaException {
         try
         {
             // Crea el filtro para encontrar el usuario por su ObjectId
@@ -253,7 +239,7 @@ public class UsuarioDAO implements IUsuarioDAO {
                     .append("contraseña", usuario.getContraseña())
                     .append("imagenPerfil", usuario.getImagenPerfil())
                     .append("direccion", convertirDireccionADocumento(usuario.getDireccion()))
-                    .append("contactos", convertirContactosADocumentos(usuario.getContactos()));
+                    .append("contactos", usuario.getContactos());
 
             // Realiza la actualización en la base de datos
             UpdateResult resultado = coleccion.updateOne(filtro, new Document("$set", docActualizacion));
@@ -272,7 +258,8 @@ public class UsuarioDAO implements IUsuarioDAO {
         }
     }
 
-    public void eliminarUsuario(ObjectId id) {
+    @Override
+    public void eliminarUsuario(ObjectId id)throws PersistenciaException {
         try
         {
             // Crea el filtro para encontrar el usuario por su ObjectId
@@ -288,62 +275,11 @@ public class UsuarioDAO implements IUsuarioDAO {
         }
     }
 
-    private UsuarioColeccion convertirDocumentoAUsuario(Document doc) {
-        ObjectId id = doc.getObjectId("_id");
-        String nombre = doc.getString("nombre");
-        String apellidoPaterno = doc.getString("apellidoPaterno");
-        String apellidoMaterno = doc.getString("apellidoMaterno");
-        String sexo = doc.getString("sexo");
-        LocalDate fechaNacimiento = doc.getDate("fechaNacimiento").toInstant()
-                .atZone(ZoneId.systemDefault()).toLocalDate();
-        String telefono = doc.getString("telefono");
-        String contraseña = doc.getString("contraseña");
-
-        byte[] imagenPerfil = doc.get("imagenPerfil", byte[].class
-        );
-        Document direccionDoc = doc.get("direccion", Document.class
-        );
-        Direccion direccion = convertirDocumentoADireccion(direccionDoc);
-        List<Document> contactosDocs = doc.getList("contactos", Document.class
-        );
-
-        List<Contacto> contactos = new ArrayList<>();
-        for (Document contactoDoc : contactosDocs)
-        {
-            String nombreContacto = contactoDoc.getString("nombre");
-
-            byte[] imagenContacto = contactoDoc.get("imagen", byte[].class
-            );
-            contactos.add(new Contacto(nombreContacto, imagenContacto));
-        }
-
-        return new UsuarioColeccion(id, nombre, apellidoPaterno, apellidoMaterno, sexo, fechaNacimiento, telefono, contraseña, imagenPerfil, direccion, contactos);
-    }
-
     private Document convertirDireccionADocumento(Direccion direccion) {
         return new Document()
                 .append("calle", direccion.getCalle())
                 .append("numero", direccion.getNumero())
                 .append("codigoPostal", direccion.getCodigoPostal());
-    }
-
-    private Direccion convertirDocumentoADireccion(Document doc) {
-        String calle = doc.getString("calle");
-        String numero = doc.getString("numero");
-        String codigoPostal = doc.getString("codigoPostal");
-        return new Direccion(calle, numero, codigoPostal);
-    }
-
-    private List<Document> convertirContactosADocumentos(List<Contacto> contactos) {
-        List<Document> contactosDocs = new ArrayList<>();
-        for (Contacto contacto : contactos)
-        {
-            Document doc = new Document()
-                    .append("nombre", contacto.getNombre())
-                    .append("imagen", contacto.getImagen());
-            contactosDocs.add(doc);
-        }
-        return contactosDocs;
     }
 
 }
