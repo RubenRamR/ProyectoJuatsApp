@@ -266,7 +266,12 @@ public class frmAgregarContactos extends javax.swing.JFrame {
             int row = tblContactos.getSelectedRow();
             List<UsuarioDTO> usuarios = usuarioNegocio.obtenerTodosLosUsuarios();
             UsuarioDTO usuariosel = usuarios.get(row);
+            System.out.println(usuariosel.toString());
             usuarioNegocio.agregarContacto(u, usuariosel);
+            UsuarioDTO a = usuarioNegocio.obtenerUsuarioPorId(u.getId());
+            frmChat frm = new frmChat(usuarioNegocio, chatNegocio, a);
+            frm.show();
+            this.dispose();
         } catch (NegocioException ex) {
             Logger.getLogger(frmAgregarContactos.class.getName()).log(Level.SEVERE, null, ex);
         }
