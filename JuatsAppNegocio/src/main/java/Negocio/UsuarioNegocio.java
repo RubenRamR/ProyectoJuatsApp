@@ -65,6 +65,20 @@ public class UsuarioNegocio implements IUsuarioNegocio {
             throw new NegocioException(e.getMessage());
         }        
     }
+    
+    @Override
+    public UsuarioColeccion obtenerUsuarioPorCredenciales(UsuarioDTO dto) throws NegocioException {
+        try
+        {
+            String telefono = dto.getTelefono();
+            String contraseña = dto.getContraseña();
+            return usuarioDAO.obtenerUsuarioPorCredenciales(telefono, contraseña);
+        } catch (Exception e)
+        {
+            throw new NegocioException(e.getMessage());
+        }        
+    }
+    
 
     @Override
     public List<UsuarioColeccion> obtenerTodosLosUsuarios() throws NegocioException {
@@ -112,6 +126,7 @@ public class UsuarioNegocio implements IUsuarioNegocio {
         usuario.setApellidoPaterno(dto.getApellidoPaterno());
         usuario.setApellidoMaterno(dto.getApellidoMaterno());
         usuario.setSexo(dto.getSexo());
+        usuario.setContraseña(dto.getContraseña());
         usuario.setFechaNacimiento(dto.getFechaNacimiento());
         usuario.setTelefono(dto.getTelefono());
         usuario.setImagenPerfil(dto.getImagenPerfil());
@@ -126,9 +141,43 @@ public class UsuarioNegocio implements IUsuarioNegocio {
         
     }
     
+    // Método para convertir UsuarioColeccion a UsuarioDTO
+    public UsuarioDTO convertirUsuarioDTO(UsuarioColeccion usuario) {
+        UsuarioDTO u = new UsuarioDTO();
+        
+        // Asignar los valores simples
+        u.setId(usuario.getId()); // Si es necesario convertir a ObjectId
+        u.setNombre(usuario.getNombre());
+        u.setApellidoPaterno(usuario.getApellidoPaterno());
+        u.setApellidoMaterno(usuario.getApellidoMaterno());
+        u.setSexo(usuario.getSexo());
+        u.setContraseña(usuario.getContraseña());
+        u.setFechaNacimiento(usuario.getFechaNacimiento());
+        u.setTelefono(usuario.getTelefono());
+        u.setImagenPerfil(usuario.getImagenPerfil());
+        u.setContactos(usuario.getContactos());
+        
+        // Convertir la dirección si está presente en el DTO
+        if (usuario.getDireccion() != null) {
+            u.setDireccion(convertirDireccionDTO(usuario.getDireccion()));
+        }
+        
+        return u;
+        
+    }    
+    
     // Método para convertir DireccionDTO a Direccion
     private Direccion convertirDireccionDTO(DireccionDTO dto) {
         Direccion direccion = new Direccion();
+        direccion.setCalle(dto.getCalle());
+        direccion.setNumero(dto.getNumero());
+        direccion.setCodigoPostal(dto.getCodigoPostal());
+        return direccion;
+    }
+    
+    // Método para convertir Direccion a DireccionDTO
+    private DireccionDTO convertirDireccionDTO(Direccion dto) {
+        DireccionDTO direccion = new DireccionDTO();
         direccion.setCalle(dto.getCalle());
         direccion.setNumero(dto.getNumero());
         direccion.setCodigoPostal(dto.getCodigoPostal());

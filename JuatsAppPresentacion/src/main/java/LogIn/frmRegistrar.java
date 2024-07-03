@@ -6,6 +6,7 @@ package LogIn;
 
 import DTO.UsuarioDTO;
 import DocsDTO.DireccionDTO;
+import Negocio.ChatNegocio;
 import java.awt.Color;
 import java.io.File;
 import javax.swing.BorderFactory;
@@ -33,15 +34,17 @@ import javax.swing.JOptionPane;
 public class frmRegistrar extends javax.swing.JFrame {
 
     UsuarioNegocio usuarioNegocio;
+    ChatNegocio chatNegocio;
 
     /**
      * Creates new form LogIn
      */
-    public frmRegistrar(UsuarioNegocio usuarioNegocio) {
+    public frmRegistrar(UsuarioNegocio usuarioNegocio, ChatNegocio chatNegocio) {
         initComponents();
         this.setLocationRelativeTo(this);
         this.usuarioNegocio = usuarioNegocio;
-
+        this.chatNegocio = chatNegocio;
+        
     }
 
     public byte[] convertirImagenABytes(File file) throws IOException {
@@ -359,13 +362,17 @@ public class frmRegistrar extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Usuario creado exitosamente.");
             limpiarCampos();
 
-        
+
+
+        frmLogIn login = new frmLogIn(usuarioNegocio, chatNegocio);
+        login.setVisible(true);
+        this.dispose();
     
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
         // TODO add your handling code here:
-        frmMainMenu frm = new frmMainMenu(usuarioNegocio);
+        frmMainMenu frm = new frmMainMenu(usuarioNegocio, chatNegocio);
         frm.show();
         this.dispose();
     }//GEN-LAST:event_btnCerrarActionPerformed

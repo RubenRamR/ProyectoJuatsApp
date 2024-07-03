@@ -5,9 +5,11 @@
 package Run;
 
 import Conexion.ConexionDB;
+import DAO.ChatDAO;
 import DAO.UsuarioDAO;
 import InterfacesDAO.IConexionDB;
 import LogIn.frmMainMenu;
+import Negocio.ChatNegocio;
 import Negocio.UsuarioNegocio;
 import com.mongodb.client.MongoDatabase;
 
@@ -28,8 +30,12 @@ public class Run {
         UsuarioDAO usuarioDAO = new UsuarioDAO(database);
 
         UsuarioNegocio usuarioNegocio = new UsuarioNegocio(usuarioDAO);
+        
+        ChatDAO chatDAO = new ChatDAO(database);
+        
+        ChatNegocio chatNegocio = new ChatNegocio(chatDAO);
 
-        frmMainMenu mMenu = new frmMainMenu(usuarioNegocio);
+        frmMainMenu mMenu = new frmMainMenu(usuarioNegocio, chatNegocio);
         mMenu.show();
 
     }

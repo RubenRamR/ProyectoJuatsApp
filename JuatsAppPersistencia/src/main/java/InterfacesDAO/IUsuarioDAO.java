@@ -22,6 +22,8 @@ public interface IUsuarioDAO {
     public UsuarioColeccion obtenerUsuarioPorId(ObjectId id) throws PersistenciaException;
 
     public List<UsuarioColeccion> obtenerTodosLosUsuarios() throws PersistenciaException;
+    
+    public UsuarioColeccion obtenerUsuarioPorCredenciales(String telefono, String contraseña)throws PersistenciaException ;    
 
     public void actualizarUsuario(UsuarioColeccion usuario) throws PersistenciaException;
 

@@ -1,4 +1,4 @@
-/*
+    /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
@@ -156,6 +156,83 @@ public class UsuarioDAO implements IUsuarioDAO {
         }
     }
 
+    @Override
+    public UsuarioColeccion obtenerUsuarioPorCredenciales(String telefono, String contraseña)throws PersistenciaException {
+        try
+        {
+            Bson filtro = Filters.eq("telefono", telefono);
+            Bson filtro2 = Filters.eq("contraseña", contraseña);
+            Bson combinedFilter = Filters.and(filtro, filtro2);
+            Document documentoUsuario = coleccion.find(combinedFilter).first();
+
+            if (documentoUsuario != null)
+            {
+                UsuarioColeccion usuario = new UsuarioColeccion();
+                usuario.setId(documentoUsuario.getObjectId("_id"));
+                usuario.setNombre(documentoUsuario.getString("nombre"));
+                usuario.setApellidoPaterno(documentoUsuario.getString("apellidoPaterno"));
+                usuario.setApellidoMaterno(documentoUsuario.getString("apellidoMaterno"));
+                usuario.setSexo(documentoUsuario.getString("sexo"));
+                usuario.setFechaNacimiento(documentoUsuario.getDate("fechaNacimiento").toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+                usuario.setTelefono(documentoUsuario.getString("telefono"));
+                usuario.setContraseña(documentoUsuario.getString("contraseña"));
+
+                if (documentoUsuario.containsKey("imagenPerfil"))
+                {
+                    Binary imagenPerfil = documentoUsuario.get("imagenPerfil", Binary.class);
+                    if (imagenPerfil != null)
+                    {
+                        usuario.setImagenPerfil(imagenPerfil.getData());
+                    } else
+                    {
+                        usuario.setImagenPerfil(null);
+                    }
+                } else
+                {
+                    usuario.setImagenPerfil(null);
+                }
+
+                if (documentoUsuario.containsKey("direccion"))
+                {
+                    Document docDireccion = documentoUsuario.get("direccion", Document.class);
+                    if (docDireccion != null)
+                    {
+                        Direccion direccion = new Direccion();
+                        direccion.setCalle(docDireccion.getString("calle"));
+                        direccion.setNumero(docDireccion.getString("numero"));
+                        direccion.setCodigoPostal(docDireccion.getString("codigoPostal"));
+                        usuario.setDireccion(direccion);
+                    } else
+                    {
+                        usuario.setDireccion(null);
+                    }
+                } else
+                {
+                    usuario.setDireccion(null);
+                }
+
+                if (documentoUsuario.containsKey("contactos"))
+                {
+                    List<ObjectId> listaContactos = documentoUsuario.getList("contactos", ObjectId.class);
+                    usuario.setContactos(listaContactos);
+                } else
+                {
+                    usuario.setContactos(null);
+                }
+
+                return usuario;
+            } else
+            {
+                return null;
+            }
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+    
     @Override
     public List<UsuarioColeccion> obtenerTodosLosUsuarios()throws PersistenciaException {
         List<UsuarioColeccion> usuarios = new ArrayList<>();

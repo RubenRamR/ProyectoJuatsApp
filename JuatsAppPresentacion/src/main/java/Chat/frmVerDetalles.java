@@ -6,6 +6,7 @@ package Chat;
 
 
 import LogIn.*;
+import Negocio.ChatNegocio;
 import java.awt.Color;
 import java.io.File;
 import javax.swing.BorderFactory;
@@ -20,14 +21,16 @@ import Negocio.UsuarioNegocio;
 public class frmVerDetalles extends javax.swing.JFrame {
 
     UsuarioNegocio usuarioNegocio;
+    ChatNegocio chatNegocio;
     
     /**
      * Creates new form LogIn
      */
-    public frmVerDetalles(UsuarioNegocio usuarioNegocio) {
+    public frmVerDetalles(UsuarioNegocio usuarioNegocio, ChatNegocio chatNegocio) {
         initComponents();
         this.setLocationRelativeTo(this);
         this.usuarioNegocio = usuarioNegocio;
+        this.chatNegocio = chatNegocio;
 
     }
 
@@ -148,7 +151,7 @@ public class frmVerDetalles extends javax.swing.JFrame {
 
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
         // TODO add your handling code here:
-        frmMainMenu frm = new frmMainMenu(usuarioNegocio);
+        frmMainMenu frm = new frmMainMenu(usuarioNegocio, chatNegocio);
         frm.show();
         this.dispose();           
     }//GEN-LAST:event_btnCerrarActionPerformed

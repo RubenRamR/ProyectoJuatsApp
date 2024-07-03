@@ -6,12 +6,18 @@ package LogIn;
 
 
 import Chat.frmChat;
+import DTO.UsuarioDTO;
+import Negocio.ChatNegocio;
 import java.awt.Color;
 import java.io.File;
 import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
 import javax.swing.border.Border;
 import Negocio.UsuarioNegocio;
+import excepciones.NegocioException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -20,14 +26,16 @@ import Negocio.UsuarioNegocio;
 public class frmLogIn extends javax.swing.JFrame {
 
     UsuarioNegocio usuarioNegocio;
+    ChatNegocio chatNegocio;
     
     /**
      * Creates new form LogIn
      */
-    public frmLogIn(UsuarioNegocio usuarioNegocio) {
+    public frmLogIn(UsuarioNegocio usuarioNegocio, ChatNegocio chatNegocio) {
         initComponents();
         this.setLocationRelativeTo(this);
         this.usuarioNegocio = usuarioNegocio;
+        this.chatNegocio = chatNegocio;
 
     }
 
@@ -137,16 +145,42 @@ public class frmLogIn extends javax.swing.JFrame {
 
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
         // TODO add your handling code here:
-        frmMainMenu frm = new frmMainMenu(usuarioNegocio);
+        frmMainMenu frm = new frmMainMenu(usuarioNegocio, chatNegocio);
         frm.show();
         this.dispose();           
     }//GEN-LAST:event_btnCerrarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
-        frmChat frm = new frmChat(usuarioNegocio);
-        frm.setVisible(true);
-        this.dispose();
+        
+        String telefono = fldTelefono.getText().trim();
+        String contraseña = fldContraseña.getText().trim();
+        
+        UsuarioDTO usuario = new UsuarioDTO();
+        usuario.setTelefono(telefono);
+        usuario.setContraseña(contraseña);        
+        
+        // Validar campos obligatorios (ejemplo)
+        if (telefono.isEmpty() || contraseña.isEmpty())
+        {
+            JOptionPane.showMessageDialog(this, "Por favor complete todos los campos obligatorios.");
+            return;
+        }
+        
+        try {
+        
+        UsuarioDTO u = usuarioNegocio.convertirUsuarioDTO(usuarioNegocio.obtenerUsuarioPorCredenciales(usuario));
+   
+        if (u != null)
+        {
+        frmChat frm = new frmChat(usuarioNegocio, chatNegocio, u);
+        frm.show();
+        this.dispose();   
+        }
+
+        } catch (NegocioException ex) {
+        JOptionPane.showMessageDialog(this, "No existe usuario con esas credenciales");
+        }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
 

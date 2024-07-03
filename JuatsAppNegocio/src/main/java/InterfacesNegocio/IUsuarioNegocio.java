@@ -23,6 +23,8 @@ public interface IUsuarioNegocio {
     UsuarioColeccion obtenerUsuarioPorId(ObjectId id) throws NegocioException;
 
     List<UsuarioColeccion> obtenerTodosLosUsuarios() throws NegocioException;
+    
+    public UsuarioColeccion obtenerUsuarioPorCredenciales(UsuarioDTO dto) throws NegocioException;
 
     void actualizarUsuario(UsuarioDTO usuario) throws NegocioException;
 

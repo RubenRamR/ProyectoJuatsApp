@@ -4,7 +4,9 @@
  */
 package Chat;
 
+import DTO.UsuarioDTO;
 import LogIn.*;
+import Negocio.ChatNegocio;
 import Utilerias.ImageRenderer;
 import Utilerias.JButtonCellEditor;
 import Utilerias.JButtonRenderer;
@@ -28,16 +30,20 @@ import Negocio.UsuarioNegocio;
 public class frmChat extends javax.swing.JFrame {
 
     UsuarioNegocio usuarioNegocio;
+    ChatNegocio chatNegocio;
+    UsuarioDTO u;
 
     /**
      * Creates new form LogIn
      */
-    public frmChat(UsuarioNegocio usuarioNegocio) {
+    public frmChat(UsuarioNegocio usuarioNegocio, ChatNegocio chatNegocio, UsuarioDTO u) {
         initComponents();
         cargarConfiguracionInicialTablaChats();
         cargarConfiguracionInicialTablaMiPerfil();
         this.setLocationRelativeTo(this);
         this.usuarioNegocio = usuarioNegocio;
+        this.chatNegocio = chatNegocio;
+        this.u = u;
 
     }
 
@@ -317,21 +323,21 @@ public class frmChat extends javax.swing.JFrame {
 
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
         // TODO add your handling code here:
-        frmMainMenu frm = new frmMainMenu(usuarioNegocio);
+        frmMainMenu frm = new frmMainMenu(usuarioNegocio, chatNegocio);
         frm.show();
         this.dispose();
     }//GEN-LAST:event_btnCerrarActionPerformed
 
     private void btnPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPerfilActionPerformed
         // TODO add your handling code here:
-        frmPerfil frm = new frmPerfil(usuarioNegocio);
+        frmPerfil frm = new frmPerfil(usuarioNegocio, chatNegocio, u);
         frm.show();
         this.dispose();
     }//GEN-LAST:event_btnPerfilActionPerformed
 
     private void btnContactosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContactosActionPerformed
         // TODO add your handling code here:
-        frmVerContactos frm = new frmVerContactos(usuarioNegocio);
+        frmVerContactos frm = new frmVerContactos(usuarioNegocio, chatNegocio, u);
         frm.show();
         this.dispose();
     }//GEN-LAST:event_btnContactosActionPerformed
@@ -358,7 +364,7 @@ public class frmChat extends javax.swing.JFrame {
 
     private void btnNuevoChatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoChatActionPerformed
         // TODO add your handling code here:
-        frmNuevoChat frm = new frmNuevoChat(usuarioNegocio);
+        frmNuevoChat frm = new frmNuevoChat(usuarioNegocio, chatNegocio, u);
         frm.show();
         this.dispose();
     }//GEN-LAST:event_btnNuevoChatActionPerformed
@@ -369,14 +375,14 @@ public class frmChat extends javax.swing.JFrame {
 
     private void btnAgregarContactosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarContactosActionPerformed
         // TODO add your handling code here:
-        frmAgregarContactos frm = new frmAgregarContactos(usuarioNegocio);
+        frmAgregarContactos frm = new frmAgregarContactos(usuarioNegocio, chatNegocio, u);
         frm.show();
         this.dispose();
     }//GEN-LAST:event_btnAgregarContactosActionPerformed
 
     private void btnDetalles2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetalles2ActionPerformed
         // TODO add your handling code here:
-        frmAgregarIntegrantes frm = new frmAgregarIntegrantes(usuarioNegocio);
+        frmAgregarIntegrantes frm = new frmAgregarIntegrantes(usuarioNegocio, chatNegocio, u);
         frm.show();
         this.dispose();
     }//GEN-LAST:event_btnDetalles2ActionPerformed
