@@ -345,6 +345,7 @@ public class frmRegistrar extends javax.swing.JFrame {
         {
             byte[] imagenBytes = convertirImagenABytes(new File(fldImagen.getText()));
             usuario.setImagenPerfil(imagenBytes);
+            System.out.println(imagenBytes);
         } catch (IOException ex)
         {
             ex.printStackTrace();

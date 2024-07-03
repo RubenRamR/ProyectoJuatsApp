@@ -229,6 +229,9 @@
                   <Color blue="42" green="8f" red="42" type="rgb"/>
                 </Property>
               </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="tblChats.setTableHeader(null);"/>
+              </AuxValues>
             </Component>
           </SubComponents>
         </Container>
@@ -309,7 +312,13 @@
                     <Column editable="true" title="Mi foto de perfil" type="java.lang.Object"/>
                   </Table>
                 </Property>
+                <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
+                  <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
+                </Property>
               </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="tblMiFoto        .setTableHeader(null);"/>
+              </AuxValues>
             </Component>
           </SubComponents>
         </Container>

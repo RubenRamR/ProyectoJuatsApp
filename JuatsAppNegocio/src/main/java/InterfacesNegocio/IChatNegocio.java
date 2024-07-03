@@ -20,9 +20,11 @@ public interface IChatNegocio {
 
     public void crearChat(ChatDTO chat) throws NegocioException;
 
-    public ChatColeccion obtenerChatPorId(ObjectId id) throws NegocioException;
+    public ChatDTO obtenerChatPorId(ObjectId id) throws NegocioException;
 
-    public List<ChatColeccion> obtenerTodosLosChats() throws NegocioException;
+    public List<ChatDTO> obtenerTodosLosChats() throws NegocioException;
+
+    public List<ChatDTO> obtenerTodosLosChatsUsuario(ObjectId id) throws NegocioException;
 
     public void actualizarChat(ChatDTO chat) throws NegocioException;
 

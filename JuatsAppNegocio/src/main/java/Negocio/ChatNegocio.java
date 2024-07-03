@@ -43,10 +43,10 @@ public class ChatNegocio implements IChatNegocio {
     }
 
     @Override
-    public ChatColeccion obtenerChatPorId(ObjectId id) throws NegocioException {
+    public ChatDTO obtenerChatPorId(ObjectId id) throws NegocioException {
         try
         {
-            return chatDAO.obtenerChatPorId(id);
+            return convertirChatDTO(chatDAO.obtenerChatPorId(id));
         } catch(Exception e)
         {
             throw new NegocioException(e.getMessage());
@@ -54,15 +54,43 @@ public class ChatNegocio implements IChatNegocio {
     }
 
     @Override
-    public List<ChatColeccion> obtenerTodosLosChats() throws NegocioException {
+    public List<ChatDTO> obtenerTodosLosChats() throws NegocioException {
         try
         {
-            return chatDAO.obtenerTodosLosChats();
+            List<ChatColeccion> chat = chatDAO.obtenerTodosLosChats();
+            List<ChatDTO> chatC = null;
+            
+            for(int i = 0; i>chat.size(); i++){
+                
+                chatC.add(convertirChatDTO(chat.get(i)));
+            }
+            return chatC;
         } catch(Exception e)
         {
             throw new NegocioException(e.getMessage());
         }
     }
+    
+    @Override
+    public List<ChatDTO> obtenerTodosLosChatsUsuario(ObjectId id) throws NegocioException {
+        try
+        {
+            List<ChatColeccion> chat = chatDAO.obtenerChatPorIdUsuario(id);
+            System.out.println("1" + chat);
+            List<ChatDTO> chatC = new ArrayList<>();
+            chat.forEach(row -> {
+                int i = 0;
+                chatC.add(convertirChatDTO(chat.get(i)));
+                i += 1;
+        });
+            
+                        System.out.println("2" + chatC);
+            return chatC;
+        } catch(Exception e)
+        {
+            throw new NegocioException(e.getMessage());
+        }
+    }    
 
     @Override
     public void actualizarChat(ChatDTO chat) throws NegocioException {
@@ -101,7 +129,22 @@ public class ChatNegocio implements IChatNegocio {
         mensajes.add(mensaje);
         }
         return mensajes;
-    }    
+    }   
+    
+    // Método para convertir MensajeColeccion a MensajeDTO
+    public List<MensajeDTO> convertirMensajeDAO(List<Mensaje> dtos) {
+        List<MensajeDTO> mensajes = new ArrayList<>();
+        
+        // Asignar los valores simples
+        for(Mensaje dto : dtos){
+        MensajeDTO mensaje = new MensajeDTO();   
+        mensaje.setFechaHoraRegistro(dto.getFechaHoraRegistro());
+        mensaje.setImagenOpcional(dto.getImagenOpcional());
+        mensaje.setTextoMensaje(dto.getTextoMensaje());
+        mensajes.add(mensaje);
+        }
+        return mensajes;
+    }        
     
     // Método para convertir ChatDTO a ChatColeccion
     public ChatColeccion convertirChatDTO(ChatDTO dto) {
@@ -122,4 +165,24 @@ public class ChatNegocio implements IChatNegocio {
         return chat;
         
     }
+    
+    // Método para convertir ChatColeccion a ChatDTO
+    public ChatDTO convertirChatDTO(ChatColeccion dto) {
+        ChatDTO chat = new ChatDTO();
+        
+        // Asignar los valores simples
+        chat.setId(dto.getId());
+        chat.setImagen(dto.getImagen());
+        chat.setIntegrantes(dto.getIntegrantes());
+        chat.setNombre(dto.getNombre());
+        
+        // Convertir los mensajes si está presente en el DTO        
+        if (dto.getMensajes() != null)
+        {
+        chat.setMensajes(convertirMensajeDAO(dto.getMensajes()));        
+        }
+        
+        return chat;
+        
+    }    
 }

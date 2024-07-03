@@ -4,6 +4,7 @@
  */
 package Chat;
 
+import DTO.ChatDTO;
 import DTO.UsuarioDTO;
 import LogIn.*;
 import Negocio.ChatNegocio;
@@ -22,11 +23,14 @@ import javax.swing.JFileChooser;
 import javax.swing.border.Border;
 import javax.swing.table.TableColumnModel;
 import Negocio.UsuarioNegocio;
+import excepciones.NegocioException;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -41,19 +45,42 @@ public class frmChat extends javax.swing.JFrame {
     /**
      * Creates new form LogIn
      */
-    public frmChat(UsuarioNegocio usuarioNegocio, ChatNegocio chatNegocio, UsuarioDTO u) {
+    public frmChat(UsuarioNegocio usuarioNegocio, ChatNegocio chatNegocio, UsuarioDTO u){
+        this.u = u;       
         initComponents();
-        cargarConfiguracionInicialTablaChats();
         cargarConfiguracionInicialTablaMiPerfil();
         this.setLocationRelativeTo(this);
         this.usuarioNegocio = usuarioNegocio;
         this.chatNegocio = chatNegocio;
-        this.u = u;
+        cargarEnTabla();
 
     }
 
-    private void cargarConfiguracionInicialTablaChats() {
 
+    private void cargarConfiguracionInicialTablaMiPerfil() {
+        tblMiFoto.setRowHeight(0, 67);
+        byte[] a = u.getImagenPerfil();
+        tblMiFoto.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer(ByteAImagen(a)));
+    }
+
+    private void cargarEnTabla()  {
+        try {
+            List<ChatDTO> todas = chatNegocio.obtenerTodosLosChatsUsuario(u.getId());
+            
+            llenarTabla(todas);
+        } catch (NegocioException ex) {
+            Logger.getLogger(frmChat.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }    
+    
+    private void llenarTabla(List<ChatDTO> lista) {
+         DefaultTableModel modeloTabla = (DefaultTableModel) this.tblChats.getModel();
+
+    // Clear existing rows
+    modeloTabla.setRowCount(0);
+    if (lista != null) {
+        lista.forEach(row -> {
         TableColumnModel modeloColumnas = this.tblChats.getColumnModel();
 
         ActionListener onAprobarClickListener = new ActionListener() {
@@ -63,24 +90,21 @@ public class frmChat extends javax.swing.JFrame {
 
             }
         };
-        int indiceColumnaEditar = 0;
+        int indiceColumnaEditar = 1;
         Color color = new Color(178, 218, 250);
-        modeloColumnas.getColumn(indiceColumnaEditar).setCellRenderer(new JButtonRenderer("Nombre", color));
-        modeloColumnas.getColumn(indiceColumnaEditar).setCellEditor(new JButtonCellEditor("Nombre", onAprobarClickListener));
-
-        tblChats.getColumnModel().getColumn(1).setCellRenderer(new ImageRenderer(ByteAImagen()));
-
+        modeloColumnas.getColumn(indiceColumnaEditar).setCellRenderer(new JButtonRenderer(row.getNombre(), color));
+        modeloColumnas.getColumn(indiceColumnaEditar).setCellEditor(new JButtonCellEditor(row.getNombre(), onAprobarClickListener));
+        byte[] a = row.getImagen();
+        tblChats.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer(ByteAImagen(a)));
+        });
     }
-
-    private void cargarConfiguracionInicialTablaMiPerfil() {
-        tblMiFoto.setRowHeight(0, 50);
-        tblMiFoto.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer(ByteAImagen()));
     }
-
-    public BufferedImage ByteAImagen (){
+        
+    
+    public BufferedImage ByteAImagen (byte[] a){
         
         // Supongamos que tienes un array de bytes llamado imageBytes
-        byte[] imageBytes = u.getImagenPerfil(); // Inicializa este array con los datos de tu imagen
+        byte[] imageBytes =  a;
 
         // Convierte los bytes en una imagen BufferedImage
         BufferedImage img = null;
@@ -214,6 +238,7 @@ public class frmChat extends javax.swing.JFrame {
         jLabel4.setText("Mensaje *");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 680, 180, 20));
 
+        tblChats.setTableHeader(null);
         tblChats.setAutoCreateRowSorter(true);
         tblChats.setBackground(new java.awt.Color(66, 143, 66));
         tblChats.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(66, 143, 66)));
@@ -284,6 +309,7 @@ public class frmChat extends javax.swing.JFrame {
         });
         jPanel1.add(btnNuevoChat, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 60, 140, 30));
 
+        tblMiFoto        .setTableHeader(null);
         tblMiFoto.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null}

@@ -131,62 +131,78 @@ public class Pruebas {
 
          */
 //
-//        // Crear un chat de prueba
-//        ChatColeccion chat = new ChatColeccion();
-//        chat.setNombre("Chat de prueba22222");
-//        chat.setImagen(new byte[]{7, 8, 9}); // Si tienes una imagen, conviértela a byte[] y asígnala aquí
-//        chat.setIntegrantes(Arrays.asList(new ObjectId(), new ObjectId()));
-//
-//        // Crear mensajes de prueba
-//        Mensaje mensaje1 = new Mensaje("Hola, ¿cómo estás?", LocalDateTime.now(), new byte[]{0, 4, 8});
-//        Mensaje mensaje2 = new Mensaje("¡Bien, gracias! ¿Y tú?", LocalDateTime.now(), null);
-//
-//        List<Mensaje> mensajes = Arrays.asList(mensaje1, mensaje2);
-//        chat.setMensajes(mensajes);
-//
-//        try
-//        {
-//            chatDAO.crearChat(chat);
-//            System.out.println("Chat creado exitosamente");
-//        } catch (PersistenciaException e)
-//        {
-//            e.printStackTrace();
-//        }
-//        ObjectId id = new ObjectId("6683790e62311b4a7c373a5b");
-//        try {
-//            ChatColeccion chat = chatDAO.obtenerChatPorId(id);
-//            if (chat != null) {
-//                System.out.println("Chat encontrado:");
-//                System.out.println(chat);
-//            } else {
-//                System.out.println("No se encontró ningún chat con el ID proporcionado.");
-//            }
-//        } catch (PersistenciaException e) {
-//            System.out.println("Error al obtener el chat: " + e.getMessage());
-//            e.printStackTrace();
-//        }
-//        try
-//        {
-//            // Obtener todos los chats
-//            List<ChatColeccion> chats = chatDAO.obtenerTodosLosChats();
-//
-//            // Mostrar los chats obtenidos
-//            if (chats.isEmpty())
-//            {
-//                System.out.println("No se encontraron chats en la base de datos.");
-//            } else
-//            {
-//                System.out.println("Chats encontrados:");
-//                for (ChatColeccion chat : chats)
-//                {
-//                    System.out.println(chat); // Esto llamará al método toString de ChatColeccion
-//                }
-//            }
-//        } catch (PersistenciaException e)
-//        {
-//            System.err.println("Error al obtener todos los chats: " + e.getMessage());
-//            e.printStackTrace();
-//        }
+        // Crear un chat de prueba
+        ObjectId u = new ObjectId("6684d499c1ccc467b190e6f6");
+        ChatColeccion chat = new ChatColeccion();
+        chat.setNombre("Chat de prueba23");
+        chat.setImagen(new byte[]{7, 8, 9}); // Si tienes una imagen, conviértela a byte[] y asígnala aquí
+        chat.setIntegrantes(Arrays.asList(u));
+
+        // Crear mensajes de prueba
+        Mensaje mensaje1 = new Mensaje("Hola, ¿cómo estás?", LocalDateTime.now(), new byte[]{0, 4, 8});
+        Mensaje mensaje2 = new Mensaje("¡Bien, gracias! ¿Y tú?", LocalDateTime.now(), null);
+
+        List<Mensaje> mensajes = Arrays.asList(mensaje1, mensaje2);
+        chat.setMensajes(mensajes);
+
+        try
+        {
+            chatDAO.crearChat(chat);
+            System.out.println("Chat creado exitosamente");
+        } catch (PersistenciaException e)
+        {
+            e.printStackTrace();
+        }
+        ObjectId id = new ObjectId("6684c54c9a389548b5e9d215");
+        try {
+            chat = chatDAO.obtenerChatPorId(id);
+            if (chat != null) {
+                System.out.println("Chat encontrado:");
+                System.out.println(chat);
+            } else {
+                System.out.println("No se encontró ningún chat con el ID proporcionado.");
+            }
+        } catch (PersistenciaException e) {
+            System.out.println("Error al obtener el chat: " + e.getMessage());
+            e.printStackTrace();
+        }
+        
+        ObjectId idU = new ObjectId("6684959b039e16078c7c274c");
+        try {
+            List<ChatColeccion> chats2 = chatDAO.obtenerChatPorIdUsuario(idU);
+            if (chats2 != null) {
+                System.out.println("Chat encontrado:");
+                System.out.println(chats2);
+            } else {
+                System.out.println("No se encontró ningún chat con el ID proporcionado.");
+            }
+        } catch (PersistenciaException e) {
+            System.out.println("Error al obtener el chat: " + e.getMessage());
+            e.printStackTrace();
+        }
+        
+        try
+        {
+            // Obtener todos los chats
+            List<ChatColeccion> chats = chatDAO.obtenerTodosLosChats();
+
+            // Mostrar los chats obtenidos
+            if (chats.isEmpty())
+            {
+                System.out.println("No se encontraron chats en la base de datos.");
+            } else
+            {
+                System.out.println("Chats encontrados:");
+                for (ChatColeccion chat2 : chats)
+                {
+                    System.out.println(chat2); // Esto llamará al método toString de ChatColeccion
+                }
+            }
+        } catch (PersistenciaException e)
+        {
+            System.err.println("Error al obtener todos los chats: " + e.getMessage());
+            e.printStackTrace();
+        }
 //        try {
 //            // Paso 1: Obtener un chat existente por su ID (supongamos que el ID existe en la base de datos)
 //            ObjectId idExistente = new ObjectId("6683790e62311b4a7c373a5b"); // Reemplaza con el ID real de un chat existente
@@ -196,7 +212,7 @@ public class Pruebas {
 //                System.err.println("No se encontró el chat con ID: " + idExistente);
 //                return;
 //            }
-//
+
 //            // Paso 2: Modificar todos los datos del chat existente
 //            chatExistente.setNombre("Nuevo nombre del chat actualizado");
 //            chatExistente.setImagen(new byte[] { 0x01, 0x02, 0x03 }); // Ejemplo de datos de imagen

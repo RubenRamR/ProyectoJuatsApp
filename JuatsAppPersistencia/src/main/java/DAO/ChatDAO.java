@@ -13,7 +13,9 @@ import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Filters.in;
 import com.mongodb.client.result.DeleteResult;
+
 import excepciones.PersistenciaException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -70,6 +72,33 @@ public class ChatDAO implements IChatDAO {
         }
     }
 
+    @Override
+    public List<ChatColeccion> obtenerChatPorIdUsuario(ObjectId id) throws PersistenciaException {
+        List<ChatColeccion> chats = new ArrayList<>();
+
+        try
+        {
+            Document query = new Document("integrantes", id);
+            MongoCursor<Document> cursor = coleccion.find(query).iterator();
+            while (cursor.hasNext())
+            {
+                Document documentoChat = cursor.next();
+                ChatColeccion chat = convertirDocumentoAChat(documentoChat);
+                if (chat != null)
+                {
+                    chats.add(chat);
+                }
+            }
+            cursor.close();
+        } catch (Exception e)
+        {
+            throw new PersistenciaException("Error al obtener todos los chats de la base de datos", e);
+        }
+
+        return chats;
+    }
+    
+    
     @Override
     public List<ChatColeccion> obtenerTodosLosChats() throws PersistenciaException {
         List<ChatColeccion> chats = new ArrayList<>();

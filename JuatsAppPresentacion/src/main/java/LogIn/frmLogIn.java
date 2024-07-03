@@ -170,7 +170,7 @@ public class frmLogIn extends javax.swing.JFrame {
         try {
         
         UsuarioDTO u = usuarioNegocio.obtenerUsuarioPorCredenciales(usuario);
-   
+        u.getImagenPerfil();
         if (u == null)
         {
         JOptionPane.showMessageDialog(this, "No existe usuario con esas credenciales");
@@ -184,7 +184,7 @@ public class frmLogIn extends javax.swing.JFrame {
         }
 
         } catch (NegocioException ex) {
-
+        JOptionPane.showMessageDialog(this, "No existe usuario con esas credenciales");
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
 

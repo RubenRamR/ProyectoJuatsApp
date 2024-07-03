@@ -19,6 +19,8 @@ public interface IChatDAO {
 
     public ChatColeccion obtenerChatPorId(ObjectId id) throws PersistenciaException;
 
+    public List<ChatColeccion> obtenerChatPorIdUsuario(ObjectId id) throws PersistenciaException;    
+    
     public List<ChatColeccion> obtenerTodosLosChats() throws PersistenciaException;
 
     public void actualizarChat(ChatColeccion chat) throws PersistenciaException;
