@@ -23,6 +23,7 @@ import javax.swing.JFileChooser;
 import javax.swing.border.Border;
 import javax.swing.table.TableColumnModel;
 import Negocio.UsuarioNegocio;
+import Utilerias.RowImageRenderer;
 import excepciones.NegocioException;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -30,9 +31,7 @@ import java.io.IOException;
 import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 
 /**
  *
@@ -83,24 +82,13 @@ public class frmChat extends javax.swing.JFrame {
     tblChats.setRowHeight(50);
     modeloTabla.setRowCount(0);
     if (lista != null) {
-
         lista.forEach(row -> {
-        JTable modelo = this.tblChats;
-
-        ActionListener onChatClickListener = new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        };
-        
-        Color color = new Color(178, 218, 250);
-        modelo.getColumn(1).setCellRenderer(new JButtonRenderer(row.getNombre(), color));
-        modelo.getColumn(1).setCellEditor(new JButtonCellEditor(row.getNombre(), onChatClickListener));
-        byte[] a = row.getImagen();
-        
-        tblChats.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer(ByteAImagen(a)));
+            RowImageRenderer a = new RowImageRenderer();
+                Object[] fila = new Object[2];
+                fila[1] =row.getNombre();
+                fila[0] = a.getTableCellRendererComponent(tblChat, ByteAImagen(row.getImagen()), rootPaneCheckingEnabled, rootPaneCheckingEnabled, ERROR, NORMAL);
+                modeloTabla.addRow(fila);             
+            
         });
     }
     }
@@ -247,7 +235,7 @@ public class frmChat extends javax.swing.JFrame {
         tblChats.setAutoCreateRowSorter(true);
         tblChats.setBackground(new java.awt.Color(66, 143, 66));
         tblChats.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(66, 143, 66)));
-        tblChats.setForeground(new java.awt.Color(51, 153, 0));
+        tblChats.setForeground(new java.awt.Color(0, 0, 0));
         tblChats.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {"", null},
@@ -281,13 +269,13 @@ public class frmChat extends javax.swing.JFrame {
 
         tblChat.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "Mensaje", "Foto", "Fecha", "Enviado por"
+                "Mensaje", "Foto", "Fecha"
             }
         ));
         jScrollPane2.setViewportView(tblChat);

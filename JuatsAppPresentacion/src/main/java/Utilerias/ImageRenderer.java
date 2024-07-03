@@ -21,11 +21,9 @@ import javax.imageio.ImageIO;
  */
 
 public class ImageRenderer extends DefaultTableCellRenderer {
+    
     private JLabel label = new JLabel();
     private BufferedImage image;
-    
-
-
     
     public ImageRenderer(BufferedImage imagen){
         image = imagen;
