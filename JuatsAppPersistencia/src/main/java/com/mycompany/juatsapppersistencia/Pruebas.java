@@ -143,11 +143,11 @@ public class Pruebas {
         
         imagenABytes a = new imagenABytes();
 
-        byte[] imagen = a.convertirImagenABytes(new File("C:\\Users\\santi\\Desktop\\sobble.png"));
+        byte[] imagen = a.convertirImagenABytes(new File("C:\\Users\\santi\\Desktop\\piplup.png"));
 
         ObjectId u = new ObjectId("6684d499c1ccc467b190e6f6");
         ChatColeccion chat = new ChatColeccion();
-        chat.setNombre("Sobble");
+        chat.setNombre("Piplup1");
         chat.setImagen(imagen); // Si tienes una imagen, conviértela a byte[] y asígnala aquí
         chat.setIntegrantes(Arrays.asList(u));
 
