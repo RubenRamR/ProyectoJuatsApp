@@ -17,6 +17,11 @@ import javax.swing.table.TableCellRenderer;
 public class JButtonRenderer implements TableCellRenderer {
 
     private final JButton button;
+
+    public JButtonRenderer() {
+        this.button = null;
+    }
+    
     
     public JButtonRenderer(String text, Color color) {
         this.button = new JButton(text);

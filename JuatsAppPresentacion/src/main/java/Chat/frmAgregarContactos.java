@@ -4,7 +4,6 @@
  */
 package Chat;
 
-
 import DTO.UsuarioDTO;
 import LogIn.*;
 import Negocio.ChatNegocio;
@@ -14,6 +13,21 @@ import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
 import javax.swing.border.Border;
 import Negocio.UsuarioNegocio;
+import Utilerias.JButtonCellEditor;
+import Utilerias.JButtonRenderer;
+import excepciones.NegocioException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
+import org.bson.types.ObjectId;
 
 /**
  *
@@ -24,17 +38,16 @@ public class frmAgregarContactos extends javax.swing.JFrame {
     UsuarioNegocio usuarioNegocio;
     ChatNegocio chatNegocio;
     UsuarioDTO u;
-    
-    /**
-     * Creates new form LogIn
-     */
+    DefaultTableModel modeloTabla;
+    private Map<Integer, UsuarioDTO> usuariosMap;
+
     public frmAgregarContactos(UsuarioNegocio usuarioNegocio, ChatNegocio chatNegocio, UsuarioDTO u) {
-        initComponents();
-        this.setLocationRelativeTo(this);
+        this.u = u;
         this.usuarioNegocio = usuarioNegocio;
         this.chatNegocio = chatNegocio;
-        this.u = u;
-        
+        initComponents();
+        configurarTablaContactos();
+        cargarDatosTablaContactos();
     }
 
     /**
@@ -50,7 +63,7 @@ public class frmAgregarContactos extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         btnCerrar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblChats = new javax.swing.JTable();
+        tblContactos = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -72,7 +85,7 @@ public class frmAgregarContactos extends javax.swing.JFrame {
         });
         jPanel1.add(btnCerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
-        tblChats.setModel(new javax.swing.table.DefaultTableModel(
+        tblContactos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {"", null, null},
                 {null, null, null},
@@ -97,8 +110,8 @@ public class frmAgregarContactos extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        tblChats.setToolTipText("");
-        jScrollPane1.setViewportView(tblChats);
+        tblContactos.setToolTipText("");
+        jScrollPane1.setViewportView(tblContactos);
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 680, 340));
 
@@ -121,11 +134,68 @@ public class frmAgregarContactos extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void configurarTablaContactos() {
+        modeloTabla = (DefaultTableModel) tblContactos.getModel();
+        TableColumnModel modeloColumnas = tblContactos.getColumnModel();
+
+        // Configurar renderizador y editor de botón
+        modeloColumnas.getColumn(2).setCellRenderer(new JButtonRenderer("Agregar", new Color(178, 218, 250)));
+        modeloColumnas.getColumn(2).setCellEditor(new JButtonCellEditor("Agregar", new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int row = tblContactos.getSelectedRow();
+                if (row != -1)
+                {
+                    UsuarioDTO usuario = usuariosMap.get(row);
+                    try
+                    {
+                        usuarioNegocio.agregarContacto(u.getId(), usuario.getId());
+                        JOptionPane.showMessageDialog(null, "Contacto agregado correctamente.");
+                    } catch (NegocioException ex)
+                    {
+                        Logger.getLogger(frmAgregarContactos.class.getName()).log(Level.SEVERE, null, ex);
+                        JOptionPane.showMessageDialog(null, "Error al agregar contacto: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
+        }));
+    }
+
+    private void cargarDatosTablaContactos() {
+        try
+        {
+            List<UsuarioDTO> usuarios = usuarioNegocio.obtenerTodosLosUsuarios();
+
+            if (usuarios != null && !usuarios.isEmpty())
+            {
+                for (UsuarioDTO usuario : usuarios)
+                {
+                    ImageIcon imagen = new ImageIcon(usuario.getImagenPerfil());
+                    modeloTabla.addRow(new Object[]
+                    {
+                        usuario.getNombre(),
+                        imagen,
+                        "Agregar"
+                    });
+                    usuariosMap.put(modeloTabla.getRowCount() - 1, usuario);
+                }
+            } else
+            {
+                JOptionPane.showMessageDialog(null, "No se encontraron usuarios para mostrar.", "Información", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (NegocioException ex)
+        {
+            Logger.getLogger(frmAgregarContactos.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Error al cargar contactos: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
         // TODO add your handling code here:
         frmChat frm = new frmChat(usuarioNegocio, chatNegocio, u);
         frm.show();
-        this.dispose();           
+        this.dispose();
     }//GEN-LAST:event_btnCerrarActionPerformed
 
 
@@ -134,6 +204,6 @@ public class frmAgregarContactos extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblChats;
+    private javax.swing.JTable tblContactos;
     // End of variables declaration//GEN-END:variables
 }

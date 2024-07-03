@@ -13,6 +13,8 @@ import DocsDTO.DireccionDTO;
 import InterfacesNegocio.IUsuarioNegocio;
 import excepciones.NegocioException;
 import excepciones.PersistenciaException;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -46,58 +48,60 @@ public class UsuarioNegocio implements IUsuarioNegocio {
     @Override
     public void crearUsuarioSinContactos(UsuarioDTO usuario) throws NegocioException {
 
-            UsuarioColeccion usuarioColeccion = this.convertirUsuarioDTO(usuario);
-        try {
+        UsuarioColeccion usuarioColeccion = this.convertirUsuarioDTO(usuario);
+        try
+        {
             usuarioDAO.crearUsuarioSinContactos(usuarioColeccion);
-        } catch (PersistenciaException ex) {
+        } catch (PersistenciaException ex)
+        {
             Logger.getLogger(UsuarioNegocio.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
-    
+
     @Override
     public UsuarioDTO obtenerUsuarioPorId(ObjectId id) throws NegocioException {
         try
         {
-            return convertirUsuarioDTO(usuarioDAO.obtenerUsuarioPorId(id));
+            return convertirUsuarioADTO(usuarioDAO.obtenerUsuarioPorId(id));
         } catch (Exception e)
         {
             throw new NegocioException(e.getMessage());
-        }        
+        }
     }
-    
+
     @Override
     public UsuarioDTO obtenerUsuarioPorCredenciales(UsuarioDTO dto) throws NegocioException {
         try
         {
             String telefono = dto.getTelefono();
             String contraseña = dto.getContraseña();
-            return convertirUsuarioDTO(usuarioDAO.obtenerUsuarioPorCredenciales(telefono, contraseña));
+            return convertirUsuarioADTO(usuarioDAO.obtenerUsuarioPorCredenciales(telefono, contraseña));
         } catch (Exception e)
         {
             throw new NegocioException(e.getMessage());
-        }        
+        }
     }
-    
 
-    @Override
     public List<UsuarioDTO> obtenerTodosLosUsuarios() throws NegocioException {
         try
         {
-            List<UsuarioColeccion> usuarios = usuarioDAO.obtenerTodosLosUsuarios();
-            List<UsuarioDTO> usuariosC = null;
-            
-            for(int i = 0; i>usuarios.size(); i++){
-                
-                usuariosC.add(convertirUsuarioDTO(usuarios.get(i)));
+            List<UsuarioColeccion> usuariosColeccion = usuarioDAO.obtenerTodosLosUsuarios(); // Delegar la consulta a usuarioDAO
+
+            List<UsuarioDTO> usuariosDTO = new ArrayList<>();
+
+            for (UsuarioColeccion usuarioColeccion : usuariosColeccion)
+            {
+                UsuarioDTO usuarioDTO = convertirUsuarioADTO(usuarioColeccion); // Método para convertir de UsuarioColeccion a UsuarioDTO
+                usuariosDTO.add(usuarioDTO);
             }
-            return usuariosC;
-        } catch (Exception e)
+
+            return usuariosDTO;
+        } catch (PersistenciaException e)
         {
-            throw new NegocioException(e.getMessage());
-        }        
+            throw new NegocioException("Error al obtener todos los usuarios en la capa de negocio", e);
+        }
     }
-    
 
     @Override
     public void actualizarUsuario(UsuarioDTO usuario) throws NegocioException {
@@ -109,7 +113,7 @@ public class UsuarioNegocio implements IUsuarioNegocio {
         } catch (Exception e)
         {
             throw new NegocioException(e.getMessage());
-        }     
+        }
     }
 
     @Override
@@ -120,13 +124,24 @@ public class UsuarioNegocio implements IUsuarioNegocio {
         } catch (Exception e)
         {
             throw new NegocioException(e.getMessage());
-        }     
+        }
     }
-    
+
+    @Override
+    public void agregarContacto(ObjectId idUsuario, ObjectId idContacto) throws NegocioException {
+        try
+        {
+            usuarioDAO.agregarContacto(idUsuario, idContacto);
+        } catch (Exception e)
+        {
+            throw new NegocioException(e.getMessage());
+        }
+    }
+
     // Método para convertir UsuarioDTO a UsuarioColeccion
     private UsuarioColeccion convertirUsuarioDTO(UsuarioDTO dto) {
         UsuarioColeccion usuario = new UsuarioColeccion();
-        
+
         // Asignar los valores simples
         usuario.setId(dto.getId()); // Si es necesario convertir a ObjectId
         usuario.setNombre(dto.getNombre());
@@ -138,41 +153,36 @@ public class UsuarioNegocio implements IUsuarioNegocio {
         usuario.setTelefono(dto.getTelefono());
         usuario.setImagenPerfil(dto.getImagenPerfil());
         usuario.setContactos(dto.getContactos());
-        
+
         // Convertir la dirección si está presente en el DTO
-        if (dto.getDireccion() != null) {
+        if (dto.getDireccion() != null)
+        {
             usuario.setDireccion(convertirDireccionDTO(dto.getDireccion()));
         }
-        
+
         return usuario;
-        
+
     }
-    
-    // Método para convertir UsuarioColeccion a UsuarioDTO
-    public UsuarioDTO convertirUsuarioDTO(UsuarioColeccion usuario) {
-        UsuarioDTO u = new UsuarioDTO();
-        
-        // Asignar los valores simples
-        u.setId(usuario.getId()); // Si es necesario convertir a ObjectId
-        u.setNombre(usuario.getNombre());
-        u.setApellidoPaterno(usuario.getApellidoPaterno());
-        u.setApellidoMaterno(usuario.getApellidoMaterno());
-        u.setSexo(usuario.getSexo());
-        u.setContraseña(usuario.getContraseña());
-        u.setFechaNacimiento(usuario.getFechaNacimiento());
-        u.setTelefono(usuario.getTelefono());
-        u.setImagenPerfil(usuario.getImagenPerfil());
-        u.setContactos(usuario.getContactos());
-        
-        // Convertir la dirección si está presente en el DTO
-        if (usuario.getDireccion() != null) {
-            u.setDireccion(convertirDireccionDTO(usuario.getDireccion()));
-        }
-        
-        return u;
-        
-    }    
-    
+
+    // Método para convertir de UsuarioColeccion a UsuarioDTO
+    private UsuarioDTO convertirUsuarioADTO(UsuarioColeccion usuarioColeccion) {
+        UsuarioDTO usuarioDTO = new UsuarioDTO();
+        usuarioDTO.setId(usuarioColeccion.getId());
+        usuarioDTO.setNombre(usuarioColeccion.getNombre());
+        usuarioDTO.setApellidoPaterno(usuarioColeccion.getApellidoPaterno());
+        usuarioDTO.setApellidoMaterno(usuarioColeccion.getApellidoMaterno());
+        usuarioDTO.setSexo(usuarioColeccion.getSexo());
+        usuarioDTO.setFechaNacimiento(usuarioColeccion.getFechaNacimiento());
+        usuarioDTO.setTelefono(usuarioColeccion.getTelefono());
+        usuarioDTO.setContraseña(usuarioColeccion.getContraseña());
+        usuarioDTO.setImagenPerfil(usuarioColeccion.getImagenPerfil());
+        usuarioDTO.setDireccion(convertirDireccionDTO(usuarioColeccion.getDireccion()));
+        usuarioDTO.setContactos(usuarioColeccion.getContactos());
+        // Otras asignaciones de propiedades si es necesario
+
+        return usuarioDTO;
+    }
+
     // Método para convertir DireccionDTO a Direccion
     private Direccion convertirDireccionDTO(DireccionDTO dto) {
         Direccion direccion = new Direccion();
@@ -181,7 +191,7 @@ public class UsuarioNegocio implements IUsuarioNegocio {
         direccion.setCodigoPostal(dto.getCodigoPostal());
         return direccion;
     }
-    
+
     // Método para convertir Direccion a DireccionDTO
     private DireccionDTO convertirDireccionDTO(Direccion dto) {
         DireccionDTO direccion = new DireccionDTO();
@@ -190,7 +200,5 @@ public class UsuarioNegocio implements IUsuarioNegocio {
         direccion.setCodigoPostal(dto.getCodigoPostal());
         return direccion;
     }
-    
-
 
 }

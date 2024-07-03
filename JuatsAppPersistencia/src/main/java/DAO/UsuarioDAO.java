@@ -1,4 +1,4 @@
-    /*
+/*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
@@ -11,6 +11,7 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.UpdateResult;
 import excepciones.PersistenciaException;
 import java.time.LocalDate;
@@ -83,7 +84,7 @@ public class UsuarioDAO implements IUsuarioDAO {
     }
 
     @Override
-    public UsuarioColeccion obtenerUsuarioPorId(ObjectId id)throws PersistenciaException {
+    public UsuarioColeccion obtenerUsuarioPorId(ObjectId id) throws PersistenciaException {
         try
         {
             Bson filtro = Filters.eq("_id", id);
@@ -157,7 +158,7 @@ public class UsuarioDAO implements IUsuarioDAO {
     }
 
     @Override
-    public UsuarioColeccion obtenerUsuarioPorCredenciales(String telefono, String contraseña)throws PersistenciaException {
+    public UsuarioColeccion obtenerUsuarioPorCredenciales(String telefono, String contraseña) throws PersistenciaException {
         try
         {
             Bson filtro = Filters.eq("telefono", telefono);
@@ -231,10 +232,9 @@ public class UsuarioDAO implements IUsuarioDAO {
             return null;
         }
     }
-    
-    
+
     @Override
-    public List<UsuarioColeccion> obtenerTodosLosUsuarios()throws PersistenciaException {
+    public List<UsuarioColeccion> obtenerTodosLosUsuarios() throws PersistenciaException {
         List<UsuarioColeccion> usuarios = new ArrayList<>();
         try
         {
@@ -298,7 +298,7 @@ public class UsuarioDAO implements IUsuarioDAO {
     }
 
     @Override
-    public void actualizarUsuario(UsuarioColeccion usuario)throws PersistenciaException {
+    public void actualizarUsuario(UsuarioColeccion usuario) throws PersistenciaException {
         try
         {
             // Crea el filtro para encontrar el usuario por su ObjectId
@@ -336,7 +336,7 @@ public class UsuarioDAO implements IUsuarioDAO {
     }
 
     @Override
-    public void eliminarUsuario(ObjectId id)throws PersistenciaException {
+    public void eliminarUsuario(ObjectId id) throws PersistenciaException {
         try
         {
             // Crea el filtro para encontrar el usuario por su ObjectId
@@ -350,6 +350,18 @@ public class UsuarioDAO implements IUsuarioDAO {
         {
             e.printStackTrace(); // Manejo básico de excepciones, imprimirá el error en la consola
         }
+    }
+
+    @Override
+    public void agregarContacto(ObjectId idUsuario, ObjectId idContacto) {
+        Bson filtro = Filters.eq("_id", idUsuario);
+        Bson actualizacion = Updates.addToSet("contactos", idContacto);
+        coleccion.updateOne(filtro, actualizacion);
+    }
+
+    @Override
+    public void eliminarContacto(ObjectId idUsuario, ObjectId idContacto) throws PersistenciaException {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     private Document convertirDireccionADocumento(Direccion direccion) {
