@@ -15,6 +15,7 @@ import InterfacesNegocio.IChatNegocio;
 import excepciones.NegocioException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.bson.types.ObjectId;
 
 /**
@@ -78,10 +79,11 @@ public class ChatNegocio implements IChatNegocio {
             List<ChatColeccion> chat = chatDAO.obtenerChatPorIdUsuario(id);
             System.out.println("1" + chat);
             List<ChatDTO> chatC = new ArrayList<>();
+            AtomicInteger counter = new AtomicInteger(0);
             chat.forEach(row -> {
-                int i = 0;
-                chatC.add(convertirChatDTO(chat.get(i)));
-                i += 1;
+            int index = counter.getAndIncrement();
+                chatC.add(convertirChatDTO(chat.get(index)));
+
         });
             
                         System.out.println("2" + chatC);

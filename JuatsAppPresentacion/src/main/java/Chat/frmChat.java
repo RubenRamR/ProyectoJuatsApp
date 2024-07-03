@@ -30,7 +30,9 @@ import java.io.IOException;
 import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -78,23 +80,26 @@ public class frmChat extends javax.swing.JFrame {
          DefaultTableModel modeloTabla = (DefaultTableModel) this.tblChats.getModel();
 
     // Clear existing rows
+    tblChats.setRowHeight(50);
     modeloTabla.setRowCount(0);
     if (lista != null) {
-        lista.forEach(row -> {
-        TableColumnModel modeloColumnas = this.tblChats.getColumnModel();
 
-        ActionListener onAprobarClickListener = new ActionListener() {
+        lista.forEach(row -> {
+        JTable modelo = this.tblChats;
+
+        ActionListener onChatClickListener = new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
 
             }
         };
-        int indiceColumnaEditar = 1;
+        
         Color color = new Color(178, 218, 250);
-        modeloColumnas.getColumn(indiceColumnaEditar).setCellRenderer(new JButtonRenderer(row.getNombre(), color));
-        modeloColumnas.getColumn(indiceColumnaEditar).setCellEditor(new JButtonCellEditor(row.getNombre(), onAprobarClickListener));
+        modelo.getColumn(1).setCellRenderer(new JButtonRenderer(row.getNombre(), color));
+        modelo.getColumn(1).setCellEditor(new JButtonCellEditor(row.getNombre(), onChatClickListener));
         byte[] a = row.getImagen();
+        
         tblChats.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer(ByteAImagen(a)));
         });
     }

@@ -13,13 +13,20 @@ import Docs.Mensaje;
 import InterfacesDAO.IChatDAO;
 import InterfacesDAO.IConexionDB;
 import InterfacesDAO.IUsuarioDAO;
+import Utilerias.imagenABytes;
 import com.mongodb.client.MongoDatabase;
 import excepciones.PersistenciaException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bson.types.ObjectId;
 
 /**
@@ -28,7 +35,8 @@ import org.bson.types.ObjectId;
  */
 public class Pruebas {
 
-    public static void main(String[] args) throws PersistenciaException {
+
+    public static void main(String[] args) throws PersistenciaException, IOException {
         // Configurar la conexión a la base de datos
         IConexionDB conexionDB = new ConexionDB();
         MongoDatabase database = conexionDB.conexion("mongodb://localhost:27017", "JuatssApp");
@@ -132,10 +140,15 @@ public class Pruebas {
          */
 //
         // Crear un chat de prueba
+        
+        imagenABytes a = new imagenABytes();
+
+        byte[] imagen = a.convertirImagenABytes(new File("C:\\Users\\santi\\Desktop\\sobble.png"));
+
         ObjectId u = new ObjectId("6684d499c1ccc467b190e6f6");
         ChatColeccion chat = new ChatColeccion();
-        chat.setNombre("Chat de prueba23");
-        chat.setImagen(new byte[]{7, 8, 9}); // Si tienes una imagen, conviértela a byte[] y asígnala aquí
+        chat.setNombre("Sobble");
+        chat.setImagen(imagen); // Si tienes una imagen, conviértela a byte[] y asígnala aquí
         chat.setIntegrantes(Arrays.asList(u));
 
         // Crear mensajes de prueba
