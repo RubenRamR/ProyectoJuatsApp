@@ -234,7 +234,7 @@ public class UsuarioDAO implements IUsuarioDAO {
     
     
     @Override
-    public List<UsuarioColeccion> obtenerTodosLosUsuarios()throws PersistenciaException {
+    public List<UsuarioColeccion> obtenerTodosLosUsuarios() throws PersistenciaException {
         List<UsuarioColeccion> usuarios = new ArrayList<>();
         try
         {
@@ -335,6 +335,47 @@ public class UsuarioDAO implements IUsuarioDAO {
         }
     }
 
+    @Override
+    public void agregarContacto(UsuarioColeccion usuario, UsuarioColeccion contacto)throws PersistenciaException {
+        try
+        {
+            // Crea el filtro para encontrar el usuario por su ObjectId
+            ObjectId idUsuario = usuario.getId();
+            Bson filtro = Filters.eq("_id", idUsuario);
+
+            // Crea el documento con los nuevos valores a actualizar
+            List<ObjectId> contactosact = usuario.getContactos();
+            contactosact.add(contacto.getId());
+            Document docActualizacion = new Document()
+                    .append("nombre", usuario.getNombre())
+                    .append("apellidoPaterno", usuario.getApellidoPaterno())
+                    .append("apellidoMaterno", usuario.getApellidoMaterno())
+                    .append("sexo", usuario.getSexo())
+                    .append("fechaNacimiento", java.sql.Date.valueOf(usuario.getFechaNacimiento()))
+                    .append("telefono", usuario.getTelefono())
+                    .append("contraseña", usuario.getContraseña())
+                    .append("imagenPerfil", usuario.getImagenPerfil())
+                    .append("direccion", convertirDireccionADocumento(usuario.getDireccion()))
+                    .append("contactos", contactosact);
+
+            // Realiza la actualización en la base de datos
+            UpdateResult resultado = coleccion.updateOne(filtro, new Document("$set", docActualizacion));
+
+            // Verifica si se actualizó correctamente
+            if (resultado.getModifiedCount() > 0)
+            {
+                System.out.println("Usuario actualizado correctamente");
+            } else
+            {
+                System.out.println("No se encontró ningún usuario para actualizar");
+            }
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+    
+    
     @Override
     public void eliminarUsuario(ObjectId id)throws PersistenciaException {
         try

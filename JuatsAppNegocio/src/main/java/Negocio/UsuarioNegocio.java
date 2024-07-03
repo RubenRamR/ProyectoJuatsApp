@@ -15,6 +15,7 @@ import excepciones.NegocioException;
 import excepciones.PersistenciaException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bson.types.ObjectId;
@@ -85,16 +86,20 @@ public class UsuarioNegocio implements IUsuarioNegocio {
         try
         {
             List<UsuarioColeccion> usuarios = usuarioDAO.obtenerTodosLosUsuarios();
-            List<UsuarioDTO> usuariosC = null;
+                      System.out.println(usuarios.toString());                          
+            List<UsuarioDTO> usuariosC = new ArrayList<>();
             
-            for(int i = 0; i>usuarios.size(); i++){
-                
-                usuariosC.add(convertirUsuarioDTO(usuarios.get(i)));
-            }
+            AtomicInteger counter = new AtomicInteger(0);
+            usuarios.forEach(row -> {
+            int index = counter.getAndIncrement();
+                usuariosC.add(convertirUsuarioDTO(usuarios.get(index)));
+
+        });
+
             return usuariosC;
-        } catch (Exception e)
+        } catch (PersistenciaException e)
         {
-            throw new NegocioException(e.getMessage());
+            throw new NegocioException("aqui");
         }        
     }
     
@@ -111,6 +116,22 @@ public class UsuarioNegocio implements IUsuarioNegocio {
             throw new NegocioException(e.getMessage());
         }     
     }
+    
+    @Override
+    public void agregarContacto(UsuarioDTO usuario, UsuarioDTO contacto) throws NegocioException {
+        try
+        {
+            UsuarioColeccion usuarioA = new UsuarioColeccion();
+            usuarioA = convertirUsuarioDTO(usuario);
+            
+            UsuarioColeccion usuarioB = new UsuarioColeccion();
+            usuarioB = convertirUsuarioDTO(contacto);      
+            usuarioDAO.agregarContacto(usuarioA, usuarioB);
+        } catch (Exception e)
+        {
+            throw new NegocioException(e.getMessage());
+        }     
+    }    
 
     @Override
     public void eliminarUsuario(ObjectId id) throws NegocioException {
@@ -164,6 +185,7 @@ public class UsuarioNegocio implements IUsuarioNegocio {
         u.setImagenPerfil(usuario.getImagenPerfil());
         u.setContactos(usuario.getContactos());
         
+        
         // Convertir la dirección si está presente en el DTO
         if (usuario.getDireccion() != null) {
             u.setDireccion(convertirDireccionDTO(usuario.getDireccion()));
@@ -192,5 +214,6 @@ public class UsuarioNegocio implements IUsuarioNegocio {
     }
     
 
+    
 
 }

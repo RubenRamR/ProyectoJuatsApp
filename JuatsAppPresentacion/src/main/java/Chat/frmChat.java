@@ -63,6 +63,7 @@ public class frmChat extends javax.swing.JFrame {
         this.setLocationRelativeTo(this);
         this.usuarioNegocio = usuarioNegocio;
         this.chatNegocio = chatNegocio;
+
         try {
             cargarEnTabla();
         } catch (ExcepcionPresentacion ex) {

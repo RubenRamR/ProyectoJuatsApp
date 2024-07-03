@@ -14,6 +14,23 @@ import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
 import javax.swing.border.Border;
 import Negocio.UsuarioNegocio;
+import Utilerias.ImageRenderer;
+import Utilerias.JButtonCellEditor;
+import Utilerias.JButtonRenderer;
+import excepciones.NegocioException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 
 /**
  *
@@ -24,19 +41,103 @@ public class frmAgregarContactos extends javax.swing.JFrame {
     UsuarioNegocio usuarioNegocio;
     ChatNegocio chatNegocio;
     UsuarioDTO u;
+    DefaultTableModel modeloTabla;
+    
     
     /**
      * Creates new form LogIn
      */
     public frmAgregarContactos(UsuarioNegocio usuarioNegocio, ChatNegocio chatNegocio, UsuarioDTO u) {
-        initComponents();
+
         this.setLocationRelativeTo(this);
         this.usuarioNegocio = usuarioNegocio;
         this.chatNegocio = chatNegocio;
         this.u = u;
         
+
+        initComponents();
+        configurarTablaContactos();
+        cargarDatosTablaContactos();
+        
     }
 
+
+    private void configurarTablaContactos() {
+        modeloTabla = (DefaultTableModel) tblContactos.getModel();
+        TableColumnModel modeloColumnas = tblContactos.getColumnModel();
+
+
+        // Configurar renderizador y editor de botón
+        modeloTabla.setRowCount(0);
+        modeloColumnas.getColumn(1).setCellRenderer(new JButtonRenderer("Detalles", new Color(178, 218, 250)));
+        modeloColumnas.getColumn(1).setCellEditor(new JButtonCellEditor("Detalles", new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int row = tblContactos.getSelectedRow();
+                if (row != -1)
+                {
+                    try {
+                        
+                        DefaultTableModel model3 = (DefaultTableModel) tblChatsFotos3.getModel();
+                        model3.setColumnCount(0);
+                        model3.setColumnCount(1);
+                        
+                        List<UsuarioDTO> usuarios = usuarioNegocio.obtenerTodosLosUsuarios();
+                        UsuarioDTO usuariosel = usuarios.get(row);
+                        
+                        tblChatsFotos3.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer(ByteAImagen(usuariosel.getImagenPerfil())));
+                        DefaultTableModel modeloTablaSel = (DefaultTableModel) tblContactoSel.getModel();
+                        
+                        modeloTablaSel.setRowCount(0);
+                        modeloTablaSel.addRow(new Object[]
+                    {
+                        
+                        usuariosel.getNombre(),
+                        usuariosel.getApellidoPaterno(),
+                        usuariosel.getApellidoMaterno(),
+                        usuariosel.getTelefono(),
+                        usuariosel.getDireccion().getCalle() +", "+ usuariosel.getDireccion().getNumero() +", "+ usuariosel.getDireccion().getCodigoPostal()
+                    });
+                        
+                    } catch (NegocioException ex) {
+                        Logger.getLogger(frmAgregarContactos.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        }));
+    }
+
+    private void cargarDatosTablaContactos() {
+        try
+        {
+            List<UsuarioDTO> usuarios = usuarioNegocio.obtenerTodosLosUsuarios();
+
+            if (usuarios != null && !usuarios.isEmpty())
+            {
+                for (UsuarioDTO usuario : usuarios)
+                {
+
+                    modeloTabla.addRow(new Object[]
+                    {
+                        usuario.getNombre(),
+
+                        "Agregar"
+                    });
+
+                }
+            } else
+            {
+                JOptionPane.showMessageDialog(null, "No se encontraron usuarios para mostrar.", "Información", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (NegocioException ex)
+        {
+            Logger.getLogger(frmAgregarContactos.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Error al cargar contactos: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -50,7 +151,12 @@ public class frmAgregarContactos extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         btnCerrar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblChats = new javax.swing.JTable();
+        tblContactos = new javax.swing.JTable();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        tblChatsFotos3 = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblContactoSel = new javax.swing.JTable();
+        btnAgregar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -72,35 +178,63 @@ public class frmAgregarContactos extends javax.swing.JFrame {
         });
         jPanel1.add(btnCerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
-        tblChats.setModel(new javax.swing.table.DefaultTableModel(
+        tblContactos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {"", null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {"", null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
             },
             new String [] {
-                "Nombre", "Foto ", "Agregar"
+                "Nombre", "Detalles"
             }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                true, false, true
-            };
+        ));
+        tblContactos.setToolTipText("");
+        jScrollPane1.setViewportView(tblContactos);
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 680, 220));
+
+        tblChatsFotos3.setTableHeader(null);
+        tblChatsFotos3.setRowHeight(105);
+        tblChatsFotos3.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null}
+            },
+            new String [] {
+                "Title 1"
+            }
+        ));
+        jScrollPane7.setViewportView(tblChatsFotos3);
+
+        jPanel1.add(jScrollPane7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 340, 130, 110));
+
+        tblContactoSel.setRowHeight(85);
+        tblContactoSel.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "Nombre", "Apellido Paterno", "Apellido Materno", "Teléfono", "Dirección"
+            }
+        ));
+        jScrollPane2.setViewportView(tblContactoSel);
+
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 340, 530, 110));
+
+        btnAgregar.setBackground(new java.awt.Color(66, 143, 66));
+        btnAgregar.setText("Agregar");
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarActionPerformed(evt);
             }
         });
-        tblChats.setToolTipText("");
-        jScrollPane1.setViewportView(tblChats);
-
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 680, 340));
+        jPanel1.add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 470, 680, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -112,9 +246,7 @@ public class frmAgregarContactos extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 529, Short.MAX_VALUE)
         );
 
         pack();
@@ -128,12 +260,53 @@ public class frmAgregarContactos extends javax.swing.JFrame {
         this.dispose();           
     }//GEN-LAST:event_btnCerrarActionPerformed
 
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        try {
+            // TODO add your handling code here:
+            int row = tblContactos.getSelectedRow();
+            List<UsuarioDTO> usuarios = usuarioNegocio.obtenerTodosLosUsuarios();
+            UsuarioDTO usuariosel = usuarios.get(row);
+            usuarioNegocio.agregarContacto(u, usuariosel);
+        } catch (NegocioException ex) {
+            Logger.getLogger(frmAgregarContactos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnAgregarActionPerformed
 
+    public BufferedImage ByteAImagen (byte[] a){
+        
+        // Supongamos que tienes un array de bytes llamado imageBytes
+        byte[] imageBytes =  a;
+
+        // Convierte los bytes en una imagen BufferedImage
+        BufferedImage img = null;
+        try {
+            ByteArrayInputStream bis = new ByteArrayInputStream(imageBytes);
+            img = ImageIO.read(bis);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Ahora puedes usar la imagen (BufferedImage)
+        if (img != null) {
+            return img;
+        } else {
+                    JOptionPane.showMessageDialog(this, "Error al leer la imagen de perfil");
+            return null;
+        }
+    
+    }
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnCerrar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblChats;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane7;
+    private javax.swing.JTable tblChatsFotos3;
+    private javax.swing.JTable tblContactoSel;
+    private javax.swing.JTable tblContactos;
     // End of variables declaration//GEN-END:variables
 }
