@@ -25,13 +25,10 @@ public class ImageRenderer extends DefaultTableCellRenderer {
     private BufferedImage image;
     
 
-    public ImageRenderer(String imagePath) {
-        try {
-                    InputStream is = getClass().getClassLoader().getResourceAsStream("imagenes/" + imagePath);
-            image = ImageIO.read(is);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+    
+    public ImageRenderer(BufferedImage imagen){
+        image = imagen;
     }
 
     @Override

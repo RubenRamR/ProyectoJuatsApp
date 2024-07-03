@@ -24,6 +24,7 @@ import org.bson.types.ObjectId;
 public class ChatNegocio implements IChatNegocio {
 
     private ChatDAO chatDAO;
+    
 
     public ChatNegocio(ChatDAO chatDAO) {
         this.chatDAO = chatDAO;

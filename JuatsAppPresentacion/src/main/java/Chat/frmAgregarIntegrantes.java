@@ -100,7 +100,7 @@ public class frmAgregarIntegrantes extends javax.swing.JFrame {
         tblChats.setToolTipText("");
         jScrollPane1.setViewportView(tblChats);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 680, 340));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 680, 190));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

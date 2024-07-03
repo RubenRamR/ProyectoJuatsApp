@@ -20,11 +20,11 @@ public interface IUsuarioNegocio {
     
     void crearUsuarioSinContactos(UsuarioDTO usuario) throws NegocioException;
 
-    UsuarioColeccion obtenerUsuarioPorId(ObjectId id) throws NegocioException;
+    UsuarioDTO obtenerUsuarioPorId(ObjectId id) throws NegocioException;
 
-    List<UsuarioColeccion> obtenerTodosLosUsuarios() throws NegocioException;
+    List<UsuarioDTO> obtenerTodosLosUsuarios() throws NegocioException;
     
-    public UsuarioColeccion obtenerUsuarioPorCredenciales(UsuarioDTO dto) throws NegocioException;
+    public UsuarioDTO obtenerUsuarioPorCredenciales(UsuarioDTO dto) throws NegocioException;
 
     void actualizarUsuario(UsuarioDTO usuario) throws NegocioException;
 

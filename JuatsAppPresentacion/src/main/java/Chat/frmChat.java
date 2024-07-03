@@ -22,6 +22,11 @@ import javax.swing.JFileChooser;
 import javax.swing.border.Border;
 import javax.swing.table.TableColumnModel;
 import Negocio.UsuarioNegocio;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -63,16 +68,40 @@ public class frmChat extends javax.swing.JFrame {
         modeloColumnas.getColumn(indiceColumnaEditar).setCellRenderer(new JButtonRenderer("Nombre", color));
         modeloColumnas.getColumn(indiceColumnaEditar).setCellEditor(new JButtonCellEditor("Nombre", onAprobarClickListener));
 
-        tblChats.getColumnModel().getColumn(1).setCellRenderer(new ImageRenderer("placeholder.jpg"));
+        tblChats.getColumnModel().getColumn(1).setCellRenderer(new ImageRenderer(ByteAImagen()));
 
     }
 
     private void cargarConfiguracionInicialTablaMiPerfil() {
         tblMiFoto.setRowHeight(0, 50);
-        tblMiFoto.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer("placeholder.jpg"));
-
+        tblMiFoto.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer(ByteAImagen()));
     }
 
+    public BufferedImage ByteAImagen (){
+        
+        // Supongamos que tienes un array de bytes llamado imageBytes
+        byte[] imageBytes = u.getImagenPerfil(); // Inicializa este array con los datos de tu imagen
+
+        // Convierte los bytes en una imagen BufferedImage
+        BufferedImage img = null;
+        try {
+            ByteArrayInputStream bis = new ByteArrayInputStream(imageBytes);
+            img = ImageIO.read(bis);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Ahora puedes usar la imagen (BufferedImage)
+        if (img != null) {
+            return img;
+        } else {
+                    JOptionPane.showMessageDialog(this, "Error al leer la imagen de perfil");
+            return null;
+        }
+    
+    }
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

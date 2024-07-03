@@ -169,17 +169,22 @@ public class frmLogIn extends javax.swing.JFrame {
         
         try {
         
-        UsuarioDTO u = usuarioNegocio.convertirUsuarioDTO(usuarioNegocio.obtenerUsuarioPorCredenciales(usuario));
+        UsuarioDTO u = usuarioNegocio.obtenerUsuarioPorCredenciales(usuario);
    
-        if (u != null)
+        if (u == null)
+        {
+        JOptionPane.showMessageDialog(this, "No existe usuario con esas credenciales");
+        
+        }
+        else 
         {
         frmChat frm = new frmChat(usuarioNegocio, chatNegocio, u);
         frm.show();
-        this.dispose();   
+        this.dispose();               
         }
 
         } catch (NegocioException ex) {
-        JOptionPane.showMessageDialog(this, "No existe usuario con esas credenciales");
+
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
 

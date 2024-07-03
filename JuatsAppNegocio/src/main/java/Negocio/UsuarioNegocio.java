@@ -56,10 +56,10 @@ public class UsuarioNegocio implements IUsuarioNegocio {
     }
     
     @Override
-    public UsuarioColeccion obtenerUsuarioPorId(ObjectId id) throws NegocioException {
+    public UsuarioDTO obtenerUsuarioPorId(ObjectId id) throws NegocioException {
         try
         {
-            return usuarioDAO.obtenerUsuarioPorId(id);
+            return convertirUsuarioDTO(usuarioDAO.obtenerUsuarioPorId(id));
         } catch (Exception e)
         {
             throw new NegocioException(e.getMessage());
@@ -67,12 +67,12 @@ public class UsuarioNegocio implements IUsuarioNegocio {
     }
     
     @Override
-    public UsuarioColeccion obtenerUsuarioPorCredenciales(UsuarioDTO dto) throws NegocioException {
+    public UsuarioDTO obtenerUsuarioPorCredenciales(UsuarioDTO dto) throws NegocioException {
         try
         {
             String telefono = dto.getTelefono();
             String contraseña = dto.getContraseña();
-            return usuarioDAO.obtenerUsuarioPorCredenciales(telefono, contraseña);
+            return convertirUsuarioDTO(usuarioDAO.obtenerUsuarioPorCredenciales(telefono, contraseña));
         } catch (Exception e)
         {
             throw new NegocioException(e.getMessage());
@@ -81,10 +81,17 @@ public class UsuarioNegocio implements IUsuarioNegocio {
     
 
     @Override
-    public List<UsuarioColeccion> obtenerTodosLosUsuarios() throws NegocioException {
+    public List<UsuarioDTO> obtenerTodosLosUsuarios() throws NegocioException {
         try
         {
-            return usuarioDAO.obtenerTodosLosUsuarios();
+            List<UsuarioColeccion> usuarios = usuarioDAO.obtenerTodosLosUsuarios();
+            List<UsuarioDTO> usuariosC = null;
+            
+            for(int i = 0; i>usuarios.size(); i++){
+                
+                usuariosC.add(convertirUsuarioDTO(usuarios.get(i)));
+            }
+            return usuariosC;
         } catch (Exception e)
         {
             throw new NegocioException(e.getMessage());
