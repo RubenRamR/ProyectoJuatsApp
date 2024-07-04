@@ -13,7 +13,7 @@ import org.bson.types.ObjectId;
  * @author rramirez
  */
 public class ChatDTO {
-    
+
     private ObjectId id;
     private String nombre;
     private byte[] imagen;
@@ -21,6 +21,10 @@ public class ChatDTO {
     private List<MensajeDTO> mensajes;
 
     public ChatDTO() {
+    }
+
+    public ChatDTO(ObjectId id) {
+        this.id = id;
     }
 
     public ChatDTO(ObjectId id, String nombre, byte[] imagen, List<ObjectId> integrantes, List<MensajeDTO> mensajes) {

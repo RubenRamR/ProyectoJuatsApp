@@ -190,7 +190,7 @@ public class frmChat extends javax.swing.JFrame {
         tblMiFoto = new javax.swing.JTable();
         btnDetalles = new javax.swing.JButton();
         btnAgregarContactos = new javax.swing.JButton();
-        btnDetalles2 = new javax.swing.JButton();
+        btnAgregarIntegrantes = new javax.swing.JButton();
         NumeroDePagina = new javax.swing.JTextField();
         btnSiguienteChat = new javax.swing.JButton();
         btnPrevioChat = new javax.swing.JButton();
@@ -303,7 +303,15 @@ public class frmChat extends javax.swing.JFrame {
             new String [] {
                 "Nombre"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tblChats.setToolTipText("");
         tblChats.setRequestFocusEnabled(false);
         tblChats.setSelectionForeground(new java.awt.Color(66, 143, 66));
@@ -379,15 +387,15 @@ public class frmChat extends javax.swing.JFrame {
         });
         jPanel1.add(btnAgregarContactos, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 20, 140, 30));
 
-        btnDetalles2.setBorder(lineBorder);
-        btnDetalles2.setBackground(new java.awt.Color(66, 143, 66));
-        btnDetalles2.setText("Agregar Integrantes");
-        btnDetalles2.addActionListener(new java.awt.event.ActionListener() {
+        btnAgregarIntegrantes.setBorder(lineBorder);
+        btnAgregarIntegrantes.setBackground(new java.awt.Color(66, 143, 66));
+        btnAgregarIntegrantes.setText("Agregar Integrantes");
+        btnAgregarIntegrantes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDetalles2ActionPerformed(evt);
+                btnAgregarIntegrantesActionPerformed(evt);
             }
         });
-        jPanel1.add(btnDetalles2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 20, 160, 30));
+        jPanel1.add(btnAgregarIntegrantes, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 20, 160, 30));
 
         NumeroDePagina.setEditable(false);
         NumeroDePagina.setBackground(new java.awt.Color(186, 219, 186));
@@ -430,7 +438,15 @@ public class frmChat extends javax.swing.JFrame {
             new String [] {
                 "Title 1"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane6.setViewportView(tblChatsFotos2);
 
         jPanel1.add(jScrollPane6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 570, 130, 240));
@@ -444,7 +460,15 @@ public class frmChat extends javax.swing.JFrame {
             new String [] {
                 "Title 1"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane7.setViewportView(tblChatsFotos3);
 
         jPanel1.add(jScrollPane7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 130, 230));
@@ -458,7 +482,15 @@ public class frmChat extends javax.swing.JFrame {
             new String [] {
                 "Title 1"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane8.setViewportView(tblChatsFotos4);
 
         jPanel1.add(jScrollPane8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 330, 130, 240));
@@ -546,12 +578,12 @@ public class frmChat extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnAgregarContactosActionPerformed
 
-    private void btnDetalles2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetalles2ActionPerformed
+    private void btnAgregarIntegrantesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarIntegrantesActionPerformed
         // TODO add your handling code here:
         frmAgregarIntegrantes frm = new frmAgregarIntegrantes(usuarioNegocio, chatNegocio, u);
         frm.show();
         this.dispose();
-    }//GEN-LAST:event_btnDetalles2ActionPerformed
+    }//GEN-LAST:event_btnAgregarIntegrantesActionPerformed
 
 
     private void NumeroDePaginaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NumeroDePaginaActionPerformed
@@ -621,10 +653,10 @@ public class frmChat extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField NumeroDePagina;
     private javax.swing.JButton btnAgregarContactos;
+    private javax.swing.JButton btnAgregarIntegrantes;
     private javax.swing.JButton btnCerrar;
     private javax.swing.JButton btnContactos;
     private javax.swing.JButton btnDetalles;
-    private javax.swing.JButton btnDetalles2;
     private javax.swing.JButton btnEncontrarImagen;
     private javax.swing.JButton btnEnviarMensaje;
     private javax.swing.JButton btnNuevoChat;

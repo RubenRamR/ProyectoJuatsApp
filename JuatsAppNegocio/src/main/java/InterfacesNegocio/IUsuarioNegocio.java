@@ -31,4 +31,6 @@ public interface IUsuarioNegocio {
     void agregarContacto(UsuarioDTO usuario, UsuarioDTO contacto) throws NegocioException;
 
     void eliminarUsuario(ObjectId id) throws NegocioException;
+    
+    public List<UsuarioDTO> obtenerTodosLosContactosDeUsuario(ObjectId id) throws NegocioException;
 }

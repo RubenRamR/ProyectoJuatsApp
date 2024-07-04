@@ -30,4 +30,6 @@ public interface IUsuarioDAO {
     public void agregarContacto(UsuarioColeccion usuario, UsuarioColeccion Contacto) throws PersistenciaException;
 
     public void eliminarUsuario(ObjectId id) throws PersistenciaException;
+    
+    public List<UsuarioColeccion> obtenerTodosLosContactosDeUsuario(ObjectId id) throws PersistenciaException;
 }

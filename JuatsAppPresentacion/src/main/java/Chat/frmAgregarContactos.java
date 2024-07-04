@@ -154,9 +154,9 @@ public class frmAgregarContactos extends javax.swing.JFrame {
         tblContactos = new javax.swing.JTable();
         jScrollPane7 = new javax.swing.JScrollPane();
         tblChatsFotos3 = new javax.swing.JTable();
+        btnAgregar = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblContactoSel = new javax.swing.JTable();
-        btnAgregar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -214,6 +214,15 @@ public class frmAgregarContactos extends javax.swing.JFrame {
 
         jPanel1.add(jScrollPane7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 340, 130, 110));
 
+        btnAgregar.setBackground(new java.awt.Color(66, 143, 66));
+        btnAgregar.setText("Agregar");
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 470, 680, 40));
+
         tblContactoSel.setRowHeight(85);
         tblContactoSel.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -226,15 +235,6 @@ public class frmAgregarContactos extends javax.swing.JFrame {
         jScrollPane2.setViewportView(tblContactoSel);
 
         jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 340, 530, 110));
-
-        btnAgregar.setBackground(new java.awt.Color(66, 143, 66));
-        btnAgregar.setText("Agregar");
-        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAgregarActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 470, 680, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

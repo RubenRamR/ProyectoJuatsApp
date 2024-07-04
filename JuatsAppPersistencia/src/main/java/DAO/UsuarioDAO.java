@@ -1,4 +1,4 @@
-    /*
+/*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
@@ -11,6 +11,7 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
+import static com.mongodb.client.model.Filters.eq;
 import com.mongodb.client.result.UpdateResult;
 import excepciones.PersistenciaException;
 import java.time.LocalDate;
@@ -84,7 +85,7 @@ public class UsuarioDAO implements IUsuarioDAO {
     }
 
     @Override
-    public UsuarioColeccion obtenerUsuarioPorId(ObjectId id)throws PersistenciaException {
+    public UsuarioColeccion obtenerUsuarioPorId(ObjectId id) throws PersistenciaException {
         try
         {
             Bson filtro = Filters.eq("_id", id);
@@ -158,7 +159,7 @@ public class UsuarioDAO implements IUsuarioDAO {
     }
 
     @Override
-    public UsuarioColeccion obtenerUsuarioPorCredenciales(String telefono, String contraseña)throws PersistenciaException {
+    public UsuarioColeccion obtenerUsuarioPorCredenciales(String telefono, String contraseña) throws PersistenciaException {
         try
         {
             Bson filtro = Filters.eq("telefono", telefono);
@@ -232,8 +233,7 @@ public class UsuarioDAO implements IUsuarioDAO {
             return null;
         }
     }
-    
-    
+
     @Override
     public List<UsuarioColeccion> obtenerTodosLosUsuarios() throws PersistenciaException {
         List<UsuarioColeccion> usuarios = new ArrayList<>();
@@ -299,7 +299,7 @@ public class UsuarioDAO implements IUsuarioDAO {
     }
 
     @Override
-    public void actualizarUsuario(UsuarioColeccion usuario)throws PersistenciaException {
+    public void actualizarUsuario(UsuarioColeccion usuario) throws PersistenciaException {
         try
         {
             // Crea el filtro para encontrar el usuario por su ObjectId
@@ -337,7 +337,7 @@ public class UsuarioDAO implements IUsuarioDAO {
     }
 
     @Override
-    public void agregarContacto(UsuarioColeccion usuario, UsuarioColeccion contacto)throws PersistenciaException {
+    public void agregarContacto(UsuarioColeccion usuario, UsuarioColeccion contacto) throws PersistenciaException {
         try
         {
             // Crea el filtro para encontrar el usuario por su ObjectId
@@ -348,72 +348,80 @@ public class UsuarioDAO implements IUsuarioDAO {
             ObjectId aux = contacto.getId();
             ObjectId aux2 = usuario.getId();
             List<ObjectId> contactosact = usuario.getContactos();
-            if (aux.equals(aux2)){JOptionPane.showMessageDialog(null, "No te puedes agregar a ti mismo como contacto");return;}
+            if (aux.equals(aux2))
+            {
+                JOptionPane.showMessageDialog(null, "No te puedes agregar a ti mismo como contacto");
+                return;
+            }
             if (contactosact == null)
             {
                 List<ObjectId> a = new ArrayList<>();
                 a.add(contacto.getId());
-                            Document docActualizacion = new Document()
-                    .append("nombre", usuario.getNombre())
-                    .append("apellidoPaterno", usuario.getApellidoPaterno())
-                    .append("apellidoMaterno", usuario.getApellidoMaterno())
-                    .append("sexo", usuario.getSexo())
-                    .append("fechaNacimiento", java.sql.Date.valueOf(usuario.getFechaNacimiento()))
-                    .append("telefono", usuario.getTelefono())
-                    .append("contraseña", usuario.getContraseña())
-                    .append("imagenPerfil", usuario.getImagenPerfil())
-                    .append("direccion", convertirDireccionADocumento(usuario.getDireccion()))
-                    .append("contactos", a);
-            // Realiza la actualización en la base de datos
-            UpdateResult resultado = coleccion.updateOne(filtro, new Document("$set", docActualizacion));
+                Document docActualizacion = new Document()
+                        .append("nombre", usuario.getNombre())
+                        .append("apellidoPaterno", usuario.getApellidoPaterno())
+                        .append("apellidoMaterno", usuario.getApellidoMaterno())
+                        .append("sexo", usuario.getSexo())
+                        .append("fechaNacimiento", java.sql.Date.valueOf(usuario.getFechaNacimiento()))
+                        .append("telefono", usuario.getTelefono())
+                        .append("contraseña", usuario.getContraseña())
+                        .append("imagenPerfil", usuario.getImagenPerfil())
+                        .append("direccion", convertirDireccionADocumento(usuario.getDireccion()))
+                        .append("contactos", a);
+                // Realiza la actualización en la base de datos
+                UpdateResult resultado = coleccion.updateOne(filtro, new Document("$set", docActualizacion));
 
-            // Verifica si se actualizó correctamente
-            if (resultado.getModifiedCount() > 0)
+                // Verifica si se actualizó correctamente
+                if (resultado.getModifiedCount() > 0)
+                {
+                    System.out.println("Primer contacto agregado correctamente");
+                    return;
+                } else
+                {
+                    System.out.println("No se encontró ningún contacto nuevo");
+
+                }
+            }
+            if (contactosact.contains(aux))
             {
-                System.out.println("Primer contacto agregado correctamente");
+                JOptionPane.showMessageDialog(null, "El contacto ya existe");
                 return;
-            } else
+            }
+            if (contactosact != null)
             {
-                System.out.println("No se encontró ningún contacto nuevo");
-                
-            }
-            }
-            if (contactosact.contains(aux)){JOptionPane.showMessageDialog(null, "El contacto ya existe");return;}
-            if (contactosact != null){
-            contactosact.add(contacto.getId());
-            Document docActualizacion = new Document()
-                    .append("nombre", usuario.getNombre())
-                    .append("apellidoPaterno", usuario.getApellidoPaterno())
-                    .append("apellidoMaterno", usuario.getApellidoMaterno())
-                    .append("sexo", usuario.getSexo())
-                    .append("fechaNacimiento", java.sql.Date.valueOf(usuario.getFechaNacimiento()))
-                    .append("telefono", usuario.getTelefono())
-                    .append("contraseña", usuario.getContraseña())
-                    .append("imagenPerfil", usuario.getImagenPerfil())
-                    .append("direccion", convertirDireccionADocumento(usuario.getDireccion()))
-                    .append("contactos", contactosact);
+                contactosact.add(contacto.getId());
+                Document docActualizacion = new Document()
+                        .append("nombre", usuario.getNombre())
+                        .append("apellidoPaterno", usuario.getApellidoPaterno())
+                        .append("apellidoMaterno", usuario.getApellidoMaterno())
+                        .append("sexo", usuario.getSexo())
+                        .append("fechaNacimiento", java.sql.Date.valueOf(usuario.getFechaNacimiento()))
+                        .append("telefono", usuario.getTelefono())
+                        .append("contraseña", usuario.getContraseña())
+                        .append("imagenPerfil", usuario.getImagenPerfil())
+                        .append("direccion", convertirDireccionADocumento(usuario.getDireccion()))
+                        .append("contactos", contactosact);
 
-            // Realiza la actualización en la base de datos
-            UpdateResult resultado = coleccion.updateOne(filtro, new Document("$set", docActualizacion));
+                // Realiza la actualización en la base de datos
+                UpdateResult resultado = coleccion.updateOne(filtro, new Document("$set", docActualizacion));
 
-            // Verifica si se actualizó correctamente
-            if (resultado.getModifiedCount() > 0)
-            {
-                System.out.println("Contacto nuevo agregado correctamente");
-            } else
-            {
-                System.out.println("No se encontró ningún contacto");
-            }
+                // Verifica si se actualizó correctamente
+                if (resultado.getModifiedCount() > 0)
+                {
+                    System.out.println("Contacto nuevo agregado correctamente");
+                } else
+                {
+                    System.out.println("No se encontró ningún contacto");
+                }
             }
         } catch (Exception e)
         {
             e.printStackTrace();
         }
     }
-    
-    
+
     @Override
-    public void eliminarUsuario(ObjectId id)throws PersistenciaException {
+    public void eliminarUsuario(ObjectId id) throws PersistenciaException {
         try
         {
             // Crea el filtro para encontrar el usuario por su ObjectId
@@ -427,6 +435,70 @@ public class UsuarioDAO implements IUsuarioDAO {
         {
             e.printStackTrace(); // Manejo básico de excepciones, imprimirá el error en la consola
         }
+    }
+
+    @Override
+    public List<UsuarioColeccion> obtenerTodosLosContactosDeUsuario(ObjectId id) throws PersistenciaException {
+        List<UsuarioColeccion> contactos = new ArrayList<>();
+        try
+        {
+            Document usuarioDocumento = coleccion.find(eq("_id", id)).first();
+            if (usuarioDocumento == null)
+            {
+                throw new PersistenciaException("Usuario no encontrado con el id: " + id.toString());
+            }
+
+            if (usuarioDocumento.containsKey("contactos"))
+            {
+                List<ObjectId> listaIdContactos = usuarioDocumento.getList("contactos", ObjectId.class);
+                for (ObjectId contactoId : listaIdContactos)
+                {
+                    Document contactoDocumento = coleccion.find(eq("_id", contactoId)).first();
+                    if (contactoDocumento != null)
+                    {
+                        UsuarioColeccion contacto = new UsuarioColeccion();
+                        contacto.setId(contactoDocumento.getObjectId("_id"));
+                        contacto.setNombre(contactoDocumento.getString("nombre"));
+                        contacto.setApellidoPaterno(contactoDocumento.getString("apellidoPaterno"));
+                        contacto.setApellidoMaterno(contactoDocumento.getString("apellidoMaterno"));
+                        contacto.setSexo(contactoDocumento.getString("sexo"));
+                        contacto.setFechaNacimiento(contactoDocumento.getDate("fechaNacimiento").toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+                        contacto.setTelefono(contactoDocumento.getString("telefono"));
+                        contacto.setContraseña(contactoDocumento.getString("contraseña"));
+
+                        if (contactoDocumento.containsKey("imagenPerfil") && contactoDocumento.get("imagenPerfil") != null)
+                        {
+                            contacto.setImagenPerfil(contactoDocumento.get("imagenPerfil", Binary.class).getData());
+                        } else
+                        {
+                            contacto.setImagenPerfil(null);
+                        }
+
+                        if (contactoDocumento.containsKey("direccion"))
+                        {
+                            Document docDireccion = contactoDocumento.get("direccion", Document.class);
+                            Direccion direccion = new Direccion();
+                            direccion.setCalle(docDireccion.getString("calle"));
+                            direccion.setNumero(docDireccion.getString("numero"));
+                            direccion.setCodigoPostal(docDireccion.getString("codigoPostal"));
+                            contacto.setDireccion(direccion);
+                        } else
+                        {
+                            contacto.setDireccion(null);
+                        }
+
+                        contacto.setContactos(null);
+
+                        contactos.add(contacto);
+                    }
+                }
+            }
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+            throw new PersistenciaException("Error al obtener los contactos del usuario", e);
+        }
+        return contactos;
     }
 
     private Document convertirDireccionADocumento(Direccion direccion) {

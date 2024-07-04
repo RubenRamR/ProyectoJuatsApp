@@ -5,6 +5,7 @@
 package DAO;
 
 import Colecciones.ChatColeccion;
+import Colecciones.UsuarioColeccion;
 import Docs.Mensaje;
 import InterfacesDAO.IChatDAO;
 import com.mongodb.client.FindIterable;
@@ -33,31 +34,33 @@ import org.bson.types.ObjectId;
 public class ChatDAO implements IChatDAO {
 
     private final MongoCollection<Document> coleccion;
+    private final MongoCollection<Document> coleccionUsuario;
 
     public ChatDAO(MongoDatabase database) {
         this.coleccion = database.getCollection("Chat");
+        this.coleccionUsuario = database.getCollection("Usuario");
     }
 
     @Override
     public void crearChat(ChatColeccion chat) throws PersistenciaException {
         try
         {
-            if(chat.getMensajes() == null){
-            Document docChat = new Document()
-                    .append("nombre", chat.getNombre())
-                    .append("imagen", chat.getImagen())
-                    .append("integrantes", chat.getIntegrantes());
-            
-            coleccion.insertOne(docChat);
-            }
-            else
+            if (chat.getMensajes() == null)
             {
-                     Document docChat = new Document()
-                    .append("nombre", chat.getNombre())
-                    .append("imagen", chat.getImagen())
-                    .append("integrantes", chat.getIntegrantes())
-                    .append("mensajes", convertirMensajesADocumentos(chat.getMensajes()));
-            coleccion.insertOne(docChat);
+                Document docChat = new Document()
+                        .append("nombre", chat.getNombre())
+                        .append("imagen", chat.getImagen())
+                        .append("integrantes", chat.getIntegrantes());
+
+                coleccion.insertOne(docChat);
+            } else
+            {
+                Document docChat = new Document()
+                        .append("nombre", chat.getNombre())
+                        .append("imagen", chat.getImagen())
+                        .append("integrantes", chat.getIntegrantes())
+                        .append("mensajes", convertirMensajesADocumentos(chat.getMensajes()));
+                coleccion.insertOne(docChat);
             }
         } catch (Exception e)
         {
@@ -107,8 +110,7 @@ public class ChatDAO implements IChatDAO {
 
         return chats;
     }
-    
-    
+
     @Override
     public List<ChatColeccion> obtenerTodosLosChats() throws PersistenciaException {
         List<ChatColeccion> chats = new ArrayList<>();
@@ -174,6 +176,60 @@ public class ChatDAO implements IChatDAO {
         }
     }
 
+    @Override
+    public void agregarIntegrante(ObjectId idChat, ObjectId idUsuario) throws PersistenciaException {
+        try
+        {
+            // Crea el filtro para encontrar el documento del chat por su ObjectId
+            Document filtro = new Document("_id", idChat);
+
+            // Crea el documento de actualización para agregar el ObjectId del usuario al array de integrantes
+            Document actualizacion = new Document("$addToSet", new Document("integrantes", idUsuario));
+
+            // Actualiza el documento del chat con el nuevo integrante
+            coleccion.updateOne(filtro, actualizacion);
+        } catch (Exception e)
+        {
+            throw new PersistenciaException("Error al agregar integrante al chat: " + e.getMessage());
+        }
+    }
+    
+    @Override
+    public boolean esIntegrante(ObjectId chatId, ObjectId usuarioId) throws PersistenciaException {
+        try {
+            Document chat = coleccion.find(Filters.and(
+                    Filters.eq("_id", chatId),
+                    Filters.eq("integrantes", usuarioId)
+            )).first();
+            return chat != null;
+        } catch (Exception e) {
+            throw new PersistenciaException("Error al verificar integrante del chat en la base de datos.", e);
+        }
+    }
+    
+    @Override
+    public List<ChatColeccion> obtenerChatsDeUsuario(ObjectId usuarioId) throws PersistenciaException {
+        List<ChatColeccion> chats = new ArrayList<>();
+        try {
+            List<Document> chatDocuments = coleccion.find(Filters.or(
+                    Filters.eq("creador", usuarioId),
+                    Filters.in("integrantes", usuarioId)
+            )).into(new ArrayList<>());
+
+            for (Document doc : chatDocuments) {
+                ChatColeccion chat = new ChatColeccion();
+                chat.setId(doc.getObjectId("_id"));
+                chat.setNombre(doc.getString("nombre"));
+                chat.setImagen(doc.get("imagen", Binary.class).getData());
+                chat.setIntegrantes((List<ObjectId>) doc.get("integrantes"));
+                chats.add(chat);
+            }
+        } catch (Exception e) {
+            throw new PersistenciaException("Error al obtener los chats del usuario", e);
+        }
+        return chats;
+    }
+
     private List<Document> convertirMensajesADocumentos(List<Mensaje> mensajes) {
         List<Document> mensajesDocs = new ArrayList<>();
         for (Mensaje mensaje : mensajes)
@@ -186,7 +242,7 @@ public class ChatDAO implements IChatDAO {
         }
         return mensajesDocs;
     }
-
+    
     private ChatColeccion convertirDocumentoAChat(Document documentoChat) {
         if (documentoChat == null)
         {

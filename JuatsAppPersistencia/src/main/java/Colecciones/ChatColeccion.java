@@ -23,6 +23,10 @@ public class ChatColeccion {
     public ChatColeccion() {
     }
 
+    public ChatColeccion(ObjectId id) {
+        this.id = id;
+    }
+
     public ChatColeccion(String nombre, byte[] imagen, List<ObjectId> integrantes, List<Mensaje> mensajes) {
         this.nombre = nombre;
         this.imagen = imagen;

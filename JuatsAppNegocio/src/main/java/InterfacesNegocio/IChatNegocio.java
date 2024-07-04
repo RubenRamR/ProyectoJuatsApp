@@ -6,6 +6,7 @@ package InterfacesNegocio;
 
 import Colecciones.ChatColeccion;
 import DTO.ChatDTO;
+import DTO.UsuarioDTO;
 import excepciones.NegocioException;
 import excepciones.PersistenciaException;
 import java.util.List;
@@ -15,7 +16,6 @@ import org.bson.types.ObjectId;
  *
  * @author rramirez
  */
-
 public interface IChatNegocio {
 
     public void crearChat(ChatDTO chat) throws NegocioException;
@@ -29,4 +29,10 @@ public interface IChatNegocio {
     public void actualizarChat(ChatDTO chat) throws NegocioException;
 
     public void eliminarChat(ObjectId id) throws NegocioException;
+
+    public void agregarIntegrante(ObjectId idChat, ObjectId idUsuario) throws NegocioException;
+
+    public boolean esIntegrante(ObjectId idChat, ObjectId idUsuario) throws NegocioException;
+
+    public List<ChatDTO> obtenerChatsDeUsuario(ObjectId usuarioId) throws NegocioException;
 }

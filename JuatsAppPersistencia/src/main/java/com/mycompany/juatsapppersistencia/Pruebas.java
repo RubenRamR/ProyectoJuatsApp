@@ -14,6 +14,7 @@ import InterfacesDAO.IChatDAO;
 import InterfacesDAO.IConexionDB;
 import InterfacesDAO.IUsuarioDAO;
 import Utilerias.imagenABytes;
+import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import excepciones.PersistenciaException;
 import java.io.File;
@@ -27,6 +28,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.bson.Document;
 import org.bson.types.ObjectId;
 
 /**
@@ -34,7 +36,6 @@ import org.bson.types.ObjectId;
  * @author rramirez
  */
 public class Pruebas {
-
 
     public static void main(String[] args) throws PersistenciaException, IOException {
         // Configurar la conexión a la base de datos
@@ -44,6 +45,8 @@ public class Pruebas {
         // Crear instancia del DAO
         IUsuarioDAO usuarioDAO = new UsuarioDAO(database);
         IChatDAO chatDAO = new ChatDAO(database);
+        MongoCollection<Document> coleccion;
+        coleccion = database.getCollection("Chat");
 
 //        // Crear una instancia de Direccion
 //        Direccion direccion = new Direccion("Calle Falsa", "123", "85064");
@@ -141,31 +144,30 @@ public class Pruebas {
 //
 //         Crear un chat de prueba
 //        
-        imagenABytes a = new imagenABytes();
-
-        byte[] imagen = a.convertirImagenABytes(new File("C:\\Users\\santi\\Desktop\\mudkip.jpg"));
-
-        ObjectId u = new ObjectId("6684d4c95e850f6424d9648e");
-        ChatColeccion chat = new ChatColeccion();
-        chat.setNombre("mudkip");
-        chat.setImagen(imagen); // Si tienes una imagen, conviértela a byte[] y asígnala aquí
-        chat.setIntegrantes(Arrays.asList(u));
-
-//        // Crear mensajes de prueba
-//        Mensaje mensaje1 = new Mensaje("Hola, ¿cómo estás?", LocalDateTime.now(), new byte[]{0, 4, 8});
-//        Mensaje mensaje2 = new Mensaje("¡Bien, gracias! ¿Y tú?", LocalDateTime.now(), null);
+//        imagenABytes a = new imagenABytes();
 //
-//        List<Mensaje> mensajes = Arrays.asList(mensaje1, mensaje2);
-//        chat.setMensajes(mensajes);
-
-        try
-        {
-            chatDAO.crearChat(chat);
-            System.out.println("Chat creado exitosamente");
-        } catch (PersistenciaException e)
-        {
-            e.printStackTrace();
-        }
+//        byte[] imagen = a.convertirImagenABytes(new File("C:\\Users\\santi\\Desktop\\mudkip.jpg"));
+//
+//        ObjectId u = new ObjectId("6684d4c95e850f6424d9648e");
+//        ChatColeccion chat = new ChatColeccion();
+//        chat.setNombre("mudkip");
+//        chat.setImagen(imagen); // Si tienes una imagen, conviértela a byte[] y asígnala aquí
+//        chat.setIntegrantes(Arrays.asList(u));
+//
+////        // Crear mensajes de prueba
+////        Mensaje mensaje1 = new Mensaje("Hola, ¿cómo estás?", LocalDateTime.now(), new byte[]{0, 4, 8});
+////        Mensaje mensaje2 = new Mensaje("¡Bien, gracias! ¿Y tú?", LocalDateTime.now(), null);
+////
+////        List<Mensaje> mensajes = Arrays.asList(mensaje1, mensaje2);
+////        chat.setMensajes(mensajes);
+//        try
+//        {
+//            chatDAO.crearChat(chat);
+//            System.out.println("Chat creado exitosamente");
+//        } catch (PersistenciaException e)
+//        {
+//            e.printStackTrace();
+//        }
 //        ObjectId id = new ObjectId("6684c54c9a389548b5e9d215");
 //        try {
 //            chat = chatDAO.obtenerChatPorId(id);
@@ -225,7 +227,6 @@ public class Pruebas {
 //                System.err.println("No se encontró el chat con ID: " + idExistente);
 //                return;
 //            }
-
 //            // Paso 2: Modificar todos los datos del chat existente
 //            chatExistente.setNombre("Nuevo nombre del chat actualizado");
 //            chatExistente.setImagen(new byte[] { 0x01, 0x02, 0x03 }); // Ejemplo de datos de imagen
@@ -253,7 +254,31 @@ public class Pruebas {
 //    e.printStackTrace();
 //}
 //
-    }
+
+        /*
+*
+*
+*
+         */
+//        ObjectId idUsuario = new ObjectId("6684d4c95e850f6424d9648e"); // Reemplaza con el ObjectId del usuario real
+//
+//        try
+//        {
+//            // Llama al método obtenerTodosLosContactosDeUsuario
+//            List<UsuarioColeccion> contactos = usuarioDAO.obtenerTodosLosContactosDeUsuario(idUsuario);
+//
+//            // Imprime la información de los contactos obtenidos utilizando toString()
+//            for (UsuarioColeccion contacto : contactos)
+//            {
+//                System.out.println(contacto.toString());
+//            }
+//        } catch (PersistenciaException e)
+//        {
+//            e.printStackTrace();
+//        } finally
+//        {
+//            // Cierra la conexión a MongoDB
+//            conexionDB.close();
 //
 //    // Método para crear una lista de mensajes de ejemplo
 //    private static List<Mensaje> crearMensajesEjemplo() {
@@ -262,4 +287,51 @@ public class Pruebas {
 //        mensajes.add(new Mensaje("¿Cómo estás?", LocalDateTime.now().plusHours(1), new byte[] { 0x04, 0x05 }));
 //        return mensajes;
 //    }
+
+        /*
+*
+*
+         */
+//        try {
+//            // Mostrar solo los integrantes de los chats
+//            List<Document> listaChats = coleccion.find().into(new ArrayList<>());
+//            for (Document chat : listaChats) {
+//                ObjectId chatId = chat.getObjectId("_id");
+//                List<ObjectId> integrantes = (List<ObjectId>) chat.get("integrantes");
+//
+//                System.out.println("ID del Chat: " + chatId);
+//                System.out.println("Integrantes:");
+//                for (ObjectId integrante : integrantes) {
+//                    System.out.println(integrante);
+//                }
+//                System.out.println(); // Separador entre chats
+//            }
+//
+//        } finally {
+//            // Cerrar la conexión a MongoDB al finalizar las pruebas
+//            conexionDB.close();
+//        }
+/*
+*
+*
+*
+         */
+//// ID del chat al que queremos agregar un integrante
+//        ObjectId idChat = new ObjectId("66867de7df17b14b23769c5e");
+//
+//        // ID del usuario que queremos agregar como integrante
+//        ObjectId idUsuario = new ObjectId("6684d58d4c46c47806701646");
+//
+//        // Agregamos el usuario como integrante al chat
+//        try {
+//            chatDAO.agregarIntegrante(idChat, idUsuario);
+//            System.out.println("Integrante agregado correctamente al chat.");
+//        } catch (PersistenciaException e) {
+//            System.err.println("Error al agregar integrante al chat: " + e.getMessage());
+//        }
+//
+//        // Mostramos el chat actualizado después de agregar el integrante
+//        System.out.println("\nChat después de agregar integrante:");
+//        chatDAO.obtenerChatPorId(idChat);
+    }
 }
