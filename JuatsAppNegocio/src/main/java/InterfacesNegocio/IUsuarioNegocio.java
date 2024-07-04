@@ -27,6 +27,8 @@ public interface IUsuarioNegocio {
     public UsuarioDTO obtenerUsuarioPorCredenciales(UsuarioDTO dto) throws NegocioException;
 
     void actualizarUsuario(UsuarioDTO usuario) throws NegocioException;
+    
+    void agregarContacto(UsuarioDTO usuario, UsuarioDTO contacto) throws NegocioException;
 
     void eliminarUsuario(ObjectId id) throws NegocioException;
     

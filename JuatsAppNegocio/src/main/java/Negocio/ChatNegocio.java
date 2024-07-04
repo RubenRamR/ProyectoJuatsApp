@@ -59,12 +59,15 @@ public class ChatNegocio implements IChatNegocio {
         try
         {
             List<ChatColeccion> chat = chatDAO.obtenerTodosLosChats();
-            List<ChatDTO> chatC = null;
             
-            for(int i = 0; i>chat.size(); i++){
-                
-                chatC.add(convertirChatDTO(chat.get(i)));
-            }
+            List<ChatDTO> chatC = new ArrayList<>();
+            AtomicInteger counter = new AtomicInteger(0);
+            chat.forEach(row -> {
+            int index = counter.getAndIncrement();
+                chatC.add(convertirChatDTO(chat.get(index)));
+
+        });
+
             return chatC;
         } catch(Exception e)
         {
@@ -77,7 +80,7 @@ public class ChatNegocio implements IChatNegocio {
         try
         {
             List<ChatColeccion> chat = chatDAO.obtenerChatPorIdUsuario(id);
-            System.out.println("1" + chat);
+
             List<ChatDTO> chatC = new ArrayList<>();
             AtomicInteger counter = new AtomicInteger(0);
             chat.forEach(row -> {
@@ -85,8 +88,7 @@ public class ChatNegocio implements IChatNegocio {
                 chatC.add(convertirChatDTO(chat.get(index)));
 
         });
-            
-                        System.out.println("2" + chatC);
+
             return chatC;
         } catch(Exception e)
         {

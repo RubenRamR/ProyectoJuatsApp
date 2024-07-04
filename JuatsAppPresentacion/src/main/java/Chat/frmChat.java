@@ -24,14 +24,19 @@ import javax.swing.border.Border;
 import javax.swing.table.TableColumnModel;
 import Negocio.UsuarioNegocio;
 import Utilerias.RowImageRenderer;
+import Utilerias.UpdateEverySecond;
 import excepciones.NegocioException;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.TimerTask;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
+import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
+import java.util.TimerTask;
 
 /**
  *
@@ -42,6 +47,11 @@ public class frmChat extends javax.swing.JFrame {
     UsuarioNegocio usuarioNegocio;
     ChatNegocio chatNegocio;
     UsuarioDTO u;
+    private int paginaChat=1;
+    private int LIMITEChat=3;    
+    private int paginaMensaje=1;
+    private int LIMITEMensaje=3;    
+    public Timer timer;
 
     /**
      * Creates new form LogIn
@@ -53,7 +63,12 @@ public class frmChat extends javax.swing.JFrame {
         this.setLocationRelativeTo(this);
         this.usuarioNegocio = usuarioNegocio;
         this.chatNegocio = chatNegocio;
-        cargarEnTabla();
+
+        try {
+            cargarEnTabla();
+        } catch (ExcepcionPresentacion ex) {
+            Logger.getLogger(frmChat.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
 
@@ -62,35 +77,62 @@ public class frmChat extends javax.swing.JFrame {
         tblMiFoto.setRowHeight(0, 67);
         byte[] a = u.getImagenPerfil();
         tblMiFoto.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer(ByteAImagen(a)));
+        
     }
 
-    private void cargarEnTabla()  {
+    private void cargarEnTabla()  throws ExcepcionPresentacion{
+
         try {
+            int indiceInicio = (paginaChat - 1) * LIMITEChat;
             List<ChatDTO> todas = chatNegocio.obtenerTodosLosChatsUsuario(u.getId());
             
-            llenarTabla(todas);
+            int indiceFin = Math.min(indiceInicio + LIMITEChat, todas.size());
+
+            List<ChatDTO> enPagina = obtenerPagina(indiceInicio, indiceFin, todas);
+            llenarTabla(enPagina);
+            actualizarNumeroDePagina();
         } catch (NegocioException ex) {
             Logger.getLogger(frmChat.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }    
     
+    private List<ChatDTO> obtenerPagina(int indiceInicio, int indiceFin, List<ChatDTO> todasaux) throws ExcepcionPresentacion {
+        List<ChatDTO> todas= todasaux;
+        List<ChatDTO> todasLasPaginas = new ArrayList<>();
+        indiceFin = Math.min(indiceFin, todas.size());
+        for (int i = indiceInicio; i < indiceFin; i++) {
+            todasLasPaginas.add(todas.get(i));
+        }
+        return todasLasPaginas;
+    }
+    
+    private void actualizarNumeroDePagina() {
+    NumeroDePagina.setText(""+paginaChat);
+    }
+            
+    
     private void llenarTabla(List<ChatDTO> lista) {
          DefaultTableModel modeloTabla = (DefaultTableModel) this.tblChats.getModel();
-
+         
     // Clear existing rows
-    tblChats.setRowHeight(50);
+    tblChats.setRowHeight(235);
     modeloTabla.setRowCount(0);
     if (lista != null) {
+                if(0 < lista.size()){tblChatsFotos3.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer(ByteAImagen(lista.get(0).getImagen())));} else {new ImageRenderer("placeholder.jpg");}
+                if(1 < lista.size()){tblChatsFotos4.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer(ByteAImagen(lista.get(1).getImagen())));} else {new ImageRenderer("placeholder.jpg");}
+                if(2 < lista.size()){tblChatsFotos2.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer(ByteAImagen(lista.get(2).getImagen())));} else {new ImageRenderer("placeholder.jpg");}
         lista.forEach(row -> {
-            RowImageRenderer a = new RowImageRenderer();
+
                 Object[] fila = new Object[2];
-                fila[1] =row.getNombre();
-                fila[0] = a.getTableCellRendererComponent(tblChat, ByteAImagen(row.getImagen()), rootPaneCheckingEnabled, rootPaneCheckingEnabled, ERROR, NORMAL);
-                modeloTabla.addRow(fila);             
+
+                fila[0] =row.getNombre();
+                modeloTabla.addRow(fila);     
+
             
         });
     }
+
     }
         
     
@@ -149,6 +191,15 @@ public class frmChat extends javax.swing.JFrame {
         btnDetalles = new javax.swing.JButton();
         btnAgregarContactos = new javax.swing.JButton();
         btnDetalles2 = new javax.swing.JButton();
+        NumeroDePagina = new javax.swing.JTextField();
+        btnSiguienteChat = new javax.swing.JButton();
+        btnPrevioChat = new javax.swing.JButton();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        tblChatsFotos2 = new javax.swing.JTable();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        tblChatsFotos3 = new javax.swing.JTable();
+        jScrollPane8 = new javax.swing.JScrollPane();
+        tblChatsFotos4 = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -238,34 +289,27 @@ public class frmChat extends javax.swing.JFrame {
         tblChats.setForeground(new java.awt.Color(0, 0, 0));
         tblChats.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {"", null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+                {""},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null}
             },
             new String [] {
-                "Nombre", "Foto "
+                "Nombre"
             }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                true, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
+        ));
         tblChats.setToolTipText("");
+        tblChats.setRequestFocusEnabled(false);
         tblChats.setSelectionForeground(new java.awt.Color(66, 143, 66));
         jScrollPane1.setViewportView(tblChats);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 240, 710));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 100, 120, 710));
 
         tblChat.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -345,6 +389,80 @@ public class frmChat extends javax.swing.JFrame {
         });
         jPanel1.add(btnDetalles2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 20, 160, 30));
 
+        NumeroDePagina.setEditable(false);
+        NumeroDePagina.setBackground(new java.awt.Color(186, 219, 186));
+        NumeroDePagina.setForeground(new java.awt.Color(0, 0, 0));
+        NumeroDePagina.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        NumeroDePagina.setText("1");
+        NumeroDePagina.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NumeroDePaginaActionPerformed(evt);
+            }
+        });
+        jPanel1.add(NumeroDePagina, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 820, 40, 30));
+
+        btnSiguienteChat.setBackground(new java.awt.Color(186, 219, 186));
+        btnSiguienteChat.setForeground(new java.awt.Color(0, 0, 0));
+        btnSiguienteChat.setText("->");
+        btnSiguienteChat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSiguienteChatActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnSiguienteChat, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 820, 90, 30));
+
+        btnPrevioChat.setBackground(new java.awt.Color(186, 219, 186));
+        btnPrevioChat.setForeground(new java.awt.Color(0, 0, 0));
+        btnPrevioChat.setText("<-");
+        btnPrevioChat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPrevioChatActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnPrevioChat, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 820, 90, 30));
+
+        tblChatsFotos2.setTableHeader(null);
+        tblChatsFotos2.setRowHeight(235);
+        tblChatsFotos2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null}
+            },
+            new String [] {
+                "Title 1"
+            }
+        ));
+        jScrollPane6.setViewportView(tblChatsFotos2);
+
+        jPanel1.add(jScrollPane6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 570, 130, 240));
+
+        tblChatsFotos3.setTableHeader(null);
+        tblChatsFotos3.setRowHeight(227);
+        tblChatsFotos3.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null}
+            },
+            new String [] {
+                "Title 1"
+            }
+        ));
+        jScrollPane7.setViewportView(tblChatsFotos3);
+
+        jPanel1.add(jScrollPane7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 130, 230));
+
+        tblChatsFotos4.setTableHeader(null);
+        tblChatsFotos4.setRowHeight(235);
+        tblChatsFotos4.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null}
+            },
+            new String [] {
+                "Title 1"
+            }
+        ));
+        jScrollPane8.setViewportView(tblChatsFotos4);
+
+        jPanel1.add(jScrollPane8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 330, 130, 240));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -353,7 +471,7 @@ public class frmChat extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 825, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 860, Short.MAX_VALUE)
         );
 
         pack();
@@ -436,7 +554,72 @@ public class frmChat extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDetalles2ActionPerformed
 
 
+    private void NumeroDePaginaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NumeroDePaginaActionPerformed
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_NumeroDePaginaActionPerformed
+
+    private void btnSiguienteChatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteChatActionPerformed
+        // TODO add your handling code here:
+        try{
+            List<ChatDTO> todas= chatNegocio.obtenerTodosLosChatsUsuario(u.getId());
+
+            int totalPaginas = (int) Math.ceil((double) todas.size() / LIMITEChat);
+
+            if (paginaChat < totalPaginas) {
+                DefaultTableModel model2 = (DefaultTableModel) tblChatsFotos2.getModel();
+                model2.setColumnCount(0);
+                model2.setColumnCount(1);
+                DefaultTableModel model3 = (DefaultTableModel) tblChatsFotos3.getModel();
+                model3.setColumnCount(0);
+                model3.setColumnCount(1);
+                DefaultTableModel model4 = (DefaultTableModel) tblChatsFotos4.getModel();
+                model4.setColumnCount(0);
+                model4.setColumnCount(1);
+
+                paginaChat++;
+                cargarEnTabla();
+                actualizarNumeroDePagina();
+            } else {
+
+                JOptionPane.showMessageDialog(this, "No hay más páginas disponibles", "Información", JOptionPane.INFORMATION_MESSAGE);
+            }}
+         catch (ExcepcionPresentacion ex) {
+            JOptionPane.showMessageDialog(this, "No hay más páginas disponibles", "Información", JOptionPane.INFORMATION_MESSAGE);
+        } catch (NegocioException ex) {
+            Logger.getLogger(frmChat.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
+        
+    }//GEN-LAST:event_btnSiguienteChatActionPerformed
+
+    private void btnPrevioChatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrevioChatActionPerformed
+        // TODO add your handling code here:
+
+                if (paginaChat > 1) {
+            try {
+                DefaultTableModel model2 = (DefaultTableModel) tblChatsFotos2.getModel();
+                model2.setColumnCount(0);
+                model2.setColumnCount(1);
+                DefaultTableModel model3 = (DefaultTableModel) tblChatsFotos3.getModel();
+                model3.setColumnCount(0);
+                model3.setColumnCount(1);
+                DefaultTableModel model4 = (DefaultTableModel) tblChatsFotos4.getModel();
+                model4.setColumnCount(0);
+                model4.setColumnCount(1);
+                paginaChat--;
+                cargarEnTabla();
+                actualizarNumeroDePagina();
+            } catch (ExcepcionPresentacion ex) {
+                JOptionPane.showMessageDialog(this, "No hay más páginas disponibles", "Información", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+    
+    }//GEN-LAST:event_btnPrevioChatActionPerformed
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField NumeroDePagina;
     private javax.swing.JButton btnAgregarContactos;
     private javax.swing.JButton btnCerrar;
     private javax.swing.JButton btnContactos;
@@ -446,6 +629,8 @@ public class frmChat extends javax.swing.JFrame {
     private javax.swing.JButton btnEnviarMensaje;
     private javax.swing.JButton btnNuevoChat;
     private javax.swing.JButton btnPerfil;
+    private javax.swing.JButton btnPrevioChat;
+    private javax.swing.JButton btnSiguienteChat;
     private javax.swing.JTextField fldFoto;
     private javax.swing.JTextField fldMensaje;
     private javax.swing.JLabel jLabel2;
@@ -455,8 +640,14 @@ public class frmChat extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
+    private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JTable tblChat;
     private javax.swing.JTable tblChats;
+    private javax.swing.JTable tblChatsFotos2;
+    private javax.swing.JTable tblChatsFotos3;
+    private javax.swing.JTable tblChatsFotos4;
     private javax.swing.JTable tblMiFoto;
     // End of variables declaration//GEN-END:variables
 }

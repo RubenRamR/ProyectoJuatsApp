@@ -5,6 +5,7 @@
 package Chat;
 
 
+import DTO.UsuarioDTO;
 import LogIn.*;
 import Negocio.ChatNegocio;
 import java.awt.Color;
@@ -22,15 +23,17 @@ public class frmVerDetalles extends javax.swing.JFrame {
 
     UsuarioNegocio usuarioNegocio;
     ChatNegocio chatNegocio;
+    UsuarioDTO u;
     
     /**
      * Creates new form LogIn
      */
-    public frmVerDetalles(UsuarioNegocio usuarioNegocio, ChatNegocio chatNegocio) {
+    public frmVerDetalles(UsuarioNegocio usuarioNegocio, ChatNegocio chatNegocio, UsuarioDTO u) {
         initComponents();
         this.setLocationRelativeTo(this);
         this.usuarioNegocio = usuarioNegocio;
         this.chatNegocio = chatNegocio;
+        this.u = u;
 
     }
 

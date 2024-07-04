@@ -42,13 +42,23 @@ public class ChatDAO implements IChatDAO {
     public void crearChat(ChatColeccion chat) throws PersistenciaException {
         try
         {
+            if(chat.getMensajes() == null){
             Document docChat = new Document()
+                    .append("nombre", chat.getNombre())
+                    .append("imagen", chat.getImagen())
+                    .append("integrantes", chat.getIntegrantes());
+            
+            coleccion.insertOne(docChat);
+            }
+            else
+            {
+                     Document docChat = new Document()
                     .append("nombre", chat.getNombre())
                     .append("imagen", chat.getImagen())
                     .append("integrantes", chat.getIntegrantes())
                     .append("mensajes", convertirMensajesADocumentos(chat.getMensajes()));
-
             coleccion.insertOne(docChat);
+            }
         } catch (Exception e)
         {
             throw new PersistenciaException("Error al crear el chat en la base de datos", e);

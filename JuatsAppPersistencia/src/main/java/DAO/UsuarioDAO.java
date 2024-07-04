@@ -18,6 +18,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.Binary;
@@ -337,6 +338,83 @@ public class UsuarioDAO implements IUsuarioDAO {
 
     @Override
     public void eliminarUsuario(ObjectId id) throws PersistenciaException {
+    public void agregarContacto(UsuarioColeccion usuario, UsuarioColeccion contacto)throws PersistenciaException {
+        try
+        {
+            // Crea el filtro para encontrar el usuario por su ObjectId
+            ObjectId idUsuario = usuario.getId();
+            Bson filtro = Filters.eq("_id", idUsuario);
+
+            // Crea el documento con los nuevos valores a actualizar
+            ObjectId aux = contacto.getId();
+            ObjectId aux2 = usuario.getId();
+            List<ObjectId> contactosact = usuario.getContactos();
+            if (aux.equals(aux2)){JOptionPane.showMessageDialog(null, "No te puedes agregar a ti mismo como contacto");return;}
+            if (contactosact == null)
+            {
+                List<ObjectId> a = new ArrayList<>();
+                a.add(contacto.getId());
+                            Document docActualizacion = new Document()
+                    .append("nombre", usuario.getNombre())
+                    .append("apellidoPaterno", usuario.getApellidoPaterno())
+                    .append("apellidoMaterno", usuario.getApellidoMaterno())
+                    .append("sexo", usuario.getSexo())
+                    .append("fechaNacimiento", java.sql.Date.valueOf(usuario.getFechaNacimiento()))
+                    .append("telefono", usuario.getTelefono())
+                    .append("contraseña", usuario.getContraseña())
+                    .append("imagenPerfil", usuario.getImagenPerfil())
+                    .append("direccion", convertirDireccionADocumento(usuario.getDireccion()))
+                    .append("contactos", a);
+            // Realiza la actualización en la base de datos
+            UpdateResult resultado = coleccion.updateOne(filtro, new Document("$set", docActualizacion));
+
+            // Verifica si se actualizó correctamente
+            if (resultado.getModifiedCount() > 0)
+            {
+                System.out.println("Primer contacto agregado correctamente");
+                return;
+            } else
+            {
+                System.out.println("No se encontró ningún contacto nuevo");
+                
+            }
+            }
+            if (contactosact.contains(aux)){JOptionPane.showMessageDialog(null, "El contacto ya existe");return;}
+            if (contactosact != null){
+            contactosact.add(contacto.getId());
+            Document docActualizacion = new Document()
+                    .append("nombre", usuario.getNombre())
+                    .append("apellidoPaterno", usuario.getApellidoPaterno())
+                    .append("apellidoMaterno", usuario.getApellidoMaterno())
+                    .append("sexo", usuario.getSexo())
+                    .append("fechaNacimiento", java.sql.Date.valueOf(usuario.getFechaNacimiento()))
+                    .append("telefono", usuario.getTelefono())
+                    .append("contraseña", usuario.getContraseña())
+                    .append("imagenPerfil", usuario.getImagenPerfil())
+                    .append("direccion", convertirDireccionADocumento(usuario.getDireccion()))
+                    .append("contactos", contactosact);
+
+            // Realiza la actualización en la base de datos
+            UpdateResult resultado = coleccion.updateOne(filtro, new Document("$set", docActualizacion));
+
+            // Verifica si se actualizó correctamente
+            if (resultado.getModifiedCount() > 0)
+            {
+                System.out.println("Contacto nuevo agregado correctamente");
+            } else
+            {
+                System.out.println("No se encontró ningún contacto");
+            }
+            }
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+    
+    
+    @Override
+    public void eliminarUsuario(ObjectId id)throws PersistenciaException {
         try
         {
             // Crea el filtro para encontrar el usuario por su ObjectId

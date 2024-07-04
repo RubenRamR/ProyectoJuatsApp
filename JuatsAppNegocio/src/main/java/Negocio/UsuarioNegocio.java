@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bson.types.ObjectId;
@@ -101,6 +102,22 @@ public class UsuarioNegocio implements IUsuarioNegocio {
         {
             throw new NegocioException("Error al obtener todos los usuarios en la capa de negocio", e);
         }
+            List<UsuarioColeccion> usuarios = usuarioDAO.obtenerTodosLosUsuarios();
+                      System.out.println(usuarios.toString());                          
+            List<UsuarioDTO> usuariosC = new ArrayList<>();
+            
+            AtomicInteger counter = new AtomicInteger(0);
+            usuarios.forEach(row -> {
+            int index = counter.getAndIncrement();
+                usuariosC.add(convertirUsuarioDTO(usuarios.get(index)));
+
+        });
+
+            return usuariosC;
+        } catch (PersistenciaException e)
+        {
+            throw new NegocioException("aqui");
+        }        
     }
 
     @Override
@@ -115,6 +132,22 @@ public class UsuarioNegocio implements IUsuarioNegocio {
             throw new NegocioException(e.getMessage());
         }
     }
+    
+    @Override
+    public void agregarContacto(UsuarioDTO usuario, UsuarioDTO contacto) throws NegocioException {
+        try
+        {
+            UsuarioColeccion usuarioA = new UsuarioColeccion();
+            usuarioA = convertirUsuarioDTO(usuario);
+            
+            UsuarioColeccion usuarioB = new UsuarioColeccion();
+            usuarioB = convertirUsuarioDTO(contacto);      
+            usuarioDAO.agregarContacto(usuarioA, usuarioB);
+        } catch (Exception e)
+        {
+            throw new NegocioException(e.getMessage());
+        }     
+    }    
 
     @Override
     public void eliminarUsuario(ObjectId id) throws NegocioException {
@@ -183,6 +216,33 @@ public class UsuarioNegocio implements IUsuarioNegocio {
         return usuarioDTO;
     }
 
+    
+    // Método para convertir UsuarioColeccion a UsuarioDTO
+    public UsuarioDTO convertirUsuarioDTO(UsuarioColeccion usuario) {
+        UsuarioDTO u = new UsuarioDTO();
+        
+        // Asignar los valores simples
+        u.setId(usuario.getId()); // Si es necesario convertir a ObjectId
+        u.setNombre(usuario.getNombre());
+        u.setApellidoPaterno(usuario.getApellidoPaterno());
+        u.setApellidoMaterno(usuario.getApellidoMaterno());
+        u.setSexo(usuario.getSexo());
+        u.setContraseña(usuario.getContraseña());
+        u.setFechaNacimiento(usuario.getFechaNacimiento());
+        u.setTelefono(usuario.getTelefono());
+        u.setImagenPerfil(usuario.getImagenPerfil());
+        u.setContactos(usuario.getContactos());
+        
+        
+        // Convertir la dirección si está presente en el DTO
+        if (usuario.getDireccion() != null) {
+            u.setDireccion(convertirDireccionDTO(usuario.getDireccion()));
+        }
+        
+        return u;
+        
+    }    
+    
     // Método para convertir DireccionDTO a Direccion
     private Direccion convertirDireccionDTO(DireccionDTO dto) {
         Direccion direccion = new Direccion();
@@ -200,5 +260,4 @@ public class UsuarioNegocio implements IUsuarioNegocio {
         direccion.setCodigoPostal(dto.getCodigoPostal());
         return direccion;
     }
-
 }
