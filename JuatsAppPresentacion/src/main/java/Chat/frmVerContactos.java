@@ -44,8 +44,7 @@ public class frmVerContactos extends javax.swing.JFrame {
     ChatNegocio chatNegocio;
     UsuarioDTO u;
     DefaultTableModel modeloTabla;
-    List<ObjectId> contactos;
-    List<UsuarioDTO> contactoAE;
+    List<UsuarioDTO> usuarios;
     
     
     /**
@@ -80,20 +79,14 @@ public class frmVerContactos extends javax.swing.JFrame {
                 int row = tblContactos.getSelectedRow();
                 if (row != -1)
                 {
-                    try {
-                        
-                        DefaultTableModel model3 = (DefaultTableModel) tblChatsFotos3.getModel();
-                        model3.setColumnCount(0);
-                        model3.setColumnCount(1);
-                        
-                        List<UsuarioDTO> usuarios = usuarioNegocio.obtenerTodosLosUsuarios();
-                        UsuarioDTO usuariosel = usuarios.get(row);
-                        
-                        tblChatsFotos3.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer(ByteAImagen(usuariosel.getImagenPerfil())));
-                        DefaultTableModel modeloTablaSel = (DefaultTableModel) tblContactoSel.getModel();
-                        
-                        modeloTablaSel.setRowCount(0);
-                        modeloTablaSel.addRow(new Object[]
+                    DefaultTableModel model3 = (DefaultTableModel) tblChatsFotos3.getModel();
+                    model3.setColumnCount(0);
+                    model3.setColumnCount(1);
+                    UsuarioDTO usuariosel = usuarios.get(row);
+                    tblChatsFotos3.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer(ByteAImagen(usuariosel.getImagenPerfil())));
+                    DefaultTableModel modeloTablaSel = (DefaultTableModel) tblContactoSel.getModel();
+                    modeloTablaSel.setRowCount(0);
+                    modeloTablaSel.addRow(new Object[]
                     {
                         
                         usuariosel.getNombre(),
@@ -102,10 +95,6 @@ public class frmVerContactos extends javax.swing.JFrame {
                         usuariosel.getTelefono(),
                         usuariosel.getDireccion().getCalle() +", "+ usuariosel.getDireccion().getNumero() +", "+ usuariosel.getDireccion().getCodigoPostal()
                     });
-                        
-                    } catch (NegocioException ex) {
-                        Logger.getLogger(frmVerContactos.class.getName()).log(Level.SEVERE, null, ex);
-                    }
                 }
             }
         }));
@@ -116,8 +105,7 @@ public class frmVerContactos extends javax.swing.JFrame {
         List<UsuarioDTO> usuarios = new ArrayList<>();
         List<ObjectId> contactos = u.getContactos();
         
-        this.contactos = contactos;        
-        
+
         if(contactos == null) 
         {
                 JOptionPane.showMessageDialog(null, "No tiene contactos agregados.", "Información", JOptionPane.INFORMATION_MESSAGE); 
@@ -132,6 +120,8 @@ public class frmVerContactos extends javax.swing.JFrame {
             } catch (NegocioException ex) {
                 Logger.getLogger(frmVerContactos.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
+            this.usuarios = usuarios;
             
         });
                 
@@ -174,7 +164,7 @@ public class frmVerContactos extends javax.swing.JFrame {
         tblChatsFotos3 = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblContactoSel = new javax.swing.JTable();
-        btnAgregar = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -245,14 +235,14 @@ public class frmVerContactos extends javax.swing.JFrame {
 
         jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 340, 530, 110));
 
-        btnAgregar.setBackground(new java.awt.Color(66, 143, 66));
-        btnAgregar.setText("Eliminar");
-        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+        btnEliminar.setBackground(new java.awt.Color(66, 143, 66));
+        btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAgregarActionPerformed(evt);
+                btnEliminarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 470, 680, 40));
+        jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 470, 680, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -278,21 +268,34 @@ public class frmVerContactos extends javax.swing.JFrame {
         this.dispose();           
     }//GEN-LAST:event_btnCerrarActionPerformed
 
-    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         try {
             // TODO add your handling code here:
             int row = tblContactos.getSelectedRow();
+            ObjectId idAE = usuarios.get(row).getId();
             
-            System.out.println(contactos.toString());
-            usuarioNegocio.agregarContacto(u, usuariosel);
+            List<ObjectId> contactosN = u.getContactos();
+            
+            if(contactosN.contains(idAE))
+            {
+                contactosN.remove(idAE);
+                u.setContactos(contactosN);
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(this, "El contacto no existe");
+            }
+                
+            usuarioNegocio.actualizarUsuario(u);
             UsuarioDTO a = usuarioNegocio.obtenerUsuarioPorId(u.getId());
+            JOptionPane.showMessageDialog(this, "El contacto se eliminó satisfactoriamente");
             frmChat frm = new frmChat(usuarioNegocio, chatNegocio, a);
             frm.show();
             this.dispose();
         } catch (NegocioException ex) {
-            Logger.getLogger(frmVerContactos.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(this, "Error en la bd");
         }
-    }//GEN-LAST:event_btnAgregarActionPerformed
+    }//GEN-LAST:event_btnEliminarActionPerformed
 
     public BufferedImage ByteAImagen (byte[] a){
         
@@ -320,8 +323,8 @@ public class frmVerContactos extends javax.swing.JFrame {
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnCerrar;
+    private javax.swing.JButton btnEliminar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
