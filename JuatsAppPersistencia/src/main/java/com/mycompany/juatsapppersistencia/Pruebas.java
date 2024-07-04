@@ -91,13 +91,13 @@ public class Pruebas {
 //            System.out.println("Usuario no encontrado.");
 //        }
 // Obtener todos los usuarios
-        List<UsuarioColeccion> usuarios = usuarioDAO.obtenerTodosLosUsuarios();
-
-        // Mostrar los usuarios obtenidos
-        for (UsuarioColeccion usuario : usuarios) {
-            System.out.println(usuario.toString());
-        }
-//        // Supongamos que obtienes un usuario para actualizar
+//        List<UsuarioColeccion> usuarios = usuarioDAO.obtenerTodosLosUsuarios();
+//
+//        // Mostrar los usuarios obtenidos
+//        for (UsuarioColeccion usuario : usuarios) {
+//            System.out.println(usuario.toString());
+//        }
+////        // Supongamos que obtienes un usuario para actualizar
 //        ObjectId idUsuario = new ObjectId("6684692875e706200ac57c40"); // Reemplaza con un ObjectId válido existente en tu base de datos
 //        UsuarioColeccion usuario = usuarioDAO.obtenerUsuarioPorId(idUsuario);
 //
@@ -139,33 +139,33 @@ public class Pruebas {
 
          */
 //
-        // Crear un chat de prueba
+//         Crear un chat de prueba
 //        
-//        imagenABytes a = new imagenABytes();
-//
-//        byte[] imagen = a.convertirImagenABytes(new File("C:\\Users\\santi\\Desktop\\piplup.png"));
-//
-//        ObjectId u = new ObjectId("6684d499c1ccc467b190e6f6");
-//        ChatColeccion chat = new ChatColeccion();
-//        chat.setNombre("Piplup1");
-//        chat.setImagen(imagen); // Si tienes una imagen, conviértela a byte[] y asígnala aquí
-//        chat.setIntegrantes(Arrays.asList(u));
-//
+        imagenABytes a = new imagenABytes();
+
+        byte[] imagen = a.convertirImagenABytes(new File("C:\\Users\\santi\\Desktop\\mudkip.jpg"));
+
+        ObjectId u = new ObjectId("6684d4c95e850f6424d9648e");
+        ChatColeccion chat = new ChatColeccion();
+        chat.setNombre("mudkip");
+        chat.setImagen(imagen); // Si tienes una imagen, conviértela a byte[] y asígnala aquí
+        chat.setIntegrantes(Arrays.asList(u));
+
 //        // Crear mensajes de prueba
 //        Mensaje mensaje1 = new Mensaje("Hola, ¿cómo estás?", LocalDateTime.now(), new byte[]{0, 4, 8});
 //        Mensaje mensaje2 = new Mensaje("¡Bien, gracias! ¿Y tú?", LocalDateTime.now(), null);
 //
 //        List<Mensaje> mensajes = Arrays.asList(mensaje1, mensaje2);
 //        chat.setMensajes(mensajes);
-//
-//        try
-//        {
-//            chatDAO.crearChat(chat);
-//            System.out.println("Chat creado exitosamente");
-//        } catch (PersistenciaException e)
-//        {
-//            e.printStackTrace();
-//        }
+
+        try
+        {
+            chatDAO.crearChat(chat);
+            System.out.println("Chat creado exitosamente");
+        } catch (PersistenciaException e)
+        {
+            e.printStackTrace();
+        }
 //        ObjectId id = new ObjectId("6684c54c9a389548b5e9d215");
 //        try {
 //            chat = chatDAO.obtenerChatPorId(id);

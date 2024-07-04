@@ -5,6 +5,7 @@
 package Chat;
 
 
+import DTO.ChatDTO;
 import DTO.UsuarioDTO;
 import LogIn.*;
 import Negocio.ChatNegocio;
@@ -14,6 +15,20 @@ import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
 import javax.swing.border.Border;
 import Negocio.UsuarioNegocio;
+import Utilerias.ImageRenderer;
+import excepciones.NegocioException;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
+import org.bson.types.ObjectId;
 
 /**
  *
@@ -24,6 +39,7 @@ public class frmNuevoChat extends javax.swing.JFrame {
     UsuarioNegocio usuarioNegocio;
     ChatNegocio chatNegocio;
     UsuarioDTO u;
+    byte[] imagen;
     
     /**
      * Creates new form LogIn
@@ -35,8 +51,46 @@ public class frmNuevoChat extends javax.swing.JFrame {
         this.chatNegocio = chatNegocio;
         this.u = u;
 
+
+    }
+    
+    public void cargarImagen(){
+    
     }
 
+    public byte[] convertirImagenABytes(File file) throws IOException {
+        // Leer el archivo de imagen en un InputStream
+        InputStream inputStream = new FileInputStream(file);
+        byte[] bytes = inputStream.readAllBytes();
+        inputStream.close();
+        return bytes;
+    }    
+
+    public BufferedImage ByteAImagen (byte[] a){
+        
+        // Supongamos que tienes un array de bytes llamado imageBytes
+        byte[] imageBytes =  a;
+
+        // Convierte los bytes en una imagen BufferedImage
+        BufferedImage img = null;
+        try {
+            ByteArrayInputStream bis = new ByteArrayInputStream(imageBytes);
+            img = ImageIO.read(bis);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Ahora puedes usar la imagen (BufferedImage)
+        if (img != null) {
+            return img;
+        } else {
+                    JOptionPane.showMessageDialog(this, "Error al leer la imagen de perfil");
+            return null;
+        }
+    
+    }
+        
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -50,11 +104,12 @@ public class frmNuevoChat extends javax.swing.JFrame {
         btnGuardar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         btnCerrar = new javax.swing.JButton();
-        fldTelefono = new javax.swing.JTextField();
+        fldNombre = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        fldImagen = new javax.swing.JTextField();
         btnEncontrarImagen = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tblMiFoto = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -89,14 +144,14 @@ public class frmNuevoChat extends javax.swing.JFrame {
         });
         jPanel1.add(btnCerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
-        fldTelefono.setBorder(lineBorder);
-        fldTelefono.setBackground(new java.awt.Color(186, 219, 186));
-        fldTelefono.addActionListener(new java.awt.event.ActionListener() {
+        fldNombre.setBorder(lineBorder);
+        fldNombre.setBackground(new java.awt.Color(186, 219, 186));
+        fldNombre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fldTelefonoActionPerformed(evt);
+                fldNombreActionPerformed(evt);
             }
         });
-        jPanel1.add(fldTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 140, 230, 40));
+        jPanel1.add(fldNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 140, 230, 40));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel2.setText("Nombre *");
@@ -105,15 +160,6 @@ public class frmNuevoChat extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel3.setText("Imagen de Perfil *");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 100, 230, -1));
-
-        fldImagen.setBorder(lineBorder);
-        fldImagen.setBackground(new java.awt.Color(186, 219, 186));
-        fldImagen.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fldImagenActionPerformed(evt);
-            }
-        });
-        jPanel1.add(fldImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 140, 230, 40));
 
         Color customColor2 = new Color(0, 113, 219);
         Color customColor3 = new Color(78, 160, 237);
@@ -127,7 +173,20 @@ public class frmNuevoChat extends javax.swing.JFrame {
                 btnEncontrarImagenActionPerformed(evt);
             }
         });
-        jPanel1.add(btnEncontrarImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 190, 110, 20));
+        jPanel1.add(btnEncontrarImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 280, 110, 20));
+
+        tblMiFoto.setTableHeader(null);
+        tblMiFoto.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null}
+            },
+            new String [] {
+                "Mi foto de perfil"
+            }
+        ));
+        jScrollPane3.setViewportView(tblMiFoto);
+
+        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 140, 250, 130));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -149,7 +208,26 @@ public class frmNuevoChat extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        // TODO add your handling code here:
+        try {
+            // TODO add your handling code here:
+            
+            ChatDTO nChat = new ChatDTO();
+            
+            nChat.setNombre(fldNombre.getText());
+            nChat.setImagen(imagen);
+            List<ObjectId> integrantesAUX = new ArrayList<>();
+            integrantesAUX.add(u.getId());
+            nChat.setIntegrantes(integrantesAUX);
+
+            chatNegocio.crearChat(nChat);
+            JOptionPane.showMessageDialog(this, "Chat creado con éxito!");
+            frmChat frm = new frmChat(usuarioNegocio, chatNegocio, u);
+            frm.show();
+            this.dispose();
+        } catch (NegocioException ex) {
+            JOptionPane.showMessageDialog(this, "Error al crear el chat");
+        }
+        
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
@@ -159,13 +237,9 @@ public class frmNuevoChat extends javax.swing.JFrame {
         this.dispose();           
     }//GEN-LAST:event_btnCerrarActionPerformed
 
-    private void fldTelefonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fldTelefonoActionPerformed
+    private void fldNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fldNombreActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_fldTelefonoActionPerformed
-
-    private void fldImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fldImagenActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_fldImagenActionPerformed
+    }//GEN-LAST:event_fldNombreActionPerformed
 
     private void btnEncontrarImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEncontrarImagenActionPerformed
         // TODO add your handling code here:
@@ -176,11 +250,18 @@ public class frmNuevoChat extends javax.swing.JFrame {
 
         // Check if a file was selected
         if (result == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = fileChooser.getSelectedFile();
-            fldImagen.setText(selectedFile.getAbsolutePath());
-        }
+            try {
+                File selectedFile = fileChooser.getSelectedFile();
 
-        
+                tblMiFoto.setRowHeight(0, 125);
+                tblMiFoto.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer(ByteAImagen(convertirImagenABytes(selectedFile))));
+                this.imagen = convertirImagenABytes(selectedFile);
+            } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this, "Error al convertir la imagen a bytes.");
+                                
+
+            }
+        }
     }//GEN-LAST:event_btnEncontrarImagenActionPerformed
 
 
@@ -188,11 +269,12 @@ public class frmNuevoChat extends javax.swing.JFrame {
     private javax.swing.JButton btnCerrar;
     private javax.swing.JButton btnEncontrarImagen;
     private javax.swing.JButton btnGuardar;
-    private javax.swing.JTextField fldImagen;
-    private javax.swing.JTextField fldTelefono;
+    private javax.swing.JTextField fldNombre;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTable tblMiFoto;
     // End of variables declaration//GEN-END:variables
 }

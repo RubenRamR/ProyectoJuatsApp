@@ -7,6 +7,7 @@ package pruebas;
 import Conexion.ConexionDB;
 import DAO.ChatDAO;
 import DAO.UsuarioDAO;
+import DTO.ChatDTO;
 import DTO.UsuarioDTO;
 import InterfacesDAO.IChatDAO;
 import InterfacesDAO.IConexionDB;
@@ -41,9 +42,16 @@ public class pruebas {
         
         ChatNegocio chatNegocio = new ChatNegocio(chatDAO);
 
+        List<UsuarioDTO> b = usuarioNegocio.obtenerTodosLosUsuarios();
+        UsuarioDTO x = b.get(0);
         
-        List<UsuarioDTO> a = usuarioNegocio.obtenerTodosLosUsuarios();
+        List<ChatDTO> a = chatNegocio.obtenerTodosLosChats();
+        System.out.println(a.size());
+        a.get(0).setMensajes(null);
+        chatNegocio.crearChat(a.get(0));
         System.out.println(a.toString());
+        a = chatNegocio.obtenerTodosLosChats();
+        System.out.println(a.size());
     }
     
 }
