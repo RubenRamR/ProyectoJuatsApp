@@ -6,6 +6,7 @@ package Chat;
 
 import DTO.ChatDTO;
 import DTO.UsuarioDTO;
+import DocsDTO.MensajeDTO;
 import LogIn.*;
 import Negocio.ChatNegocio;
 import Utilerias.ImageRenderer;
@@ -28,7 +29,10 @@ import Utilerias.UpdateEverySecond;
 import excepciones.NegocioException;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TimerTask;
@@ -37,6 +41,8 @@ import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
 import java.util.TimerTask;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 /**
  *
@@ -52,6 +58,9 @@ public class frmChat extends javax.swing.JFrame {
     private int paginaMensaje=1;
     private int LIMITEMensaje=3;    
     public Timer timer;
+    List<ChatDTO> chats;
+    ChatDTO chatC;
+    byte[] imagen;
 
     /**
      * Creates new form LogIn
@@ -69,9 +78,58 @@ public class frmChat extends javax.swing.JFrame {
         } catch (ExcepcionPresentacion ex) {
             Logger.getLogger(frmChat.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        lectorTablaChats();
+        lectorTablaChat();
 
     }
 
+    public void lectorTablaChats(){
+    
+            tblChats.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent event) {
+                // Ignore extra messages
+                if (!event.getValueIsAdjusting()) {
+                    int selectedRow = tblChats.getSelectedRow();
+                    if (selectedRow != -1) {
+                        // React to the row selection
+                        System.out.println("Selected Row: " + selectedRow);
+                        try {
+                            cargarEnTablaChat(chats.get(selectedRow));
+                        } catch (ExcepcionPresentacion ex) {
+                            Logger.getLogger(frmChat.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+            }
+        });    
+        
+    }
+    
+    public void lectorTablaChat(){
+    
+            tblChat.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent event) {
+                // Ignore extra messages
+                if (!event.getValueIsAdjusting()) {
+                    int selectedRow = tblChat.getSelectedRow();
+                    if (selectedRow != -1) {
+                        // React to the row selection
+                        if(chatC.getMensajes().get(selectedRow).getImagenOpcional() == null){return;}
+                       
+                        System.out.println(chatC.getMensajes().get(selectedRow).getImagenOpcional());
+                        frmFoto frm = new frmFoto(chatC.getMensajes().get(selectedRow).getImagenOpcional());
+                        frm.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+                        frm.show();
+                        }
+                    }
+                }
+            
+        });    
+        
+    }    
 
     private void cargarConfiguracionInicialTablaMiPerfil() {
         tblMiFoto.setRowHeight(0, 67);
@@ -91,14 +149,44 @@ public class frmChat extends javax.swing.JFrame {
             List<ChatDTO> enPagina = obtenerPagina(indiceInicio, indiceFin, todas);
             llenarTabla(enPagina);
             actualizarNumeroDePagina();
+            this.chats = enPagina;
         } catch (NegocioException ex) {
             Logger.getLogger(frmChat.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }    
+    }    
+    
+    private void cargarEnTablaChat(ChatDTO chatA)  throws ExcepcionPresentacion{    
+    DefaultTableModel modeloTabla = (DefaultTableModel) this.tblChat.getModel();
+         
+    // Clear existing rows
+    modeloTabla.setRowCount(0);
+    if (chatA != null) {
+        this.chatC = chatA;
+        chatA.getMensajes().forEach(row -> {
 
+                Object[] fila = new Object[3];
+
+                fila[0] =row.getTextoMensaje();
+                if (row.getImagenOpcional() != null){
+                    fila[1] = "Click para ver la imagen";            
+                }
+                else
+                {
+                    fila[1] = "El mensaje no contiene imagen";
+                }
+
+                fila[2] =row.getFechaHoraRegistro();
+                
+                
+                modeloTabla.addRow(fila);     
+
+            
+        });
+    }
     }    
     
     private List<ChatDTO> obtenerPagina(int indiceInicio, int indiceFin, List<ChatDTO> todasaux) throws ExcepcionPresentacion {
-        List<ChatDTO> todas= todasaux;
+        List<ChatDTO> todas = todasaux;
         List<ChatDTO> todasLasPaginas = new ArrayList<>();
         indiceFin = Math.min(indiceFin, todas.size());
         for (int i = indiceInicio; i < indiceFin; i++) {
@@ -113,15 +201,15 @@ public class frmChat extends javax.swing.JFrame {
             
     
     private void llenarTabla(List<ChatDTO> lista) {
-         DefaultTableModel modeloTabla = (DefaultTableModel) this.tblChats.getModel();
+    DefaultTableModel modeloTabla = (DefaultTableModel) this.tblChats.getModel();
          
     // Clear existing rows
     tblChats.setRowHeight(235);
     modeloTabla.setRowCount(0);
-    if (lista != null) {
-                if(0 < lista.size()){tblChatsFotos3.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer(ByteAImagen(lista.get(0).getImagen())));} else {new ImageRenderer("placeholder.jpg");}
-                if(1 < lista.size()){tblChatsFotos4.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer(ByteAImagen(lista.get(1).getImagen())));} else {new ImageRenderer("placeholder.jpg");}
-                if(2 < lista.size()){tblChatsFotos2.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer(ByteAImagen(lista.get(2).getImagen())));} else {new ImageRenderer("placeholder.jpg");}
+        if (lista != null) {
+                if(0 < lista.size()){tblChatsFotos3.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer(ByteAImagen(lista.get(0).getImagen())));} else {tblChatsFotos3.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer("placeholder.jpg"));}
+                if(1 < lista.size()){tblChatsFotos4.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer(ByteAImagen(lista.get(1).getImagen())));} else {tblChatsFotos4.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer("placeholder.jpg"));}
+                if(2 < lista.size()){tblChatsFotos2.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer(ByteAImagen(lista.get(2).getImagen())));} else {tblChatsFotos2.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer("placeholder.jpg"));}
         lista.forEach(row -> {
 
                 Object[] fila = new Object[2];
@@ -132,7 +220,6 @@ public class frmChat extends javax.swing.JFrame {
             
         });
     }
-
     }
         
     
@@ -160,6 +247,15 @@ public class frmChat extends javax.swing.JFrame {
     
     }
     
+    public byte[] convertirImagenABytes(File file) throws IOException {
+        // Leer el archivo de imagen en un InputStream
+        InputStream inputStream = new FileInputStream(file);
+        byte[] bytes = inputStream.readAllBytes();
+        inputStream.close();
+        return bytes;
+    } 
+        
+    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -174,7 +270,6 @@ public class frmChat extends javax.swing.JFrame {
         btnCerrar = new javax.swing.JButton();
         fldMensaje = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        fldFoto = new javax.swing.JTextField();
         btnPerfil = new javax.swing.JButton();
         btnContactos = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
@@ -200,6 +295,8 @@ public class frmChat extends javax.swing.JFrame {
         tblChatsFotos3 = new javax.swing.JTable();
         jScrollPane8 = new javax.swing.JScrollPane();
         tblChatsFotos4 = new javax.swing.JTable();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        tblFotoMensaje = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -230,15 +327,6 @@ public class frmChat extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 10)); // NOI18N
         jLabel2.setText("Foto");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 730, 180, 20));
-
-        fldFoto.setBorder(lineBorder);
-        fldFoto.setBackground(new java.awt.Color(186, 219, 186));
-        fldFoto.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fldFotoActionPerformed(evt);
-            }
-        });
-        jPanel1.add(fldFoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 750, 350, 30));
 
         btnPerfil.setBorder(lineBorder);
         btnPerfil.setBackground(new java.awt.Color(66, 143, 66));
@@ -276,7 +364,7 @@ public class frmChat extends javax.swing.JFrame {
                 btnEncontrarImagenActionPerformed(evt);
             }
         });
-        jPanel1.add(btnEncontrarImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 790, 110, 20));
+        jPanel1.add(btnEncontrarImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 790, 110, 20));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 10)); // NOI18N
         jLabel4.setText("Mensaje *");
@@ -321,10 +409,7 @@ public class frmChat extends javax.swing.JFrame {
 
         tblChat.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+
             },
             new String [] {
                 "Mensaje", "Foto", "Fecha"
@@ -495,6 +580,19 @@ public class frmChat extends javax.swing.JFrame {
 
         jPanel1.add(jScrollPane8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 330, 130, 240));
 
+        tblMiFoto.setTableHeader(null);
+        tblFotoMensaje.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null}
+            },
+            new String [] {
+                "Mi foto de perfil"
+            }
+        ));
+        jScrollPane4.setViewportView(tblFotoMensaje);
+
+        jPanel1.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 750, 210, 100));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -509,11 +607,6 @@ public class frmChat extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void fldFotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fldFotoActionPerformed
-        // TODO add your handling code here:
-
-    }//GEN-LAST:event_fldFotoActionPerformed
 
     private void fldMensajeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fldMensajeActionPerformed
         // TODO add your handling code here:
@@ -548,16 +641,48 @@ public class frmChat extends javax.swing.JFrame {
         int result = fileChooser.showOpenDialog(this);
 
         // Check if a file was selected
-        if (result == JFileChooser.APPROVE_OPTION)
-        {
-            File selectedFile = fileChooser.getSelectedFile();
-            fldFoto.setText(selectedFile.getAbsolutePath());
-        }
+        if (result == JFileChooser.APPROVE_OPTION) {
+            try {
+                File selectedFile = fileChooser.getSelectedFile();
 
+                tblFotoMensaje.setRowHeight(0, 125);
+                tblFotoMensaje.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer(ByteAImagen(convertirImagenABytes(selectedFile))));
+                this.imagen = convertirImagenABytes(selectedFile);
+            } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this, "Error al convertir la imagen a bytes.");
+                                
+
+            }
+        }
     }//GEN-LAST:event_btnEncontrarImagenActionPerformed
 
     private void btnEnviarMensajeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarMensajeActionPerformed
-        // TODO add your handling code here:
+
+        try {
+            if (chatC != null){
+            ChatDTO chatNM = this.chatC;
+            MensajeDTO mensaje = new MensajeDTO();
+            List<MensajeDTO> mensajes = chatNM.getMensajes();
+            
+            mensaje.setTextoMensaje(fldMensaje.getText());
+            mensaje.setFechaHoraRegistro(LocalDateTime.now());
+            if (imagen != null){
+            mensaje.setImagenOpcional(imagen);
+            }
+            mensajes.add(mensaje);
+            
+            chatNM.setMensajes(mensajes);
+            
+            chatNegocio.actualizarChat(chatNM);
+            }
+            else
+            {
+                      JOptionPane.showMessageDialog(this, "Selecciona un mensaje primero"); 
+            }
+            
+        } catch (NegocioException ex) {
+           JOptionPane.showMessageDialog(this, "Error al mandar mensaje :(");
+        }
     }//GEN-LAST:event_btnEnviarMensajeActionPerformed
 
     private void btnNuevoChatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoChatActionPerformed
@@ -594,7 +719,7 @@ public class frmChat extends javax.swing.JFrame {
     private void btnSiguienteChatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteChatActionPerformed
         // TODO add your handling code here:
         try{
-            List<ChatDTO> todas= chatNegocio.obtenerTodosLosChatsUsuario(u.getId());
+            List<ChatDTO> todas = chatNegocio.obtenerTodosLosChatsUsuario(u.getId());
 
             int totalPaginas = (int) Math.ceil((double) todas.size() / LIMITEChat);
 
@@ -663,7 +788,6 @@ public class frmChat extends javax.swing.JFrame {
     private javax.swing.JButton btnPerfil;
     private javax.swing.JButton btnPrevioChat;
     private javax.swing.JButton btnSiguienteChat;
-    private javax.swing.JTextField fldFoto;
     private javax.swing.JTextField fldMensaje;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -672,6 +796,7 @@ public class frmChat extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
@@ -680,6 +805,7 @@ public class frmChat extends javax.swing.JFrame {
     private javax.swing.JTable tblChatsFotos2;
     private javax.swing.JTable tblChatsFotos3;
     private javax.swing.JTable tblChatsFotos4;
+    private javax.swing.JTable tblFotoMensaje;
     private javax.swing.JTable tblMiFoto;
     // End of variables declaration//GEN-END:variables
 }

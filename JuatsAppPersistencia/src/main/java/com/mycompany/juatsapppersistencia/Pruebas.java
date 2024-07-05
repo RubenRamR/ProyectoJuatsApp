@@ -147,17 +147,21 @@ public class Pruebas {
 //        imagenABytes a = new imagenABytes();
 //
 //        byte[] imagen = a.convertirImagenABytes(new File("C:\\Users\\santi\\Desktop\\mudkip.jpg"));
-//
+
 //        ObjectId u = new ObjectId("6684d4c95e850f6424d9648e");
 //        ChatColeccion chat = new ChatColeccion();
 //        chat.setNombre("mudkip");
 //        chat.setImagen(imagen); // Si tienes una imagen, conviértela a byte[] y asígnala aquí
 //        chat.setIntegrantes(Arrays.asList(u));
 //
-////        // Crear mensajes de prueba
-////        Mensaje mensaje1 = new Mensaje("Hola, ¿cómo estás?", LocalDateTime.now(), new byte[]{0, 4, 8});
-////        Mensaje mensaje2 = new Mensaje("¡Bien, gracias! ¿Y tú?", LocalDateTime.now(), null);
-////
+        // Crear mensajes de prueba
+//        Mensaje mensaje1 = new Mensaje("Hola, ¿cómo estás?", LocalDateTime.now(), imagen);
+//        Mensaje mensaje2 = new Mensaje("¡Bien, gracias! ¿Y tú?", LocalDateTime.now(), null);
+//        
+//        chatDAO.crearMensaje(mensaje1);
+//        chatDAO.crearMensaje(mensaje2);
+//        
+
 ////        List<Mensaje> mensajes = Arrays.asList(mensaje1, mensaje2);
 ////        chat.setMensajes(mensajes);
 //        try

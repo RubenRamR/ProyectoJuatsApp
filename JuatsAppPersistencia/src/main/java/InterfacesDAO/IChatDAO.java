@@ -6,6 +6,7 @@ package InterfacesDAO;
 
 import Colecciones.ChatColeccion;
 import Colecciones.UsuarioColeccion;
+import Docs.Mensaje;
 import excepciones.PersistenciaException;
 import java.util.List;
 import org.bson.types.ObjectId;
@@ -33,4 +34,7 @@ public interface IChatDAO {
     public boolean esIntegrante(ObjectId chatId, ObjectId usuarioId) throws PersistenciaException;
 
     public List<ChatColeccion> obtenerChatsDeUsuario(ObjectId usuarioId) throws PersistenciaException;
+    
+    public void crearMensaje(Mensaje mensaje) throws PersistenciaException;
+    
 }

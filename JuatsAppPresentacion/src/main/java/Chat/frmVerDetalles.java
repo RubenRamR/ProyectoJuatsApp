@@ -177,7 +177,7 @@ public class frmVerDetalles extends javax.swing.JFrame {
         // Check if a file was selected
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
-            fldImagen.setText(selectedFile.getAbsolutePath());
+            fldImagen.setText(selectedFile.getAbsolutePath());  
         }
 
         

@@ -229,6 +229,31 @@ public class ChatDAO implements IChatDAO {
         }
         return chats;
     }
+    
+    @Override
+    public void crearMensaje(Mensaje mensaje) throws PersistenciaException{
+        try
+        {
+            if (mensaje.getImagenOpcional() == null)
+            {
+                Document docMensaje = new Document()
+                        .append("textoMensaje", mensaje.getTextoMensaje())
+                        .append("fechaHoraRegistro", mensaje.getFechaHoraRegistro());
+
+                coleccion.insertOne(docMensaje);
+            } else
+            {
+                Document docMensaje = new Document()
+                        .append("textoMensaje", mensaje.getTextoMensaje())
+                        .append("fechaHoraRegistro", mensaje.getFechaHoraRegistro())
+                        .append("imagenOpcional", mensaje.getImagenOpcional());
+                coleccion.insertOne(docMensaje);
+            }
+        } catch (Exception e)
+        {
+            throw new PersistenciaException("Error al crear el mensaje en la base de datos", e);
+        }
+    }
 
     private List<Document> convertirMensajesADocumentos(List<Mensaje> mensajes) {
         List<Document> mensajesDocs = new ArrayList<>();

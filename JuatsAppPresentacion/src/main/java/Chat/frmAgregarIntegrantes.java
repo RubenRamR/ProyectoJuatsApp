@@ -43,6 +43,7 @@ public class frmAgregarIntegrantes extends javax.swing.JFrame {
     UsuarioDTO u;
     DefaultTableModel modeloTabla;
     private ObjectId chatIdSel;
+    List<UsuarioDTO> usu;
 
     /**
      * Creates new form LogIn
@@ -71,31 +72,20 @@ public class frmAgregarIntegrantes extends javax.swing.JFrame {
                 int row = tblIntegrantes.getSelectedRow();
                 if (row != -1)
                 {
-                    try
+                    DefaultTableModel model3 = (DefaultTableModel) tblChatsFotos4.getModel();
+                    model3.setColumnCount(0);
+                    model3.setColumnCount(1);
+                    List<UsuarioDTO> usuarios =  usu;
+                    UsuarioDTO usuariosel = usuarios.get(row);
+                    tblChatsFotos4.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer(ByteAImagen(usuariosel.getImagenPerfil())));
+                    DefaultTableModel modeloTablaSel = (DefaultTableModel) tblIntegranteSel.getModel();
+                    modeloTablaSel.setRowCount(0);
+                    modeloTablaSel.addRow(new Object[]
                     {
-
-                        DefaultTableModel model3 = (DefaultTableModel) tblChatsFotos4.getModel();
-                        model3.setColumnCount(0);
-                        model3.setColumnCount(1);
-
-                        List<UsuarioDTO> usuarios = usuarioNegocio.obtenerTodosLosContactosDeUsuario(u.getId());
-                        UsuarioDTO usuariosel = usuarios.get(row);
-
-                        tblChatsFotos4.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer(ByteAImagen(usuariosel.getImagenPerfil())));
-                        DefaultTableModel modeloTablaSel = (DefaultTableModel) tblIntegranteSel.getModel();
-
-                        modeloTablaSel.setRowCount(0);
-                        modeloTablaSel.addRow(new Object[]
-                        {
-
-                            usuariosel.getNombre(),
-                            usuariosel.getTelefono(),
-                        });
-
-                    } catch (NegocioException ex)
-                    {
-                        Logger.getLogger(frmAgregarContactos.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                        
+                        usuariosel.getNombre(),
+                        usuariosel.getTelefono(),
+                    });
                 }
             }
         }));
@@ -108,6 +98,7 @@ public class frmAgregarIntegrantes extends javax.swing.JFrame {
 
             if (usuarios != null && !usuarios.isEmpty())
             {
+                this.usu = usuarios;
                 for (UsuarioDTO usuario : usuarios)
                 {
 
@@ -305,7 +296,7 @@ public class frmAgregarIntegrantes extends javax.swing.JFrame {
                 if (row != -1)
                 {
                     // Obtener el usuario seleccionado desde la tabla
-                    List<UsuarioDTO> usuarios = usuarioNegocio.obtenerTodosLosUsuarios();
+                    List<UsuarioDTO> usuarios = usu;
                     UsuarioDTO usuariosel = usuarios.get(row);
 
                     // Verificar si el usuario ya es integrante del chat

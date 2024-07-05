@@ -47,7 +47,6 @@ public class ImageRenderer extends DefaultTableCellRenderer {
     
     public ImageRenderer(String imagePath) {
         try {
-            image = ImageIO.read(new File(imagePath));
                     InputStream is = getClass().getClassLoader().getResourceAsStream("imagenes/" + imagePath);
             image = ImageIO.read(is);
         } catch (IOException e) {

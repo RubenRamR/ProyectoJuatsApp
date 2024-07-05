@@ -43,6 +43,8 @@ public class pruebas {
         ChatDAO chatDAO = new ChatDAO(database);
 
         ChatNegocio chatNegocio = new ChatNegocio(chatDAO);
+        
+        
 
 //        List<UsuarioDTO> b = usuarioNegocio.obtenerTodosLosUsuarios();
 //        UsuarioDTO x = b.get(0);
@@ -95,33 +97,33 @@ public class pruebas {
 //            e.printStackTrace();
 //        }
 
-try {
-            // Simular ID de usuario
-            ObjectId usuarioId = new ObjectId("6684d4c95e850f6424d9648e");
-
-            // Crear instancia del negocio
-
-            // Llamar al método obtenerChatsDeUsuario
-            List<ChatDTO> chatsDTO = chatNegocio.obtenerChatsDeUsuario(usuarioId);
-
-            // Mostrar los chats DTO obtenidos
-            for (ChatDTO chatDTO : chatsDTO) {
-                System.out.println("ChatDTO ID: " + chatDTO.getId());
-                System.out.println("Nombre: " + chatDTO.getNombre());
-                System.out.println("Integrantes: " + chatDTO.getIntegrantes());
-//                System.out.println("Mensajes:");
-//                for (MensajeDTO mensajeDTO : chatDTO.getMensajes()) {
-//                    System.out.println("\tTexto: " + mensajeDTO.getTextoMensaje());
-//                    System.out.println("\tFecha: " + mensajeDTO.getFechaHoraRegistro());
-//                    System.out.println("\tImagen opcional: " + (mensajeDTO.getImagenOpcional() != null ? "Presente" : "N/A"));
-//                }
-//                System.out.println("--------------------------------------");
-            }
-
-        } catch (NegocioException e) {
-            System.err.println("Error en la capa de negocio: " + e.getMessage());
-            e.printStackTrace();
-        }
-
+//try {
+//            // Simular ID de usuario
+//            ObjectId usuarioId = new ObjectId("6684d4c95e850f6424d9648e");
+//
+//            // Crear instancia del negocio
+//
+//            // Llamar al método obtenerChatsDeUsuario
+//            List<ChatDTO> chatsDTO = chatNegocio.obtenerChatsDeUsuario(usuarioId);
+//
+//            // Mostrar los chats DTO obtenidos
+//            for (ChatDTO chatDTO : chatsDTO) {
+//                System.out.println("ChatDTO ID: " + chatDTO.getId());
+//                System.out.println("Nombre: " + chatDTO.getNombre());
+//                System.out.println("Integrantes: " + chatDTO.getIntegrantes());
+////                System.out.println("Mensajes:");
+////                for (MensajeDTO mensajeDTO : chatDTO.getMensajes()) {
+////                    System.out.println("\tTexto: " + mensajeDTO.getTextoMensaje());
+////                    System.out.println("\tFecha: " + mensajeDTO.getFechaHoraRegistro());
+////                    System.out.println("\tImagen opcional: " + (mensajeDTO.getImagenOpcional() != null ? "Presente" : "N/A"));
+////                }
+////                System.out.println("--------------------------------------");
+//            }
+//
+//        } catch (NegocioException e) {
+//            System.err.println("Error en la capa de negocio: " + e.getMessage());
+//            e.printStackTrace();
+//        }
+//
     }
 }
