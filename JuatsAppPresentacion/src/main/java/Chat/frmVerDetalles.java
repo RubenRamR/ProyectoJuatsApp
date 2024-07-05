@@ -62,8 +62,8 @@ public class frmVerDetalles extends javax.swing.JFrame {
         this.usuarioNegocio = usuarioNegocio;
         this.chatNegocio = chatNegocio;
         this.u = u;
-        configurarComboBoxChats();
         configurarTablaChats();
+        configurarComboBoxChats();
 
         integrantesActuales = new ArrayList<>();
         mensajesActuales = new ArrayList<>();
@@ -91,6 +91,10 @@ public class frmVerDetalles extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         tbl = new javax.swing.JScrollPane();
         tblChatsFotos4 = new javax.swing.JTable();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblIntegrantes = new javax.swing.JTable();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
 
         jLabel4.setText("jLabel4");
 
@@ -114,7 +118,7 @@ public class frmVerDetalles extends javax.swing.JFrame {
                 btnGuardarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 430, 320, 50));
+        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 490, 320, 50));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 64)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -140,12 +144,14 @@ public class frmVerDetalles extends javax.swing.JFrame {
         jPanel1.add(fldNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 150, 230, 40));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Chats:");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 110, 160, -1));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("Imagen de Perfil ");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 210, 230, -1));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 240, 270, -1));
 
         btnEncontrarImagen.setBorder(lineBorder2);
         btnEncontrarImagen.setBackground(customColor3);
@@ -156,7 +162,7 @@ public class frmVerDetalles extends javax.swing.JFrame {
                 btnEncontrarImagenActionPerformed(evt);
             }
         });
-        jPanel1.add(btnEncontrarImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 370, 110, 20));
+        jPanel1.add(btnEncontrarImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 410, 110, 20));
 
         ChatsComboBox.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         ChatsComboBox.addActionListener(new java.awt.event.ActionListener() {
@@ -167,6 +173,7 @@ public class frmVerDetalles extends javax.swing.JFrame {
         jPanel1.add(ChatsComboBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 150, 160, 60));
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel5.setText("Nombre");
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 110, 230, -1));
 
@@ -182,7 +189,38 @@ public class frmVerDetalles extends javax.swing.JFrame {
         ));
         tbl.setViewportView(tblChatsFotos4);
 
-        jPanel1.add(tbl, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 250, 130, 110));
+        jPanel1.add(tbl, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 290, 130, 110));
+
+        tblIntegrantes.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Nombre", "Teléfono"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblIntegrantes.setToolTipText("");
+        jScrollPane1.setViewportView(tblIntegrantes);
+
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 290, 270, 130));
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel6.setText("Imagen de Perfil ");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 240, 200, -1));
+
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel7.setText("Imagen de Perfil ");
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 240, 200, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -194,9 +232,7 @@ public class frmVerDetalles extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 557, Short.MAX_VALUE)
         );
 
         pack();
@@ -394,13 +430,44 @@ public class frmVerDetalles extends javax.swing.JFrame {
             {
                 List<ChatDTO> chats = chatNegocio.obtenerChatsDeUsuario(u.getId());
                 ChatDTO chatSeleccionado = chats.get(selectedIndex);
-                chatIdSel = chatSeleccionado.getId();
+                List<ObjectId> integrantesID = chatSeleccionado.getIntegrantes();
+                List<UsuarioDTO> integrantesDTO = new ArrayList<>();
 
+                for (int i = 0; i<integrantesID.size(); i++)
+                {
+                    
+                    integrantesDTO.add(usuarioNegocio.obtenerUsuarioPorId(integrantesID.get(i)));
+                    
+                }
+                
+                DefaultTableModel modelo = (DefaultTableModel) tblIntegrantes.getModel();
+                modelo.setRowCount(0);
+                
+            if (integrantesDTO != null && !integrantesDTO.isEmpty())
+            {
+                for (UsuarioDTO usuario : integrantesDTO)
+                {
+
+                    modelo.addRow(new Object[]
+                    {
+                        usuario.getNombre(),
+                        usuario.getTelefono()
+                    });
+
+                }
+            } else
+            {
+                JOptionPane.showMessageDialog(null, "No se encontraron usuarios para mostrar.", "Información", JOptionPane.INFORMATION_MESSAGE);
+            }                
+                
                 fldNombre.setText(chatSeleccionado.getNombre());
-
+                
                 byte[] imagenBytes = chatSeleccionado.getImagen();
+                System.out.println(imagenBytes);
+                System.out.println("1");
                 if (imagenBytes != null)
                 {
+                    System.out.println("2");
                     DefaultTableModel modeloTabla = (DefaultTableModel) tblChatsFotos4.getModel();
                     modeloTabla.setRowCount(0);
                     modeloTabla.addRow(new Object[]
@@ -433,8 +500,12 @@ public class frmVerDetalles extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane tbl;
     private javax.swing.JTable tblChatsFotos4;
+    private javax.swing.JTable tblIntegrantes;
     // End of variables declaration//GEN-END:variables
 }

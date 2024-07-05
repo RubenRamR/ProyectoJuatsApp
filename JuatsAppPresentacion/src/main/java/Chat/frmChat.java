@@ -41,6 +41,7 @@ import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
 import java.util.TimerTask;
+import javax.swing.JScrollBar;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import org.bson.types.ObjectId;
@@ -56,12 +57,10 @@ public class frmChat extends javax.swing.JFrame {
     UsuarioDTO u;
     private int paginaChat = 1;
     private int LIMITEChat = 3;
-    private int paginaMensaje = 1;
-    private int LIMITEMensaje = 3;
-    public Timer timer;
     List<ChatDTO> chats;
     ChatDTO chatC;
     byte[] imagen;
+    Timer temporizador;
 
     /**
      * Creates new form LogIn
@@ -107,6 +106,30 @@ public class frmChat extends javax.swing.JFrame {
                         {
                             Logger.getLogger(frmChat.class.getName()).log(Level.SEVERE, null, ex);
                         }
+                        
+                                if (temporizador != null) 
+                                {
+                                    temporizador.stop();
+                                }
+
+                        temporizador = new Timer(500, new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            try {
+                                if(chats.isEmpty())
+                                {return;}
+                                cargarEnTablaChat(chats.get(selectedRow));
+                                System.out.println(selectedRow);
+                               
+                            } catch (ExcepcionPresentacion ex) {
+                                Logger.getLogger(frmChat.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+
+                        }
+                        });
+
+                        temporizador.start();
+
                     }
                 }
             }
@@ -131,7 +154,6 @@ public class frmChat extends javax.swing.JFrame {
                             return;
                         }
 
-                        System.out.println(chatC.getMensajes().get(selectedRow).getImagenOpcional());
                         frmFoto frm = new frmFoto(chatC.getMensajes().get(selectedRow).getImagenOpcional());
                         frm.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
                         frm.show();
@@ -200,6 +222,11 @@ public class frmChat extends javax.swing.JFrame {
                 modeloTabla.addRow(fila);
 
             });
+            
+
+            
+            JScrollBar scrollBar = jScrollPane2.getVerticalScrollBar();
+            scrollBar.setValue(scrollBar.getMinimum());
         }
     }
 
@@ -378,7 +405,7 @@ public class frmChat extends javax.swing.JFrame {
                 fldMensajeActionPerformed(evt);
             }
         });
-        jPanel1.add(fldMensaje, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 700, 350, 30));
+        jPanel1.add(fldMensaje, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 700, 700, 30));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 10)); // NOI18N
         jLabel2.setText("Foto");
@@ -392,7 +419,7 @@ public class frmChat extends javax.swing.JFrame {
                 btnPerfilActionPerformed(evt);
             }
         });
-        jPanel1.add(btnPerfil, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 60, 110, 30));
+        jPanel1.add(btnPerfil, new org.netbeans.lib.awtextra.AbsoluteConstraints(1130, 60, 110, 30));
 
         btnContactos.setBorder(lineBorder);
         btnContactos.setBackground(new java.awt.Color(66, 143, 66));
@@ -402,7 +429,7 @@ public class frmChat extends javax.swing.JFrame {
                 btnContactosActionPerformed(evt);
             }
         });
-        jPanel1.add(btnContactos, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 20, 110, 30));
+        jPanel1.add(btnContactos, new org.netbeans.lib.awtextra.AbsoluteConstraints(1130, 20, 110, 30));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel3.setText("Chats");
@@ -420,7 +447,7 @@ public class frmChat extends javax.swing.JFrame {
                 btnEncontrarImagenActionPerformed(evt);
             }
         });
-        jPanel1.add(btnEncontrarImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 790, 110, 20));
+        jPanel1.add(btnEncontrarImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(1010, 780, 110, 20));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 10)); // NOI18N
         jLabel4.setText("Mensaje *");
@@ -473,7 +500,7 @@ public class frmChat extends javax.swing.JFrame {
         ));
         jScrollPane2.setViewportView(tblChat);
 
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 100, 590, 580));
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 100, 960, 580));
 
         btnEnviarMensaje.setBorder(lineBorder);
         btnEnviarMensaje.setBackground(new java.awt.Color(66, 143, 66));
@@ -483,7 +510,7 @@ public class frmChat extends javax.swing.JFrame {
                 btnEnviarMensajeActionPerformed(evt);
             }
         });
-        jPanel1.add(btnEnviarMensaje, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 700, 230, 80));
+        jPanel1.add(btnEnviarMensaje, new org.netbeans.lib.awtextra.AbsoluteConstraints(1010, 690, 230, 80));
 
         btnNuevoChat.setBorder(lineBorder);
         btnNuevoChat.setBackground(new java.awt.Color(66, 143, 66));
@@ -506,7 +533,7 @@ public class frmChat extends javax.swing.JFrame {
         ));
         jScrollPane3.setViewportView(tblMiFoto);
 
-        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 20, 140, 70));
+        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 20, 140, 70));
 
         btnDetalles.setBorder(lineBorder);
         btnDetalles.setBackground(new java.awt.Color(66, 143, 66));
@@ -642,22 +669,22 @@ public class frmChat extends javax.swing.JFrame {
                 {null}
             },
             new String [] {
-                "Mi foto de perfil"
+                "0"
             }
         ));
         jScrollPane4.setViewportView(tblFotoMensaje);
 
-        jPanel1.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 750, 210, 100));
+        jPanel1.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 750, 560, 220));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 890, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1258, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 860, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 860, Short.MAX_VALUE)
         );
 
         pack();
@@ -670,6 +697,11 @@ public class frmChat extends javax.swing.JFrame {
 
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
         // TODO add your handling code here:
+                                        if (temporizador != null) 
+                                {
+                                    temporizador.stop();
+                                }
+
         frmMainMenu frm = new frmMainMenu(usuarioNegocio, chatNegocio);
         frm.show();
         this.dispose();
@@ -677,6 +709,11 @@ public class frmChat extends javax.swing.JFrame {
 
     private void btnPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPerfilActionPerformed
         // TODO add your handling code here:
+                                        if (temporizador != null) 
+                                {
+                                    temporizador.stop();
+                                }
+
         frmPerfil frm = new frmPerfil(usuarioNegocio, chatNegocio, u);
         frm.show();
         this.dispose();
@@ -684,6 +721,11 @@ public class frmChat extends javax.swing.JFrame {
 
     private void btnContactosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContactosActionPerformed
         // TODO add your handling code here:
+                                        if (temporizador != null) 
+                                {
+                                    temporizador.stop();
+                                }
+
         frmVerContactos frm = new frmVerContactos(usuarioNegocio, chatNegocio, u);
         frm.show();
         this.dispose();
@@ -736,6 +778,7 @@ public class frmChat extends javax.swing.JFrame {
                 chatNM.setMensajes(mensajes);
 
                 chatNegocio.actualizarChat(chatNM);
+                lectorTablaChats();
             } else
             {
                 JOptionPane.showMessageDialog(this, "Selecciona un mensaje primero");
@@ -749,6 +792,11 @@ public class frmChat extends javax.swing.JFrame {
 
     private void btnNuevoChatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoChatActionPerformed
         // TODO add your handling code here:
+                                        if (temporizador != null) 
+                                {
+                                    temporizador.stop();
+                                }
+
         frmNuevoChat frm = new frmNuevoChat(usuarioNegocio, chatNegocio, u);
         frm.show();
         this.dispose();
@@ -756,6 +804,11 @@ public class frmChat extends javax.swing.JFrame {
 
     private void btnDetallesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetallesActionPerformed
         // TODO add your handling code here:
+                                        if (temporizador != null) 
+                                {
+                                    temporizador.stop();
+                                }
+
         frmVerDetalles frm = new frmVerDetalles(usuarioNegocio, chatNegocio, u);
         frm.setVisible(true);
         this.dispose();
@@ -763,6 +816,11 @@ public class frmChat extends javax.swing.JFrame {
 
     private void btnAgregarContactosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarContactosActionPerformed
         // TODO add your handling code here:
+                                        if (temporizador != null) 
+                                {
+                                    temporizador.stop();
+                                }
+
         frmAgregarContactos frm = new frmAgregarContactos(usuarioNegocio, chatNegocio, u);
         frm.show();
         this.dispose();
@@ -770,6 +828,11 @@ public class frmChat extends javax.swing.JFrame {
 
     private void btnAgregarIntegrantesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarIntegrantesActionPerformed
         // TODO add your handling code here:
+                                        if (temporizador != null) 
+                                {
+                                    temporizador.stop();
+                                }
+
         frmAgregarIntegrantes frm = new frmAgregarIntegrantes(usuarioNegocio, chatNegocio, u);
         frm.show();
         this.dispose();
@@ -783,6 +846,11 @@ public class frmChat extends javax.swing.JFrame {
 
     private void btnSiguienteChatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteChatActionPerformed
         // TODO add your handling code here:
+                                        if (temporizador != null) 
+                                {
+                                    temporizador.stop();
+                                }
+
         try
         {
             List<ChatDTO> todas = chatNegocio.obtenerTodosLosChatsUsuario(u.getId());
@@ -822,6 +890,10 @@ public class frmChat extends javax.swing.JFrame {
 
     private void btnPrevioChatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrevioChatActionPerformed
         // TODO add your handling code here:
+                                if (temporizador != null) 
+                                {
+                                    temporizador.stop();
+                                }
 
         if (paginaChat > 1)
         {

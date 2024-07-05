@@ -282,6 +282,9 @@ public class frmRegistrar extends javax.swing.JFrame {
             }
         });
         jPanel1.add(fldNumero, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 250, 230, 40));
+
+        fldContraseña.setBorder(lineBorder);
+        fldContraseña.setBackground(new java.awt.Color(186, 219, 186));
         jPanel1.add(fldContraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 440, 230, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
