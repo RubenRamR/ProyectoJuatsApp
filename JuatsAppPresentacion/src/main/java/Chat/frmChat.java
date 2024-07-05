@@ -116,8 +116,8 @@ public class frmChat extends javax.swing.JFrame {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             try {
-                                if(chats.isEmpty())
-                                {return;}
+
+                                cargarEnTabla();
                                 cargarEnTablaChat(chats.get(selectedRow));
                                 System.out.println(selectedRow);
                                
@@ -185,6 +185,8 @@ public class frmChat extends javax.swing.JFrame {
             llenarTabla(enPagina);
             actualizarNumeroDePagina();
             this.chats = enPagina;
+            
+            
         } catch (NegocioException ex)
         {
             Logger.getLogger(frmChat.class.getName()).log(Level.SEVERE, null, ex);

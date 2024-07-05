@@ -95,6 +95,7 @@ public class frmVerDetalles extends javax.swing.JFrame {
         tblIntegrantes = new javax.swing.JTable();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
+        btnEliminar = new javax.swing.JButton();
 
         jLabel4.setText("jLabel4");
 
@@ -221,6 +222,15 @@ public class frmVerDetalles extends javax.swing.JFrame {
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel7.setText("Imagen de Perfil ");
         jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 240, 200, -1));
+
+        btnEliminar.setBackground(Color.red);
+        btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 520, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -430,6 +440,7 @@ public class frmVerDetalles extends javax.swing.JFrame {
             {
                 List<ChatDTO> chats = chatNegocio.obtenerChatsDeUsuario(u.getId());
                 ChatDTO chatSeleccionado = chats.get(selectedIndex);
+                chatIdSel = chatSeleccionado.getId();
                 List<ObjectId> integrantesID = chatSeleccionado.getIntegrantes();
                 List<UsuarioDTO> integrantesDTO = new ArrayList<>();
 
@@ -488,10 +499,28 @@ public class frmVerDetalles extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_ChatsComboBoxActionPerformed
 
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        // TODO add your handling code here:
+        if (chatIdSel != null)
+        {
+            try {
+                chatNegocio.eliminarChat(chatIdSel);
+                JOptionPane.showMessageDialog(null, "Chat eliminado correctamente.", "Información", JOptionPane.INFORMATION_MESSAGE);
+            } catch (NegocioException ex) {
+                Logger.getLogger(frmVerDetalles.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        else
+        {
+                            JOptionPane.showMessageDialog(null, "Primero selecciona un chat.", "Información", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> ChatsComboBox;
     private javax.swing.JButton btnCerrar;
+    private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnEncontrarImagen;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JTextField fldNombre;
