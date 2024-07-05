@@ -102,12 +102,11 @@ public class ChatNegocio implements IChatNegocio {
     public void actualizarChat(ChatDTO chat) throws NegocioException {
         try
         {
-            ChatColeccion chatA;
-            chatA = convertirChatDTO(chat);
+            ChatColeccion chatA = convertirChatDTO(chat);
             chatDAO.actualizarChat(chatA);
         } catch (Exception e)
         {
-            throw new NegocioException(e.getMessage());
+            throw new NegocioException("Error al actualizar el chat en la base de datos", e);
         }
     }
 

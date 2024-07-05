@@ -694,6 +694,9 @@ public class frmChat extends javax.swing.JFrame {
 
     private void btnDetallesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetallesActionPerformed
         // TODO add your handling code here:
+        frmVerDetalles frm = new frmVerDetalles(usuarioNegocio, chatNegocio, u);
+        frm.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnDetallesActionPerformed
 
     private void btnAgregarContactosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarContactosActionPerformed

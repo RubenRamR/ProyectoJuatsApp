@@ -237,6 +237,7 @@ public class frmAgregarIntegrantes extends javax.swing.JFrame {
         });
         jPanel1.add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 470, 680, 40));
 
+        ChatsComboBox.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         ChatsComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ChatsComboBoxActionPerformed(evt);

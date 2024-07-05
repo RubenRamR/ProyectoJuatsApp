@@ -4,8 +4,9 @@
  */
 package Chat;
 
-
+import DTO.ChatDTO;
 import DTO.UsuarioDTO;
+import DocsDTO.MensajeDTO;
 import LogIn.*;
 import Negocio.ChatNegocio;
 import java.awt.Color;
@@ -14,6 +15,29 @@ import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
 import javax.swing.border.Border;
 import Negocio.UsuarioNegocio;
+import Utilerias.ImageRenderer2;
+import excepciones.NegocioException;
+import java.awt.Component;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
+import org.bson.types.ObjectId;
 
 /**
  *
@@ -24,7 +48,11 @@ public class frmVerDetalles extends javax.swing.JFrame {
     UsuarioNegocio usuarioNegocio;
     ChatNegocio chatNegocio;
     UsuarioDTO u;
-    
+    private ObjectId chatIdSel;
+    DefaultTableModel modeloTabla;
+    private List<ObjectId> integrantesActuales;
+    private List<MensajeDTO> mensajesActuales;
+
     /**
      * Creates new form LogIn
      */
@@ -34,7 +62,11 @@ public class frmVerDetalles extends javax.swing.JFrame {
         this.usuarioNegocio = usuarioNegocio;
         this.chatNegocio = chatNegocio;
         this.u = u;
+        configurarComboBoxChats();
+        configurarTablaChats();
 
+        integrantesActuales = new ArrayList<>();
+        mensajesActuales = new ArrayList<>();
     }
 
     /**
@@ -46,15 +78,21 @@ public class frmVerDetalles extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel4 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         btnGuardar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         btnCerrar = new javax.swing.JButton();
-        fldTelefono = new javax.swing.JTextField();
+        fldNombre = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        fldImagen = new javax.swing.JTextField();
         btnEncontrarImagen = new javax.swing.JButton();
+        ChatsComboBox = new javax.swing.JComboBox<>();
+        jLabel5 = new javax.swing.JLabel();
+        tbl = new javax.swing.JScrollPane();
+        tblChatsFotos4 = new javax.swing.JTable();
+
+        jLabel4.setText("jLabel4");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -70,13 +108,13 @@ public class frmVerDetalles extends javax.swing.JFrame {
         btnGuardar.setBorder(lineBorder2);
         btnGuardar.setBackground(customColor3);
         btnGuardar.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
-        btnGuardar.setText("Guardar");
+        btnGuardar.setText("Guardar cambios");
         btnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGuardarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 440, 180, 40));
+        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 430, 320, 50));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 64)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -92,31 +130,22 @@ public class frmVerDetalles extends javax.swing.JFrame {
         });
         jPanel1.add(btnCerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
-        fldTelefono.setBorder(lineBorder);
-        fldTelefono.setBackground(new java.awt.Color(186, 219, 186));
-        fldTelefono.addActionListener(new java.awt.event.ActionListener() {
+        fldNombre.setBorder(lineBorder);
+        fldNombre.setBackground(new java.awt.Color(186, 219, 186));
+        fldNombre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fldTelefonoActionPerformed(evt);
+                fldNombreActionPerformed(evt);
             }
         });
-        jPanel1.add(fldTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 140, 230, 40));
+        jPanel1.add(fldNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 150, 230, 40));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jLabel2.setText("Nombre");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 100, 230, -1));
+        jLabel2.setText("Chats:");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 110, 160, -1));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel3.setText("Imagen de Perfil ");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 100, 230, -1));
-
-        fldImagen.setBorder(lineBorder);
-        fldImagen.setBackground(new java.awt.Color(186, 219, 186));
-        fldImagen.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fldImagenActionPerformed(evt);
-            }
-        });
-        jPanel1.add(fldImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 140, 230, 40));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 210, 230, -1));
 
         btnEncontrarImagen.setBorder(lineBorder2);
         btnEncontrarImagen.setBackground(customColor3);
@@ -127,7 +156,33 @@ public class frmVerDetalles extends javax.swing.JFrame {
                 btnEncontrarImagenActionPerformed(evt);
             }
         });
-        jPanel1.add(btnEncontrarImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 190, 110, 20));
+        jPanel1.add(btnEncontrarImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 370, 110, 20));
+
+        ChatsComboBox.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        ChatsComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ChatsComboBoxActionPerformed(evt);
+            }
+        });
+        jPanel1.add(ChatsComboBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 150, 160, 60));
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jLabel5.setText("Nombre");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 110, 230, -1));
+
+        tblChatsFotos4.setTableHeader(null);
+        tblChatsFotos4.setRowHeight(105);
+        tblChatsFotos4.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null}
+            },
+            new String [] {
+                "Title 1"
+            }
+        ));
+        tbl.setViewportView(tblChatsFotos4);
+
+        jPanel1.add(tbl, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 250, 130, 110));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -148,51 +203,200 @@ public class frmVerDetalles extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
+        String nuevoNombre = fldNombre.getText();
+
+        if (chatIdSel == null)
+        {
+            JOptionPane.showMessageDialog(this, "Por favor selecciona un chat.");
+            return;
+        }
+
+        try
+        {
+            ChatDTO chatActualizado = new ChatDTO();
+            chatActualizado.setId(chatIdSel);
+            chatActualizado.setNombre(nuevoNombre);
+
+            if (tblChatsFotos4.getRowCount() > 0)
+            {
+                byte[] nuevaImagenBytes = obtenerBytesDesdeTabla(tblChatsFotos4, 0, 0);
+                chatActualizado.setImagen(nuevaImagenBytes);
+            }
+
+            // Mantener los integrantes y mensajes actuales
+            chatActualizado.setIntegrantes(integrantesActuales);
+            chatActualizado.setMensajes(mensajesActuales);
+
+            chatNegocio.actualizarChat(chatActualizado);
+
+            if (tblChatsFotos4.getRowCount() > 0)
+            {
+                actualizarImagenEnTabla(chatActualizado.getImagen());
+            }
+
+            JOptionPane.showMessageDialog(this, "Chat actualizado correctamente.");
+
+            frmChat frm = new frmChat(usuarioNegocio, chatNegocio, u);
+            frm.setVisible(true);
+            this.dispose();
+        } catch (NegocioException ex)
+        {
+            JOptionPane.showMessageDialog(this, "Error al actualizar el chat: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(frmVerDetalles.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private byte[] obtenerBytesDesdeTabla(JTable table, int row, int column) {
+        Object value = table.getValueAt(row, column);
+        if (value instanceof byte[])
+        {
+            return (byte[]) value;
+        } else
+        {
+            throw new ClassCastException("El valor de la celda no es de tipo byte[]");
+        }
+    }
+
+    /**
+     * Método para actualizar la imagen en la tabla tblChatsFotos4.
+     */
+    private void actualizarImagenEnTabla(byte[] nuevaImagenBytes) {
+        // Suponiendo que la imagen está en la primera fila y primera columna
+        ImageRenderer2 renderer = new ImageRenderer2(nuevaImagenBytes);
+        TableColumn columnaImagen = tblChatsFotos4.getColumnModel().getColumn(0);
+        columnaImagen.setCellRenderer(renderer);
+
+        // Actualizar la tabla para reflejar los cambios
+        DefaultTableModel modeloTabla = (DefaultTableModel) tblChatsFotos4.getModel();
+        modeloTabla.fireTableDataChanged();
+    }
 
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
         // TODO add your handling code here:
-        frmMainMenu frm = new frmMainMenu(usuarioNegocio, chatNegocio);
+        frmChat frm = new frmChat(usuarioNegocio, chatNegocio, u);
         frm.show();
-        this.dispose();           
+        this.dispose();
     }//GEN-LAST:event_btnCerrarActionPerformed
 
-    private void fldTelefonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fldTelefonoActionPerformed
+    private void fldNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fldNombreActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_fldTelefonoActionPerformed
-
-    private void fldImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fldImagenActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_fldImagenActionPerformed
+    }//GEN-LAST:event_fldNombreActionPerformed
 
     private void btnEncontrarImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEncontrarImagenActionPerformed
         // TODO add your handling code here:
         JFileChooser fileChooser = new JFileChooser();
 
-        // Show the open dialog
         int result = fileChooser.showOpenDialog(this);
 
-        // Check if a file was selected
-        if (result == JFileChooser.APPROVE_OPTION) {
+        if (result == JFileChooser.APPROVE_OPTION)
+        {
             File selectedFile = fileChooser.getSelectedFile();
-            fldImagen.setText(selectedFile.getAbsolutePath());  
+
+            try
+            {
+                byte[] imageBytes = Files.readAllBytes(selectedFile.toPath());
+
+                tblChatsFotos4.setModel(new javax.swing.table.DefaultTableModel(
+                        new Object[][]
+                        {
+                            {
+                                imageBytes
+                            }
+                        },
+                        new String[]
+                        {
+                            "Imagen"
+                        }
+                ));
+                tblChatsFotos4.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer2(imageBytes));
+            } catch (IOException ex)
+            {
+                ex.printStackTrace();
+            }
         }
 
-        
     }//GEN-LAST:event_btnEncontrarImagenActionPerformed
+
+    private void configurarTablaChats() {
+        DefaultTableModel modeloTabla = (DefaultTableModel) tblChatsFotos4.getModel();
+        TableColumnModel modeloColumnas = tblChatsFotos4.getColumnModel();
+        modeloTabla.setRowCount(0);
+        modeloColumnas.getColumn(0).setCellRenderer(new ImageRenderer2(null)); // Inicializar con un renderizador de imagen vacío
+    }
+
+    private void configurarComboBoxChats() {
+        try
+        {
+            // Obtener los chats del usuario
+            List<ChatDTO> chats = chatNegocio.obtenerChatsDeUsuario(u.getId());
+
+            // Limpiar el ComboBox
+            ChatsComboBox.removeAllItems();
+
+            // Añadir los nombres de los chats al ComboBox
+            for (ChatDTO chat : chats)
+            {
+                ChatsComboBox.addItem(chat.getNombre());
+            }
+        } catch (NegocioException ex)
+        {
+            Logger.getLogger(frmVerDetalles.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void ChatsComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ChatsComboBoxActionPerformed
+        // TODO add your handling code here:
+        int selectedIndex = ChatsComboBox.getSelectedIndex();
+        if (selectedIndex != -1)
+        {
+            try
+            {
+                List<ChatDTO> chats = chatNegocio.obtenerChatsDeUsuario(u.getId());
+                ChatDTO chatSeleccionado = chats.get(selectedIndex);
+                chatIdSel = chatSeleccionado.getId();
+
+                fldNombre.setText(chatSeleccionado.getNombre());
+
+                byte[] imagenBytes = chatSeleccionado.getImagen();
+                if (imagenBytes != null)
+                {
+                    DefaultTableModel modeloTabla = (DefaultTableModel) tblChatsFotos4.getModel();
+                    modeloTabla.setRowCount(0);
+                    modeloTabla.addRow(new Object[]
+                    {
+                        imagenBytes
+                    });
+                    tblChatsFotos4.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer2(imagenBytes));
+                }
+
+                // Cargar integrantes y mensajes en variables
+                integrantesActuales = chatSeleccionado.getIntegrantes();
+                mensajesActuales = chatSeleccionado.getMensajes();
+
+            } catch (NegocioException ex)
+            {
+                Logger.getLogger(frmVerDetalles.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_ChatsComboBoxActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> ChatsComboBox;
     private javax.swing.JButton btnCerrar;
     private javax.swing.JButton btnEncontrarImagen;
     private javax.swing.JButton btnGuardar;
-    private javax.swing.JTextField fldImagen;
-    private javax.swing.JTextField fldTelefono;
+    private javax.swing.JTextField fldNombre;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane tbl;
+    private javax.swing.JTable tblChatsFotos4;
     // End of variables declaration//GEN-END:variables
 }
