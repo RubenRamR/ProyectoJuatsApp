@@ -565,7 +565,7 @@
                 </Property>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="tblMiFoto.setTableHeader(null);"/>
+                <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="tblFotoMensaje.setTableHeader(null);"/>
               </AuxValues>
             </Component>
           </SubComponents>

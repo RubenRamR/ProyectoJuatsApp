@@ -580,7 +580,7 @@ public class frmChat extends javax.swing.JFrame {
 
         jPanel1.add(jScrollPane8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 330, 130, 240));
 
-        tblMiFoto.setTableHeader(null);
+        tblFotoMensaje.setTableHeader(null);
         tblFotoMensaje.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null}
