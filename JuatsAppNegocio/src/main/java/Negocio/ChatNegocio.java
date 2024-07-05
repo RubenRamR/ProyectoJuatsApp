@@ -188,6 +188,7 @@ public class ChatNegocio implements IChatNegocio {
                     mensajeDTO.setTextoMensaje(mensaje.getTextoMensaje());
                     mensajeDTO.setFechaHoraRegistro(mensaje.getFechaHoraRegistro());
                     mensajeDTO.setImagenOpcional(mensaje.getImagenOpcional());
+                    mensajeDTO.setEmisor(mensaje.getEmisor());
                     mensajesDTO.add(mensajeDTO);
                 }
                 chatDTO.setMensajes(mensajesDTO);
@@ -212,6 +213,7 @@ public class ChatNegocio implements IChatNegocio {
             mensaje.setFechaHoraRegistro(dto.getFechaHoraRegistro());
             mensaje.setImagenOpcional(dto.getImagenOpcional());
             mensaje.setTextoMensaje(dto.getTextoMensaje());
+            mensaje.setEmisor(dto.getEmisor());
             mensajes.add(mensaje);
         }
         return mensajes;
@@ -228,6 +230,7 @@ public class ChatNegocio implements IChatNegocio {
             mensaje.setFechaHoraRegistro(dto.getFechaHoraRegistro());
             mensaje.setImagenOpcional(dto.getImagenOpcional());
             mensaje.setTextoMensaje(dto.getTextoMensaje());
+            mensaje.setEmisor(dto.getEmisor());
             mensajes.add(mensaje);
         }
         return mensajes;

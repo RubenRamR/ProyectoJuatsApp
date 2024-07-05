@@ -54,8 +54,8 @@ public class frmLogIn extends javax.swing.JFrame {
         btnCerrar = new javax.swing.JButton();
         fldTelefono = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        fldContraseña = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
+        fldContraseña = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -103,18 +103,10 @@ public class frmLogIn extends javax.swing.JFrame {
         jLabel2.setText("Teléfono *");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 130, 230, -1));
 
-        fldContraseña.setBorder(lineBorder);
-        fldContraseña.setBackground(new java.awt.Color(186, 219, 186));
-        fldContraseña.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fldContraseñaActionPerformed(evt);
-            }
-        });
-        jPanel1.add(fldContraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 280, 230, 40));
-
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel5.setText("Contraseña *");
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 240, 230, -1));
+        jPanel1.add(fldContraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 290, 230, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -134,10 +126,6 @@ public class frmLogIn extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void fldContraseñaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fldContraseñaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_fldContraseñaActionPerformed
 
     private void fldTelefonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fldTelefonoActionPerformed
         // TODO add your handling code here:
@@ -192,7 +180,7 @@ public class frmLogIn extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCerrar;
     private javax.swing.JButton btnGuardar;
-    private javax.swing.JTextField fldContraseña;
+    private javax.swing.JPasswordField fldContraseña;
     private javax.swing.JTextField fldTelefono;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

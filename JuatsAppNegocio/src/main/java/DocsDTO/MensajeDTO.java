@@ -5,6 +5,7 @@
 package DocsDTO;
 
 import java.time.LocalDateTime;
+import org.bson.types.ObjectId;
 
 /**
  *
@@ -15,16 +16,24 @@ public class MensajeDTO {
     private String textoMensaje;
     private LocalDateTime fechaHoraRegistro;
     private byte[] imagenOpcional;
+    private ObjectId emisor;
 
     public MensajeDTO() {
-    }   
-    
-    // Constructor, getters y setters
-    public MensajeDTO(String textoMensaje, LocalDateTime fechaHoraRegistro, byte[] imagenOpcional) {
+    }
+
+    public MensajeDTO(String textoMensaje, LocalDateTime fechaHoraRegistro, byte[] imagenOpcional, ObjectId emisor) {
         this.textoMensaje = textoMensaje;
         this.fechaHoraRegistro = fechaHoraRegistro;
         this.imagenOpcional = imagenOpcional;
+        this.emisor = emisor;
     }
+
+//    // Constructor, getters y setters
+//    public MensajeDTO(String textoMensaje, LocalDateTime fechaHoraRegistro, byte[] imagenOpcional) {
+//        this.textoMensaje = textoMensaje;
+//        this.fechaHoraRegistro = fechaHoraRegistro;
+//        this.imagenOpcional = imagenOpcional;
+//    }
 
     public String getTextoMensaje() {
         return textoMensaje;
@@ -50,10 +59,17 @@ public class MensajeDTO {
         this.imagenOpcional = imagenOpcional;
     }
 
+    public ObjectId getEmisor() {
+        return emisor;
+    }
+
+    public void setEmisor(ObjectId emisor) {
+        this.emisor = emisor;
+    }
+
     @Override
     public String toString() {
-        return "Mensaje{" + "textoMensaje=" + textoMensaje + ", fechaHoraRegistro=" + fechaHoraRegistro + ", imagenOpcional=" + imagenOpcional + '}';
+        return "MensajeDTO{" + "textoMensaje=" + textoMensaje + ", fechaHoraRegistro=" + fechaHoraRegistro + ", imagenOpcional=" + imagenOpcional + ", emisor=" + emisor + '}';
     }
-    
-    
+
 }

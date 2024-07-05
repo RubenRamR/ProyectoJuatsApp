@@ -1,10 +1,11 @@
-    /*
+/*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Docs;
 
 import java.time.LocalDateTime;
+import org.bson.types.ObjectId;
 
 /**
  *
@@ -15,10 +16,18 @@ public class Mensaje {
     private String textoMensaje;
     private LocalDateTime fechaHoraRegistro;
     private byte[] imagenOpcional;
+    private ObjectId emisor;
 
     public Mensaje() {
     }
-    
+
+    public Mensaje(String textoMensaje, LocalDateTime fechaHoraRegistro, byte[] imagenOpcional, ObjectId emisor) {
+        this.textoMensaje = textoMensaje;
+        this.fechaHoraRegistro = fechaHoraRegistro;
+        this.imagenOpcional = imagenOpcional;
+        this.emisor = emisor;
+    }
+
     // Constructor, getters y setters
     public Mensaje(String textoMensaje, LocalDateTime fechaHoraRegistro, byte[] imagenOpcional) {
         this.textoMensaje = textoMensaje;
@@ -50,10 +59,17 @@ public class Mensaje {
         this.imagenOpcional = imagenOpcional;
     }
 
+    public ObjectId getEmisor() {
+        return emisor;
+    }
+
+    public void setEmisor(ObjectId emisor) {
+        this.emisor = emisor;
+    }
+
     @Override
     public String toString() {
-        return "Mensaje{" + "textoMensaje=" + textoMensaje + ", fechaHoraRegistro=" + fechaHoraRegistro + ", imagenOpcional=" + imagenOpcional + '}';
+        return "Mensaje{" + "textoMensaje=" + textoMensaje + ", fechaHoraRegistro=" + fechaHoraRegistro + ", imagenOpcional=" + imagenOpcional + ", emisor=" + emisor + '}';
     }
-    
-    
+
 }

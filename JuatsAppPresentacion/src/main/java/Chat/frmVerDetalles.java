@@ -217,6 +217,7 @@ public class frmVerDetalles extends javax.swing.JFrame {
         try
         {
             ChatDTO chatActualizado = new ChatDTO();
+            chatActualizado = chatNegocio.obtenerChatPorId(chatIdSel);
             chatActualizado.setId(chatIdSel);
             chatActualizado.setNombre(nuevoNombre);
 
@@ -225,10 +226,6 @@ public class frmVerDetalles extends javax.swing.JFrame {
                 byte[] nuevaImagenBytes = obtenerBytesDesdeTabla(tblChatsFotos4, 0, 0);
                 chatActualizado.setImagen(nuevaImagenBytes);
             }
-
-            // Mantener los integrantes y mensajes actuales
-            chatActualizado.setIntegrantes(integrantesActuales);
-            chatActualizado.setMensajes(mensajesActuales);
 
             chatNegocio.actualizarChat(chatActualizado);
 
@@ -247,6 +244,47 @@ public class frmVerDetalles extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Error al actualizar el chat: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(frmVerDetalles.class.getName()).log(Level.SEVERE, null, ex);
         }
+//        String nuevoNombre = fldNombre.getText();
+//
+//        if (chatIdSel == null)
+//        {
+//            JOptionPane.showMessageDialog(this, "Por favor selecciona un chat.");
+//            return;
+//        }
+//
+//        try
+//        {
+//            ChatDTO chatActualizado = new ChatDTO();
+//            chatActualizado.setId(chatIdSel);
+//            chatActualizado.setNombre(nuevoNombre);
+//
+//            if (tblChatsFotos4.getRowCount() > 0)
+//            {
+//                byte[] nuevaImagenBytes = obtenerBytesDesdeTabla(tblChatsFotos4, 0, 0);
+//                chatActualizado.setImagen(nuevaImagenBytes);
+//            }
+//
+//            // Mantener los integrantes y mensajes actuales
+//            chatActualizado.setIntegrantes(integrantesActuales);
+//            chatActualizado.setMensajes(mensajesActuales);
+//
+//            chatNegocio.actualizarChat(chatActualizado);
+//
+//            if (tblChatsFotos4.getRowCount() > 0)
+//            {
+//                actualizarImagenEnTabla(chatActualizado.getImagen());
+//            }
+//
+//            JOptionPane.showMessageDialog(this, "Chat actualizado correctamente.");
+//
+//            frmChat frm = new frmChat(usuarioNegocio, chatNegocio, u);
+//            frm.setVisible(true);
+//            this.dispose();
+//        } catch (NegocioException ex)
+//        {
+//            JOptionPane.showMessageDialog(this, "Error al actualizar el chat: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+//            Logger.getLogger(frmVerDetalles.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private byte[] obtenerBytesDesdeTabla(JTable table, int row, int column) {

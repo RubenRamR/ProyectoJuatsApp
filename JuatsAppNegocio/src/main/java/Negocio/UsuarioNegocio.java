@@ -8,7 +8,6 @@ import Colecciones.UsuarioColeccion;
 import DAO.UsuarioDAO;
 import DTO.UsuarioDTO;
 import Docs.Direccion;
-import DocsDTO.ContactoDTO;
 import DocsDTO.DireccionDTO;
 import InterfacesNegocio.IUsuarioNegocio;
 import excepciones.NegocioException;

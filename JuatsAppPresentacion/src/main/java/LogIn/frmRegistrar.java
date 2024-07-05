@@ -86,7 +86,6 @@ public class frmRegistrar extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         fldImagen = new javax.swing.JTextField();
-        fldContraseña = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         fldColonia = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
@@ -106,6 +105,7 @@ public class frmRegistrar extends javax.swing.JFrame {
         fldCalle = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
         fldNumero = new javax.swing.JTextField();
+        fldContraseña = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -165,15 +165,6 @@ public class frmRegistrar extends javax.swing.JFrame {
             }
         });
         jPanel1.add(fldImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 240, 230, 60));
-
-        fldContraseña.setBorder(lineBorder);
-        fldContraseña.setBackground(new java.awt.Color(186, 219, 186));
-        fldContraseña.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fldContraseñaActionPerformed(evt);
-            }
-        });
-        jPanel1.add(fldContraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 430, 230, 40));
 
         jLabel11.setText("Colonia");
         jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 150, 50, -1));
@@ -291,6 +282,7 @@ public class frmRegistrar extends javax.swing.JFrame {
             }
         });
         jPanel1.add(fldNumero, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 250, 230, 40));
+        jPanel1.add(fldContraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 440, 230, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -386,10 +378,6 @@ public class frmRegistrar extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_fldColoniaActionPerformed
 
-    private void fldContraseñaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fldContraseñaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_fldContraseñaActionPerformed
-
     private void fldImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fldImagenActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_fldImagenActionPerformed
@@ -451,7 +439,7 @@ public class frmRegistrar extends javax.swing.JFrame {
     private javax.swing.JTextField fldApellidoPaterno;
     private javax.swing.JTextField fldCalle;
     private javax.swing.JTextField fldColonia;
-    private javax.swing.JTextField fldContraseña;
+    private javax.swing.JPasswordField fldContraseña;
     private com.toedter.calendar.JDateChooser fldFecha;
     private javax.swing.JTextField fldImagen;
     private javax.swing.JTextField fldNombre;

@@ -137,21 +137,22 @@ public class ChatDAO implements IChatDAO {
     }
 
     @Override
-public void actualizarChat(ChatColeccion chat) throws PersistenciaException {
-    try {
-        Document filtro = new Document("_id", chat.getId());
-        Document docChatActualizado = new Document()
-                .append("nombre", chat.getNombre())
-                .append("imagen", chat.getImagen())
-                .append("integrantes", chat.getIntegrantes())
-                .append("mensajes", convertirMensajesADocumentos(chat.getMensajes()));
+    public void actualizarChat(ChatColeccion chat) throws PersistenciaException {
+        try
+        {
+            Document filtro = new Document("_id", chat.getId());
+            Document docChatActualizado = new Document()
+                    .append("nombre", chat.getNombre())
+                    .append("imagen", chat.getImagen())
+                    .append("integrantes", chat.getIntegrantes())
+                    .append("mensajes", convertirMensajesADocumentos(chat.getMensajes()));
 
-        coleccion.replaceOne(filtro, docChatActualizado);
-    } catch (Exception e) {
-        throw new PersistenciaException("Error al actualizar el chat en la base de datos", e);
+            coleccion.replaceOne(filtro, docChatActualizado);
+        } catch (Exception e)
+        {
+            throw new PersistenciaException("Error al actualizar el chat en la base de datos", e);
+        }
     }
-}
-
 
     @Override
     public void eliminarChat(ObjectId id) throws PersistenciaException {
@@ -242,7 +243,8 @@ public void actualizarChat(ChatColeccion chat) throws PersistenciaException {
             {
                 Document docMensaje = new Document()
                         .append("textoMensaje", mensaje.getTextoMensaje())
-                        .append("fechaHoraRegistro", mensaje.getFechaHoraRegistro());
+                        .append("fechaHoraRegistro", mensaje.getFechaHoraRegistro())
+                        .append("emisor", mensaje.getEmisor());
 
                 coleccion.insertOne(docMensaje);
             } else
@@ -250,7 +252,8 @@ public void actualizarChat(ChatColeccion chat) throws PersistenciaException {
                 Document docMensaje = new Document()
                         .append("textoMensaje", mensaje.getTextoMensaje())
                         .append("fechaHoraRegistro", mensaje.getFechaHoraRegistro())
-                        .append("imagenOpcional", mensaje.getImagenOpcional());
+                        .append("imagenOpcional", mensaje.getImagenOpcional())
+                        .append("emisor", mensaje.getEmisor());;
                 coleccion.insertOne(docMensaje);
             }
         } catch (Exception e)
@@ -266,7 +269,8 @@ public void actualizarChat(ChatColeccion chat) throws PersistenciaException {
             Document doc = new Document()
                     .append("textoMensaje", mensaje.getTextoMensaje())
                     .append("fechaHoraRegistro", java.sql.Timestamp.valueOf(mensaje.getFechaHoraRegistro()))
-                    .append("imagenOpcional", mensaje.getImagenOpcional());
+                    .append("imagenOpcional", mensaje.getImagenOpcional())
+                    .append("emisor", mensaje.getEmisor());
             mensajesDocs.add(doc);
         }
         return mensajesDocs;
@@ -300,8 +304,10 @@ public void actualizarChat(ChatColeccion chat) throws PersistenciaException {
             {
                 imagenOpcional = doc.get("imagenOpcional", Binary.class).getData();
             }
+            
+            ObjectId emisores = doc.getObjectId("emisor");
 
-            mensajes.add(new Mensaje(textoMensaje, fechaHoraRegistro, imagenOpcional));
+            mensajes.add(new Mensaje(textoMensaje, fechaHoraRegistro, imagenOpcional, emisores));
         }
         return mensajes;
     }

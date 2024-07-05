@@ -43,6 +43,7 @@ import javax.swing.table.DefaultTableModel;
 import java.util.TimerTask;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import org.bson.types.ObjectId;
 
 /**
  *
@@ -53,10 +54,10 @@ public class frmChat extends javax.swing.JFrame {
     UsuarioNegocio usuarioNegocio;
     ChatNegocio chatNegocio;
     UsuarioDTO u;
-    private int paginaChat=1;
-    private int LIMITEChat=3;    
-    private int paginaMensaje=1;
-    private int LIMITEMensaje=3;    
+    private int paginaChat = 1;
+    private int LIMITEChat = 3;
+    private int paginaMensaje = 1;
+    private int LIMITEMensaje = 3;
     public Timer timer;
     List<ChatDTO> chats;
     ChatDTO chatC;
@@ -65,198 +66,253 @@ public class frmChat extends javax.swing.JFrame {
     /**
      * Creates new form LogIn
      */
-    public frmChat(UsuarioNegocio usuarioNegocio, ChatNegocio chatNegocio, UsuarioDTO u){
-        this.u = u;       
+    public frmChat(UsuarioNegocio usuarioNegocio, ChatNegocio chatNegocio, UsuarioDTO u) {
+        this.u = u;
         initComponents();
         cargarConfiguracionInicialTablaMiPerfil();
         this.setLocationRelativeTo(this);
         this.usuarioNegocio = usuarioNegocio;
         this.chatNegocio = chatNegocio;
 
-        try {
+        try
+        {
             cargarEnTabla();
-        } catch (ExcepcionPresentacion ex) {
+        } catch (ExcepcionPresentacion ex)
+        {
             Logger.getLogger(frmChat.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         lectorTablaChats();
         lectorTablaChat();
 
     }
 
-    public void lectorTablaChats(){
-    
-            tblChats.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+    public void lectorTablaChats() {
+
+        tblChats.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent event) {
                 // Ignore extra messages
-                if (!event.getValueIsAdjusting()) {
+                if (!event.getValueIsAdjusting())
+                {
                     int selectedRow = tblChats.getSelectedRow();
-                    if (selectedRow != -1) {
+                    if (selectedRow != -1)
+                    {
                         // React to the row selection
                         System.out.println("Selected Row: " + selectedRow);
-                        try {
+                        try
+                        {
                             cargarEnTablaChat(chats.get(selectedRow));
-                        } catch (ExcepcionPresentacion ex) {
+                        } catch (ExcepcionPresentacion ex)
+                        {
                             Logger.getLogger(frmChat.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
                 }
             }
-        });    
-        
+        });
+
     }
-    
-    public void lectorTablaChat(){
-    
-            tblChat.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+    public void lectorTablaChat() {
+
+        tblChat.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent event) {
                 // Ignore extra messages
-                if (!event.getValueIsAdjusting()) {
+                if (!event.getValueIsAdjusting())
+                {
                     int selectedRow = tblChat.getSelectedRow();
-                    if (selectedRow != -1) {
+                    if (selectedRow != -1)
+                    {
                         // React to the row selection
-                        if(chatC.getMensajes().get(selectedRow).getImagenOpcional() == null){return;}
-                       
+                        if (chatC.getMensajes().get(selectedRow).getImagenOpcional() == null)
+                        {
+                            return;
+                        }
+
                         System.out.println(chatC.getMensajes().get(selectedRow).getImagenOpcional());
                         frmFoto frm = new frmFoto(chatC.getMensajes().get(selectedRow).getImagenOpcional());
                         frm.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
                         frm.show();
-                        }
                     }
                 }
-            
-        });    
-        
-    }    
+            }
+
+        });
+
+    }
 
     private void cargarConfiguracionInicialTablaMiPerfil() {
         tblMiFoto.setRowHeight(0, 67);
         byte[] a = u.getImagenPerfil();
         tblMiFoto.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer(ByteAImagen(a)));
-        
+
     }
 
-    private void cargarEnTabla()  throws ExcepcionPresentacion{
+    private void cargarEnTabla() throws ExcepcionPresentacion {
 
-        try {
+        try
+        {
             int indiceInicio = (paginaChat - 1) * LIMITEChat;
             List<ChatDTO> todas = chatNegocio.obtenerTodosLosChatsUsuario(u.getId());
-            
+
             int indiceFin = Math.min(indiceInicio + LIMITEChat, todas.size());
 
             List<ChatDTO> enPagina = obtenerPagina(indiceInicio, indiceFin, todas);
             llenarTabla(enPagina);
             actualizarNumeroDePagina();
             this.chats = enPagina;
-        } catch (NegocioException ex) {
+        } catch (NegocioException ex)
+        {
             Logger.getLogger(frmChat.class.getName()).log(Level.SEVERE, null, ex);
-        }    
-    }    
-    
-    private void cargarEnTablaChat(ChatDTO chatA)  throws ExcepcionPresentacion{    
-    DefaultTableModel modeloTabla = (DefaultTableModel) this.tblChat.getModel();
-         
-    // Clear existing rows
-    modeloTabla.setRowCount(0);
-    if (chatA != null) {
-        this.chatC = chatA;
-        chatA.getMensajes().forEach(row -> {
+        }
+    }
 
-                Object[] fila = new Object[3];
+    private void cargarEnTablaChat(ChatDTO chatA) throws ExcepcionPresentacion {
+        DefaultTableModel modeloTabla = (DefaultTableModel) this.tblChat.getModel();
 
-                fila[0] =row.getTextoMensaje();
-                if (row.getImagenOpcional() != null){
-                    fila[1] = "Click para ver la imagen";            
-                }
-                else
+        // Clear existing rows
+        modeloTabla.setRowCount(0);
+        if (chatA != null)
+        {
+            this.chatC = chatA;
+            chatA.getMensajes().forEach(row ->
+            {
+
+                Object[] fila = new Object[4];
+
+                fila[0] = row.getTextoMensaje();
+                if (row.getImagenOpcional() != null)
+                {
+                    fila[1] = "Click para ver la imagen";
+                } else
                 {
                     fila[1] = "El mensaje no contiene imagen";
                 }
 
-                fila[2] =row.getFechaHoraRegistro();
+                fila[2] = row.getFechaHoraRegistro();
                 
-                
-                modeloTabla.addRow(fila);     
+                String nombreEmisor = obtenerNombreDelEmisor(row.getEmisor());
 
-            
-        });
+                fila[3] = nombreEmisor;
+
+                modeloTabla.addRow(fila);
+
+            });
+        }
     }
-    }    
-    
+
+    private String obtenerNombreDelEmisor(ObjectId idEmisor) {
+        try
+        {
+            UsuarioDTO usuario = usuarioNegocio.obtenerUsuarioPorId(idEmisor);
+            if (usuario != null)
+            {
+                return usuario.getNombre();
+            } else
+            {
+                return "Nombre no encontrado";
+            }
+        } catch (NegocioException ex)
+        {
+            Logger.getLogger(frmChat.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
     private List<ChatDTO> obtenerPagina(int indiceInicio, int indiceFin, List<ChatDTO> todasaux) throws ExcepcionPresentacion {
         List<ChatDTO> todas = todasaux;
         List<ChatDTO> todasLasPaginas = new ArrayList<>();
         indiceFin = Math.min(indiceFin, todas.size());
-        for (int i = indiceInicio; i < indiceFin; i++) {
+        for (int i = indiceInicio; i < indiceFin; i++)
+        {
             todasLasPaginas.add(todas.get(i));
         }
         return todasLasPaginas;
     }
-    
+
     private void actualizarNumeroDePagina() {
-    NumeroDePagina.setText(""+paginaChat);
+        NumeroDePagina.setText("" + paginaChat);
     }
-            
-    
+
     private void llenarTabla(List<ChatDTO> lista) {
-    DefaultTableModel modeloTabla = (DefaultTableModel) this.tblChats.getModel();
-         
-    // Clear existing rows
-    tblChats.setRowHeight(235);
-    modeloTabla.setRowCount(0);
-        if (lista != null) {
-                if(0 < lista.size()){tblChatsFotos3.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer(ByteAImagen(lista.get(0).getImagen())));} else {tblChatsFotos3.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer("placeholder.jpg"));}
-                if(1 < lista.size()){tblChatsFotos4.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer(ByteAImagen(lista.get(1).getImagen())));} else {tblChatsFotos4.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer("placeholder.jpg"));}
-                if(2 < lista.size()){tblChatsFotos2.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer(ByteAImagen(lista.get(2).getImagen())));} else {tblChatsFotos2.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer("placeholder.jpg"));}
-        lista.forEach(row -> {
+        DefaultTableModel modeloTabla = (DefaultTableModel) this.tblChats.getModel();
+
+        // Clear existing rows
+        tblChats.setRowHeight(235);
+        modeloTabla.setRowCount(0);
+        if (lista != null)
+        {
+            if (0 < lista.size())
+            {
+                tblChatsFotos3.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer(ByteAImagen(lista.get(0).getImagen())));
+            } else
+            {
+                tblChatsFotos3.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer("placeholder.jpg"));
+            }
+            if (1 < lista.size())
+            {
+                tblChatsFotos4.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer(ByteAImagen(lista.get(1).getImagen())));
+            } else
+            {
+                tblChatsFotos4.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer("placeholder.jpg"));
+            }
+            if (2 < lista.size())
+            {
+                tblChatsFotos2.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer(ByteAImagen(lista.get(2).getImagen())));
+            } else
+            {
+                tblChatsFotos2.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer("placeholder.jpg"));
+            }
+            lista.forEach(row ->
+            {
 
                 Object[] fila = new Object[2];
 
-                fila[0] =row.getNombre();
-                modeloTabla.addRow(fila);     
+                fila[0] = row.getNombre();
+                modeloTabla.addRow(fila);
 
-            
-        });
+            });
+        }
     }
-    }
-        
-    
-    public BufferedImage ByteAImagen (byte[] a){
-        
+
+    public BufferedImage ByteAImagen(byte[] a) {
+
         // Supongamos que tienes un array de bytes llamado imageBytes
-        byte[] imageBytes =  a;
+        byte[] imageBytes = a;
 
         // Convierte los bytes en una imagen BufferedImage
         BufferedImage img = null;
-        try {
+        try
+        {
             ByteArrayInputStream bis = new ByteArrayInputStream(imageBytes);
             img = ImageIO.read(bis);
-        } catch (IOException e) {
+        } catch (IOException e)
+        {
             e.printStackTrace();
         }
 
         // Ahora puedes usar la imagen (BufferedImage)
-        if (img != null) {
+        if (img != null)
+        {
             return img;
-        } else {
-                    JOptionPane.showMessageDialog(this, "Error al leer la imagen de perfil");
+        } else
+        {
+            JOptionPane.showMessageDialog(this, "Error al leer la imagen de perfil");
             return null;
         }
-    
+
     }
-    
+
     public byte[] convertirImagenABytes(File file) throws IOException {
         // Leer el archivo de imagen en un InputStream
         InputStream inputStream = new FileInputStream(file);
         byte[] bytes = inputStream.readAllBytes();
         inputStream.close();
         return bytes;
-    } 
-        
-    
-    
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -412,7 +468,7 @@ public class frmChat extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Mensaje", "Foto", "Fecha"
+                "Mensaje", "Foto", "Fecha", "Enviado Por"
             }
         ));
         jScrollPane2.setViewportView(tblChat);
@@ -641,16 +697,18 @@ public class frmChat extends javax.swing.JFrame {
         int result = fileChooser.showOpenDialog(this);
 
         // Check if a file was selected
-        if (result == JFileChooser.APPROVE_OPTION) {
-            try {
+        if (result == JFileChooser.APPROVE_OPTION)
+        {
+            try
+            {
                 File selectedFile = fileChooser.getSelectedFile();
 
                 tblFotoMensaje.setRowHeight(0, 125);
                 tblFotoMensaje.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer(ByteAImagen(convertirImagenABytes(selectedFile))));
                 this.imagen = convertirImagenABytes(selectedFile);
-            } catch (IOException ex) {
-            JOptionPane.showMessageDialog(this, "Error al convertir la imagen a bytes.");
-                                
+            } catch (IOException ex)
+            {
+                JOptionPane.showMessageDialog(this, "Error al convertir la imagen a bytes.");
 
             }
         }
@@ -658,30 +716,34 @@ public class frmChat extends javax.swing.JFrame {
 
     private void btnEnviarMensajeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarMensajeActionPerformed
 
-        try {
-            if (chatC != null){
-            ChatDTO chatNM = this.chatC;
-            MensajeDTO mensaje = new MensajeDTO();
-            List<MensajeDTO> mensajes = chatNM.getMensajes();
-            
-            mensaje.setTextoMensaje(fldMensaje.getText());
-            mensaje.setFechaHoraRegistro(LocalDateTime.now());
-            if (imagen != null){
-            mensaje.setImagenOpcional(imagen);
-            }
-            mensajes.add(mensaje);
-            
-            chatNM.setMensajes(mensajes);
-            
-            chatNegocio.actualizarChat(chatNM);
-            }
-            else
+        try
+        {
+            if (chatC != null)
             {
-                      JOptionPane.showMessageDialog(this, "Selecciona un mensaje primero"); 
+                ChatDTO chatNM = this.chatC;
+                MensajeDTO mensaje = new MensajeDTO();
+                List<MensajeDTO> mensajes = chatNM.getMensajes();
+
+                mensaje.setTextoMensaje(fldMensaje.getText());
+                mensaje.setFechaHoraRegistro(LocalDateTime.now());
+                if (imagen != null)
+                {
+                    mensaje.setImagenOpcional(imagen);
+                }
+                mensaje.setEmisor(u.getId());
+                mensajes.add(mensaje);
+
+                chatNM.setMensajes(mensajes);
+
+                chatNegocio.actualizarChat(chatNM);
+            } else
+            {
+                JOptionPane.showMessageDialog(this, "Selecciona un mensaje primero");
             }
-            
-        } catch (NegocioException ex) {
-           JOptionPane.showMessageDialog(this, "Error al mandar mensaje :(");
+
+        } catch (NegocioException ex)
+        {
+            JOptionPane.showMessageDialog(this, "Error al mandar mensaje :(");
         }
     }//GEN-LAST:event_btnEnviarMensajeActionPerformed
 
@@ -721,12 +783,14 @@ public class frmChat extends javax.swing.JFrame {
 
     private void btnSiguienteChatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteChatActionPerformed
         // TODO add your handling code here:
-        try{
+        try
+        {
             List<ChatDTO> todas = chatNegocio.obtenerTodosLosChatsUsuario(u.getId());
 
             int totalPaginas = (int) Math.ceil((double) todas.size() / LIMITEChat);
 
-            if (paginaChat < totalPaginas) {
+            if (paginaChat < totalPaginas)
+            {
                 DefaultTableModel model2 = (DefaultTableModel) tblChatsFotos2.getModel();
                 model2.setColumnCount(0);
                 model2.setColumnCount(1);
@@ -740,24 +804,29 @@ public class frmChat extends javax.swing.JFrame {
                 paginaChat++;
                 cargarEnTabla();
                 actualizarNumeroDePagina();
-            } else {
+            } else
+            {
 
                 JOptionPane.showMessageDialog(this, "No hay más páginas disponibles", "Información", JOptionPane.INFORMATION_MESSAGE);
-            }}
-         catch (ExcepcionPresentacion ex) {
+            }
+        } catch (ExcepcionPresentacion ex)
+        {
             JOptionPane.showMessageDialog(this, "No hay más páginas disponibles", "Información", JOptionPane.INFORMATION_MESSAGE);
-        } catch (NegocioException ex) {
+        } catch (NegocioException ex)
+        {
             Logger.getLogger(frmChat.class.getName()).log(Level.SEVERE, null, ex);
         }
-    
-        
+
+
     }//GEN-LAST:event_btnSiguienteChatActionPerformed
 
     private void btnPrevioChatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrevioChatActionPerformed
         // TODO add your handling code here:
 
-                if (paginaChat > 1) {
-            try {
+        if (paginaChat > 1)
+        {
+            try
+            {
                 DefaultTableModel model2 = (DefaultTableModel) tblChatsFotos2.getModel();
                 model2.setColumnCount(0);
                 model2.setColumnCount(1);
@@ -770,11 +839,12 @@ public class frmChat extends javax.swing.JFrame {
                 paginaChat--;
                 cargarEnTabla();
                 actualizarNumeroDePagina();
-            } catch (ExcepcionPresentacion ex) {
+            } catch (ExcepcionPresentacion ex)
+            {
                 JOptionPane.showMessageDialog(this, "No hay más páginas disponibles", "Información", JOptionPane.INFORMATION_MESSAGE);
             }
         }
-    
+
     }//GEN-LAST:event_btnPrevioChatActionPerformed
 
 
